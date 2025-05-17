@@ -22,10 +22,12 @@ import {
 } from "lucide-react";
 import { message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
+import axios from 'axios'
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { logout } from "../../store/slices/userSlice";
 import { 
-  getDashboardSummary,
+  studentDashboardApi,
+  useGetDashboardSummaryQuery,
   useResetAnnouncementsCountMutation 
 } from "../../store/slices/studentDashboardApi";
 
@@ -41,7 +43,7 @@ export default function StudentNavbar() {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
   // RTK Query hooks
-  const { data } = getDashboardSummary();
+  const { data } = useGetDashboardSummaryQuery();
   const newAnnouncementsCount = data?.studentCount?.number;
   const [resetAnnouncementCount] = useResetAnnouncementsCountMutation();
 

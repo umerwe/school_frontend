@@ -1,3 +1,10 @@
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+
+const baseUrl =
+  import.meta.env.MODE === 'production'
+    ? import.meta.env.VITE_API_BASE_URL_PROD
+    : import.meta.env.VITE_API_BASE_URL_LOCAL;
+
 export const studentDashboardApi = createApi({
   reducerPath: 'studentDashboardApi',
   baseQuery: fetchBaseQuery({
