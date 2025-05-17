@@ -4,7 +4,7 @@ import { Link, Outlet} from 'react-router-dom'
 const RootLayout = () => {
   return (
     <div>
-      <Link to='/admin-register' className=''>
+      <Link to='/admin-register'>
       Register
       </Link>
       <Outlet />
