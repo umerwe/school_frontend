@@ -109,7 +109,7 @@ export default function LoginForm() {
                 import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
             
                 const { data } = await axios.post(
-                `${baseUrl}auth/login-${selectedRole}`,
+                `${baseUrl}/auth/login-${selectedRole}`,
                 payload,
                 { withCredentials: true }
             );
