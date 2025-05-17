@@ -44,8 +44,11 @@ const TeacherAi = () => {
     setError(null);
 
     try {
+     const baseUrl =
+                import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+            
       const response = await axios.post(
-        'http://localhost:8000/api/v1/teacher-ai',
+        `${baseUrl}/teacher-ai`, // Adjust endpoint as needed
         { prompt },
         { withCredentials: true }
       );
