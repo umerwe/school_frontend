@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import axios from 'axios';
 import {
   Users,
   User,
@@ -45,7 +46,7 @@ const ParentNavbar = () => {
   const [resetReportCommentsCount] = useResetReportCommentsCountMutation();
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
-console.log(dashboardData)
+
   // Update counts from dashboard data
   useEffect(() => {
     if (dashboardData) {
@@ -86,10 +87,14 @@ console.log(dashboardData)
 
   const handleLogout = async () => {
     setIsDropdownVisible(false);
+
+    const baseUrl =
+      import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+
     try {
       // 1. Call logout API
       await axios.post(
-        "http://localhost:8000/api/v1/auth/logout",
+        `${baseUrl}auth/logout`,
         {},
         { withCredentials: true }
       );
@@ -188,9 +193,8 @@ console.log(dashboardData)
     <div className="flex h-screen overflow-hidden bg-gray-50">
       {/* Sidebar */}
       <div
-        className={`bg-indigo-500 text-white h-full transition-all duration-300 ease-in-out ${
-          isSidebarOpen ? "w-64" : "w-20"
-        } shadow-xl z-10 rounded-sm`}
+        className={`bg-indigo-500 text-white h-full transition-all duration-300 ease-in-out ${isSidebarOpen ? "w-64" : "w-20"
+          } shadow-xl z-10 rounded-sm`}
       >
         <div className="flex items-center justify-between p-4 border-b border-indigo-400">
           {isSidebarOpen ? (
@@ -225,28 +229,25 @@ console.log(dashboardData)
                   navigate(item.path);
                   if (item.onClick) item.onClick();
                 }}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200 ${
-                  location.pathname === item.path
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200 ${location.pathname === item.path
                     ? "bg-indigo-400 shadow-lg shadow-indigo-900/20"
                     : "text-white hover:bg-indigo-400 hover:text-white hover:translate-x-1"
-                }`}
+                  }`}
               >
                 <span
-                  className={`flex-shrink-0 ${
-                    location.pathname === item.path
+                  className={`flex-shrink-0 ${location.pathname === item.path
                       ? "text-indigo-100"
                       : "text-white hover:text-white transition-colors"
-                  }`}
+                    }`}
                 >
                   {item.icon}
                 </span>
                 {isSidebarOpen && (
                   <span
-                    className={`text-sm font-medium ${
-                      location.pathname === item.path
+                    className={`text-sm font-medium ${location.pathname === item.path
                         ? "text-white"
                         : "text-white hover:text-white transition-colors"
-                    }`}
+                      }`}
                     style={{ fontFamily: "Nunito, sans-serif" }}
                   >
                     {item.label}
@@ -320,9 +321,8 @@ console.log(dashboardData)
                 <div className="flex items-center">
                   <ChevronDown
                     size={16}
-                    className={`text-gray-600 transition-transform duration-200 ${
-                      isDropdownVisible ? "rotate-180" : ""
-                    }`}
+                    className={`text-gray-600 transition-transform duration-200 ${isDropdownVisible ? "rotate-180" : ""
+                      }`}
                   />
                 </div>
               </div>

@@ -1,9 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+const baseUrl =
+  import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+
 export const parentDashboardApi = createApi({
   reducerPath: 'parentDashboardApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8000/api/v1/',
+    baseUrl,
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
       headers.set('Accept', 'application/json');

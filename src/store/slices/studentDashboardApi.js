@@ -1,9 +1,7 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
 export const studentDashboardApi = createApi({
   reducerPath: 'studentDashboardApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8000/api/v1/',
+    baseUrl,
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
       headers.set('Accept', 'application/json');
@@ -17,9 +15,17 @@ export const studentDashboardApi = createApi({
       transformResponse: (response) => response.data,
       providesTags: ['StudentDashboard'],
     }),
+    resetAnnouncementsCount: builder.mutation({
+      query: (studentId) => ({
+        url: `student/${studentId}/reset-number`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['StundentDashboard'],
+    }),
   }),
 });
 
 export const {
   useGetDashboardSummaryQuery,
+  useResetAnnouncementsCountMutation,
 } = studentDashboardApi;

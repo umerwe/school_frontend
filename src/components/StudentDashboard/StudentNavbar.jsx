@@ -24,8 +24,10 @@ import { message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { logout } from "../../store/slices/userSlice";
-import axios from "axios";
-import { studentDashboardApi } from "../../store/slices/studentDashboardApi";
+import { 
+  getDashboardSummary,
+  useResetAnnouncementsCountMutation 
+} from "../../store/slices/studentDashboardApi";
 
 export default function StudentNavbar() {
   const navigate = useNavigate();
@@ -37,7 +39,11 @@ export default function StudentNavbar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const [newAnnouncementsCount, setNewAnnouncementsCount] = useState(0);
+
+  // RTK Query hooks
+  const { data } = getDashboardSummary();
+  const newAnnouncementsCount = data?.studentCount?.number;
+  const [resetAnnouncementCount] = useResetAnnouncementsCountMutation();
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
@@ -53,28 +59,25 @@ export default function StudentNavbar() {
 
   const handleLogout = async () => {
     setIsDropdownVisible(false);
+
+    const baseUrl =
+      import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+
     try {
-      // 1. Call logout API
       await axios.post(
-        "http://localhost:8000/api/v1/auth/logout",
+        `${baseUrl}auth/logout`,
         {},
         { withCredentials: true }
       );
 
-      // 2. Clear RTK Query cache for student dashboard only
       dispatch(studentDashboardApi.util.resetApiState());
       localStorage.removeItem('persist:studentDashboardApi');
-
-      // 3. Dispatch logout to clear user slice
       dispatch(logout());
 
-      // 4. Navigate and reload
       navigate("/", { replace: true });
       window.location.reload();
     } catch (error) {
       console.error("Error during logout:", error);
-
-      // Fallback clearing cache and logout even if API call fails
       dispatch(studentDashboardApi.util.resetApiState());
       localStorage.removeItem('persist:studentDashboardApi');
       dispatch(logout());
@@ -83,53 +86,17 @@ export default function StudentNavbar() {
     }
   };
 
-  const fetchUnreadAnnouncementsCount = async () => {
+  const handleResetAnnouncementCount = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:8000/api/v1/student/${currentUser._id}/number`,
-        {
-          withCredentials: true,
-        }
-      );
-      const count = res.data.data?.number ?? 0;;
-      setNewAnnouncementsCount(count);
-    } catch (err) {
-      message.error(err.response?.data?.message || "Error fetching announcements count");
-      setNewAnnouncementsCount(0);
-    }
-  };
-
-  useEffect(() => {
-    if (currentUser?._id) {
-      fetchUnreadAnnouncementsCount();
-    } else {
-      message.error("No current user ID available");
-    }
-  }, [currentUser?._id]);
-
-  useEffect(() => {
-    const interval = setInterval(fetchUnreadAnnouncementsCount, 60000);
-    return () => clearInterval(interval);
-  }, [currentUser?._id]);
-
-  const resetAnnouncementCount = async () => {
-    try {
-      await axios.post(
-        `http://localhost:8000/api/v1/student/${currentUser._id}/reset-number`,
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-      setNewAnnouncementsCount(0);
+      await resetAnnouncementCount(currentUser._id).unwrap();
     } catch (error) {
-      message.error(error.response?.data?.message || "Error resetting announcements count");
+      message.error(error?.data?.message || "Error resetting announcements count");
     }
   };
 
   useEffect(() => {
-    if (location.pathname === "/student-dashboard/announcements") {
-      resetAnnouncementCount();
+    if (location.pathname === "/student-dashboard/announcements" && currentUser?._id) {
+      handleResetAnnouncementCount();
     }
   }, [location.pathname, currentUser?._id]);
 

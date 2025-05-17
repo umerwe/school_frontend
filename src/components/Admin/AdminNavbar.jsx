@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import axios from 'axios';
 import {
   Users,
   BookOpen,
@@ -35,7 +36,7 @@ const AdminNavbar = () => {
 
   const { data: dashboardData, error: dashboardError } = useGetDashboardSummaryQuery();
   const [resetAdminNumber] = useResetAdminNumberMutation();
-  
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -89,9 +90,13 @@ const AdminNavbar = () => {
 
   const handleLogout = async () => {
     setIsDropdownVisible(false);
+
+    const baseUrl =
+      import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+
     try {
       // Call logout API
-      await fetch("http://localhost:8000/api/v1/auth/logout", {
+      await axios(`${baseUrl}auth/logout`, {
         method: "POST",
         credentials: "include",
       });
@@ -125,46 +130,46 @@ const AdminNavbar = () => {
       .join(" ") || "";
 
   // Menu items with Parent Reports badge
- const menuItems = [
-  { icon: <LayoutDashboard size={20} />, label: "Dashboard", path: "/admin-dashboard" },
+  const menuItems = [
+    { icon: <LayoutDashboard size={20} />, label: "Dashboard", path: "/admin-dashboard" },
 
-  // Academic
-  { icon: <Users size={20} />, label: "Classes", path: "/admin-dashboard/classes" },
-  { icon: <BookOpen size={20} />, label: "Subjects", path: "/admin-dashboard/subjects" },
-  { icon: <User size={20} />, label: "Teachers", path: "/admin-dashboard/teachers" },
-  { icon: <UserPlus size={20} />, label: "Students", path: "/admin-dashboard/students" },
+    // Academic
+    { icon: <Users size={20} />, label: "Classes", path: "/admin-dashboard/classes" },
+    { icon: <BookOpen size={20} />, label: "Subjects", path: "/admin-dashboard/subjects" },
+    { icon: <User size={20} />, label: "Teachers", path: "/admin-dashboard/teachers" },
+    { icon: <UserPlus size={20} />, label: "Students", path: "/admin-dashboard/students" },
 
-  // Parent & Reports
-  { icon: <User size={20} />, label: "Parents", path: "/admin-dashboard/parents" },
-  {
-    icon: (
-      <div className="relative">
-        <MessageSquare size={20} />
-        {newReportsCount > 0 ? (
-          <span
-            className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold h-5 w-5 flex items-center justify-center rounded-full"
-            data-testid="reports-badge"
-          >
-            {newReportsCount}
-          </span>
-        ) : null}
-      </div>
-    ),
-    label: "Parent Reports",
-    path: "/admin-dashboard/reports",
-    onClick: async () => {
-      await resetReportsCount();
+    // Parent & Reports
+    { icon: <User size={20} />, label: "Parents", path: "/admin-dashboard/parents" },
+    {
+      icon: (
+        <div className="relative">
+          <MessageSquare size={20} />
+          {newReportsCount > 0 ? (
+            <span
+              className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold h-5 w-5 flex items-center justify-center rounded-full"
+              data-testid="reports-badge"
+            >
+              {newReportsCount}
+            </span>
+          ) : null}
+        </div>
+      ),
+      label: "Parent Reports",
+      path: "/admin-dashboard/reports",
+      onClick: async () => {
+        await resetReportsCount();
+      },
     },
-  },
 
-  // Management
-  { icon: <FileText size={20} />, label: "Fee Vouchers", path: "/admin-dashboard/vouchers" },
-  { icon: <Bell size={20} />, label: "Announcements", path: "/admin-dashboard/announcement/new" },
-  { icon: <Bot size={20} />, label: "AI Assistant", path: "/admin-dashboard/ai-assistant" },
+    // Management
+    { icon: <FileText size={20} />, label: "Fee Vouchers", path: "/admin-dashboard/vouchers" },
+    { icon: <Bell size={20} />, label: "Announcements", path: "/admin-dashboard/announcement/new" },
+    { icon: <Bot size={20} />, label: "AI Assistant", path: "/admin-dashboard/ai-assistant" },
 
-  // Newly Added
-  { icon: <BookOpen size={20} />, label: "Attendance", path: "/admin-dashboard/attendance" },
-];
+    // Newly Added
+    { icon: <BookOpen size={20} />, label: "Attendance", path: "/admin-dashboard/attendance" },
+  ];
 
 
   return (
