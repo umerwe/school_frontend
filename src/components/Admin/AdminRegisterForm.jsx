@@ -112,14 +112,14 @@ export default function AdminRegisterForm() {
     try {
       const baseUrl =
         import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
-
+console.log(baseUrl)
       setLoading(true);
-      await axios.post(
+      let x = await axios.post(
         `${baseUrl}/auth/register-admin`,
         payload,
         { headers: { 'Content-Type': 'multipart/form-data' }, withCredentials: true }
       );
-
+console.log(x)
       message.success('Admin Registration Successfully!');
 
       setSuccess(true);
@@ -130,7 +130,7 @@ export default function AdminRegisterForm() {
         setSuccess(false);
       }, 3000);
     } catch (err) {
-      const errorMessage = err?.response?.data?.message || 'Registration failed';
+      const errorMessage = err || 'Registration failed';
       message.error(errorMessage);
     } finally {
       setLoading(false);
