@@ -108,11 +108,14 @@ export default function AdminRegisterForm() {
     payload.append('email', formData.email);
     payload.append('password', formData.password);
     if (logo) payload.append('logo', logo);
-    
+
     try {
+      const baseUrl =
+        import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+
       setLoading(true);
       await axios.post(
-        'http://localhost:8000/api/v1/auth/register-admin',
+        `${baseUrl}auth/register-admin`,
         payload,
         { headers: { 'Content-Type': 'multipart/form-data' }, withCredentials: true }
       );
@@ -142,7 +145,7 @@ export default function AdminRegisterForm() {
         <div className={`absolute bottom-0 right-0 w-96 h-96 rounded-full bg-indigo-600 opacity-5 transition-all duration-5000 ease-in-out ${animateBackground ? '-translate-x-10 -translate-y-10' : 'translate-x-6 translate-y-6'}`}></div>
         <div className={`absolute top-1/3 right-1/4 w-32 h-32 rounded-full bg-indigo-400 opacity-5 transition-all duration-3000 ease-in-out ${animateBackground ? 'scale-110' : 'scale-100'}`}></div>
       </div>
-      
+
       <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl flex flex-col md:flex-row overflow-hidden transform transition-all duration-500 hover:shadow-2xl z-10">
         {/* Form Section */}
         <div className="w-full md:w-1/2 p-8 bg-white">
@@ -161,8 +164,8 @@ export default function AdminRegisterForm() {
                 <CheckCircleIcon className="h-10 w-10 text-indigo-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-800 mb-4">Registration Successful!</h3>
-              <Link 
-                to="/" 
+              <Link
+                to="/"
                 className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md font-medium transition-colors transform hover:scale-105 active:scale-95 duration-200"
               >
                 Proceed to Login
@@ -253,11 +256,11 @@ export default function AdminRegisterForm() {
                       </>
                     )}
                   </div>
-                  <input 
-                    type="file" 
-                    accept="image/*" 
-                    onChange={handleLogoChange} 
-                    className="hidden" 
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleLogoChange}
+                    className="hidden"
                   />
                 </label>
                 {errors.logo && <p className="text-red-500 text-xs mt-1">{errors.logo}</p>}
@@ -297,7 +300,7 @@ export default function AdminRegisterForm() {
           {/* Background abstract shapes */}
           <div className={`absolute -bottom-16 -right-16 w-64 h-64 rounded-full bg-indigo-400 opacity-20 transition-transform duration-3000 ease-in-out ${animateBackground ? 'scale-110' : 'scale-100'}`}></div>
           <div className={`absolute -top-8 -left-8 w-40 h-40 rounded-full bg-indigo-300 opacity-20 transition-transform duration-3000 ease-in-out ${animateBackground ? 'scale-90' : 'scale-100'}`}></div>
-          
+
           <div className="flex-1 flex flex-col justify-center items-center text-center z-10">
             <h2 className="text-3xl font-bold mb-4 transform transition duration-500 hover:translate-y-px">Join eSchool</h2>
             <p className="text-indigo-100 text-base max-w-xs mb-6">

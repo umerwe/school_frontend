@@ -65,7 +65,7 @@ export default function LoginForm() {
         return <Navigate to="/teacher-dashboard" />;
     } else if (user?.role === 'student') {
         return <Navigate to="/student-dashboard" />;
-    } else if (user?.role === 'parent') { 
+    } else if (user?.role === 'parent') {
         return <Navigate to="/parent-dashboard" />;
     }
 
@@ -99,14 +99,17 @@ export default function LoginForm() {
         } else if (selectedRole === 'student') {
             payload['rollNumberOrEmail'] = formData.instituteNameOrEmail;
             payload.password = formData.password;
-        } else if (selectedRole === 'parent') { // Added payload for Parent
+        } else if (selectedRole === 'parent') { 
             payload['email'] = formData.instituteNameOrEmail;
             payload.password = formData.password;
         }
 
         try {
-            const { data } = await axios.post(
-                `http://localhost:8000/api/v1/auth/login-${selectedRole}`,
+            const baseUrl =
+                import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+            
+                const { data } = await axios.post(
+                `${baseUrl}auth/login-${selectedRole}`,
                 payload,
                 { withCredentials: true }
             );
@@ -140,34 +143,34 @@ export default function LoginForm() {
                 <div className={`absolute top-1/3 right-1/4 w-32 h-32 rounded-full bg-indigo-400 opacity-5 transition-all duration-3000 ease-in-out ${animateBackground ? 'scale-110' : 'scale-100'}`}></div>
             </div>
 
-            <div className="w-full max-w-5xl h-[480px] bg-white rounded-2xl shadow-xl flex flex-col md:flex-row overflow-hidden transform transition-all duration-500 hover:shadow-2xl z-10">
+            <div className="w-full max-w-5xl min-w-[330px] h-auto md:h-[480px] bg-white rounded-2xl shadow-xl flex flex-col md:flex-row overflow-hidden transform transition-all duration-500 hover:shadow-2xl z-10">
                 {/* Form Section */}
-                <div className="w-full md:w-1/2 p-8 bg-white">
-                    <div className="flex items-center mb-8 transition-all duration-300 hover:translate-x-1">
-                        <AcademicCapIcon className="h-10 w-10 text-amber-500 -rotate-[25deg]" />
+                <div className="w-full md:w-1/2 p-4 sm:p-6 md:p-8 bg-white">
+                    <div className="flex items-center mb-4 sm:mb-6 md:mb-8 transition-all duration-300 hover:translate-x-1">
+                        <AcademicCapIcon className="h-8 w-8 sm:h-10 sm:w-10 text-amber-500 -rotate-[25deg]" />
                         <span
                             style={{ fontFamily: 'Nunito, sans-serif' }}
-                            className="text-[25px] font-extrabold text-indigo-700 tracking-wide mt-1"
+                            className="text-[20px] sm:text-[25px] font-extrabold text-indigo-700 tracking-wide mt-1"
                         >
                             eSchool.
                         </span>
                     </div>
 
                     {/* Role Selection */}
-                    <div className="flex justify-center gap-4 mb-8">
+                    <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-8">
                         {Object.keys(roleConfig).map(role => (
                             <button
                                 key={role}
                                 onClick={() => setSelectedRole(role)}
-                                className={`flex flex-col items-center justify-center w-19 h-19 rounded-full transition-all duration-300 ${selectedRole === role
+                                className={`flex flex-col items-center justify-center w-14 h-14 sm:w-16 sm:h-16 md:w-19 md:h-19 rounded-full transition-all duration-300 ${selectedRole === role
                                     ? 'bg-indigo-500 text-white shadow-lg transform scale-102'
                                     : 'bg-gray-100 text-gray-600 hover:bg-indigo-100 hover:text-indigo-700'
                                     }`}
                             >
                                 {React.cloneElement(roleConfig[role].icon, {
-                                    className: `h-5 w-5 mb-1 transition-colors ${selectedRole === role ? 'text-white' : 'text-indigo-600'}`
+                                    className: `h-4 w-4 sm:h-5 sm:w-5 mb-1 transition-colors ${selectedRole === role ? 'text-white' : 'text-indigo-600'}`
                                 })}
-                                <span className="text-xs font-semibold capitalize">
+                                <span className="text-[10px] sm:text-xs font-semibold capitalize">
                                     {role}
                                 </span>
                             </button>
@@ -175,19 +178,19 @@ export default function LoginForm() {
                     </div>
 
                     {/* Login Form */}
-                    <form onSubmit={handleSubmit} className="space-y-5 w-[400px] flex flex-col mx-auto">
+                    <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4 md:space-y-5 w-full max-w-[400px] mx-auto">
                         {/* Username/Email Field */}
                         <div className="transform transition duration-200 hover:translate-y-px">
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    {React.cloneElement(currentConfig.icon, { className: 'h-5 w-5 text-indigo-400' })}
+                                    {React.cloneElement(currentConfig.icon, { className: 'h-4 w-4 sm:h-5 sm:w-5 text-indigo-400' })}
                                 </div>
                                 <input
                                     type="text"
                                     name="instituteNameOrEmail"
                                     value={formData.instituteNameOrEmail}
                                     onChange={handleChange}
-                                    className={`pl-10 w-full rounded-md border ${errors.instituteNameOrEmail ? 'border-red-500' : 'border-gray-300'} py-2.5 text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-600 transition duration-200`}
+                                    className={`pl-8 sm:pl-10 w-full rounded-md border ${errors.instituteNameOrEmail ? 'border-red-500' : 'border-gray-300'} py-2 text-sm sm:text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-600 transition duration-200`}
                                     placeholder={currentConfig.placeholder}
                                 />
                             </div>
@@ -200,14 +203,14 @@ export default function LoginForm() {
                         <div className="transform transition duration-200 hover:translate-y-px">
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <LockClosedIcon className="h-5 w-5 text-indigo-400" />
+                                    <LockClosedIcon className="h-4 w-4 sm:h-5 sm:w-5 text-indigo-400" />
                                 </div>
                                 <input
                                     type={showPassword ? 'text' : 'password'}
                                     name="password"
                                     value={formData.password}
                                     onChange={handleChange}
-                                    className={`pl-10 pr-10 w-full rounded-md border ${errors.password ? 'border-red-500' : 'border-gray-300'} py-2.5 text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-600 transition duration-200`}
+                                    className={`pl-8 sm:pl-10 pr-8 sm:pr-10 w-full rounded-md border ${errors.password ? 'border-red-500' : 'border-gray-300'} py-2 text-sm sm:text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-600 transition duration-200`}
                                     placeholder="Password"
                                 />
                                 <button
@@ -216,9 +219,9 @@ export default function LoginForm() {
                                     onClick={() => setShowPassword(prev => !prev)}
                                 >
                                     {showPassword ? (
-                                        <EyeIcon className="h-5 w-5 text-indigo-400 hover:text-indigo-600" />
+                                        <EyeIcon className="h-4 w-4 sm:h-5 sm:w-5 text-indigo-400 hover:text-indigo-600" />
                                     ) : (
-                                        <EyeSlashIcon className="h-5 w-5 text-indigo-400 hover:text-indigo-600" />
+                                        <EyeSlashIcon className="h-4 w-4 sm:h-5 sm:w-5 text-indigo-400 hover:text-indigo-600" />
                                     )}
                                 </button>
                             </div>
@@ -229,11 +232,11 @@ export default function LoginForm() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className={`w-full bg-indigo-600 text-white py-2.5 rounded-md font-medium transition-all duration-300 transform hover:translate-y-px hover:shadow-md flex items-center justify-center gap-2 ${loading ? 'bg-indigo-400 cursor-not-allowed' : 'hover:bg-indigo-700'}`}
+                            className={`w-full bg-indigo-600 text-white py-2 rounded-md font-medium transition-all duration-300 transform hover:translate-y-px hover:shadow-md flex items-center justify-center gap-2 ${loading ? 'bg-indigo-400 cursor-not-allowed' : 'hover:bg-indigo-700'}`}
                         >
                             {loading ? (
                                 <>
-                                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <svg className="animate-spin h-4 w-4 sm:h-5 sm:w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
@@ -245,7 +248,7 @@ export default function LoginForm() {
                     </form>
 
                     {/* Register Link */}
-                    <p className="text-center text-sm text-gray-600 mt-6">
+                    <p className="text-center text-xs sm:text-sm text-gray-600 mt-4 sm:mt-6">
                         Don't have an account?{' '}
                         <Link to="/admin-register" className="text-indigo-600 hover:text-indigo-800 font-medium transition duration-200 hover:underline">
                             Sign up
@@ -260,16 +263,16 @@ export default function LoginForm() {
                     <div className={`absolute -top-8 -left-8 w-40 h-40 rounded-full bg-indigo-300 opacity-20 transition-transform duration-3000 ease-in-out ${animateBackground ? 'scale-90' : 'scale-100'}`}></div>
 
                     <div className="flex-1 flex flex-col justify-center items-center text-center z-10">
-                        <h2 className="text-3xl font-bold mb-4 transform transition duration-500 hover:translate-y-px">Welcome to eSchool</h2>
-                        <p className="text-indigo-100 text-base max-w-xs mb-6">
+                        <h2 className="text-2xl sm:text-3xl font-bold mb-4 transform transition duration-500 hover:translate-y-px">Welcome to eSchool</h2>
+                        <p className="text-indigo-100 text-sm sm:text-base max-w-xs mb-6">
                             Manage your institute seamlessly and enhance your classroom experience.
                         </p>
                         <div className="relative">
-                            <div className="absolute -inset-4 rounded-full bg-indigo-400 opacity-20 animate-pulse"></div>
-                            <AcademicCapIcon className="h-20 w-20 text-amber-400 relative z-10 transform transition duration-500 hover:rotate-12" />
+                            <div className="absolute -inset-3 sm:-inset-4 rounded-full bg-indigo-400 opacity-20 animate-pulse"></div>
+                            <AcademicCapIcon className="h-16 w-16 sm:h-20 sm:w-20 text-amber-400 relative z-10 transform transition duration-500 hover:rotate-12" />
                         </div>
                     </div>
-                    <div className="text-sm text-indigo-200 text-center z-10">
+                    <div className="text-xs sm:text-sm text-indigo-200 text-center z-10">
                         © 2025 eSchool. All rights reserved.
                     </div>
                 </div>
