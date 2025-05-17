@@ -115,7 +115,7 @@ export default function AdminRegisterForm() {
 
       setLoading(true);
       await axios.post(
-        `${baseUrl}auth/register-admin`,
+        `${baseUrl}/auth/register-admin`,
         payload,
         { headers: { 'Content-Type': 'multipart/form-data' }, withCredentials: true }
       );
