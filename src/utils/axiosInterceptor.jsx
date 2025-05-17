@@ -2,9 +2,14 @@ import axios from 'axios';
 import { store } from '../store/store';
 import { logout, updateTokens } from '../store/slices/userSlice';
 
-// Create axios instance
+const baseUrl =
+  import.meta.env.MODE === 'production'
+    ? import.meta.env.VITE_API_BASE_URL_PROD
+    : import.meta.env.VITE_API_BASE_URL_LOCAL;
+    
+
 const api = axios.create({
-  baseURL: 'http://localhost:8000/api/v1',
+  baseUrl,
   withCredentials: true,
   timeout: 8000 // 8 seconds timeout
 });
