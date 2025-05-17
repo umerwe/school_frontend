@@ -131,6 +131,7 @@ console.log(x)
       }, 3000);
     } catch (err) {
       const errorMessage = err || 'Registration failed';
+console.log(err)
       message.error(errorMessage);
     } finally {
       setLoading(false);
