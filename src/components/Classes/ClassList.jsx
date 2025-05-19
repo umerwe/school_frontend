@@ -115,7 +115,7 @@ export default function ClassList() {
                 Classes
               </h2>
               <p className="text-sm md:text-base text-gray-500 font-nunito">
-                View and manage all classes in the system
+                View and manage all classes
               </p>
             </div>
           </div>
