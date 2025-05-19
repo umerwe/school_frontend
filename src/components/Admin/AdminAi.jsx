@@ -274,8 +274,4 @@ const AdminAi = () => {
   );
 };
 
-<<<<<<< HEAD
 export default AdminAi;
-=======
-export default AdminAi;
->>>>>>> 90bf01d57ae33d58e642e1050de33e81fec3cfc9
