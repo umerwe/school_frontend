@@ -70,18 +70,14 @@ export default function SubjectList() {
         const messageKey = `deleteSubject-${id}`;
         message.loading({ content: "Deleting subject...", key: messageKey });
 
-        console.log("Deleting subject, subjectId:", id); // Debug
-
         try {
           const response = await deleteSubject(id).unwrap();
-          console.log("Delete subject response:", response); // Debug
           message.success({
             content: "Subject deleted successfully",
             key: messageKey,
             duration: 2,
           });
         } catch (error) {
-          console.error("Delete subject error:", error); // Debug
           const backendError = error?.data?.message || "Failed to delete subject";
           message.error({ content: backendError, key: messageKey, duration: 3 });
         }
@@ -92,48 +88,30 @@ export default function SubjectList() {
     });
   };
 
-  if (!currentUser || currentUser.role !== "admin") {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-4 md:p-8">
-        <div className="max-w-6xl mx-auto bg-white p-8 rounded-2xl shadow-lg border border-indigo-100 text-center">
-          <div className="w-24 h-24 mx-auto bg-indigo-100 rounded-full flex items-center justify-center mb-4">
-            <BookOpen className="w-10 h-10 text-indigo-500" />
-          </div>
-          <h3 className="text-2xl font-semibold text-gray-800 mb-2 font-nunito">
-            Access Denied
-          </h3>
-          <p className="text-gray-500 max-w-md mx-auto font-nunito">
-            You must be an admin to view subjects. Please contact the administration.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-4 md:p-8">
-      <div className="max-w-6xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-4 sm:p-6 md:p-8">
+      <div className="max-w-7xl mx-auto bg-white p-4 sm:p-6 md:p-8 rounded-2xl shadow-lg border border-indigo-100">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 md:pl-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-indigo-100 rounded-full">
-              <BookOpen className="w-6 h-6 text-indigo-600" />
+            <div className="p-3 bg-indigo-100 rounded-full">
+              <BookOpen className="w-6 h-6 md:w-8 md:h-8 text-indigo-600" />
             </div>
             <div>
               <h1 className="text-xl md:text-2xl font-bold text-gray-800 font-nunito">
-                Subject Management
+                Subjects
               </h1>
-              <p className="text-sm text-gray-500 font-nunito">
+              <p className="text-xs sm:text-sm text-gray-500 font-nunito">
                 View and manage all subjects
               </p>
             </div>
           </div>
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="relative">
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+            <div className="relative w-full sm:w-36">
               <select
                 value={filterClass}
                 onChange={(e) => setFilterClass(e.target.value)}
-                className="w-full md:w-36 bg-white border border-indigo-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all appearance-none pr-8 font-nunito text-sm"
+                className="w-full bg-white border border-indigo-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all appearance-none pr-8 font-nunito text-xs sm:text-sm"
               >
                 <option value="">All Classes</option>
                 {availableClasses.map((classTitle) => (
@@ -157,11 +135,11 @@ export default function SubjectList() {
                 </svg>
               </div>
             </div>
-            <div className="relative">
+            <div className="relative w-full sm:w-36">
               <select
                 value={filterSection}
                 onChange={(e) => setFilterSection(e.target.value)}
-                className="w-full md:w-36 bg-white border border-indigo-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all appearance-none pr-8 font-nunito text-sm"
+                className="w-full bg-white border border-indigo-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all appearance-none pr-8 font-nunito text-xs sm:text-sm"
               >
                 <option value="">All Sections</option>
                 {availableSections.map((section) => (
@@ -186,7 +164,7 @@ export default function SubjectList() {
               </div>
             </div>
             <button
-              className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium font-nunito text-sm transition-colors shadow-sm hover:shadow-md"
+              className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium font-nunito text-xs sm:text-sm transition-colors shadow-sm hover:shadow-md w-full sm:w-auto"
               onClick={() => navigate("/admin-dashboard/subjects/new")}
             >
               + Create Subject
@@ -194,63 +172,63 @@ export default function SubjectList() {
           </div>
         </div>
 
-        {/* Subjects Table */}
+        {/* Subjects Display */}
         {isLoading ? (
-          <div className="bg-white rounded-xl shadow-sm border border-indigo-100 p-8 h-64 flex flex-col items-center justify-center gap-4">
-            <Loader2 className="w-10 h-10 text-indigo-500 animate-spin" />
-            <p className="text-gray-500 font-nunito">Loading subjects...</p>
+          <div className="bg-white rounded-xl shadow-sm border border-indigo-100 p-6 sm:p-8 h-64 flex flex-col items-center justify-center gap-4">
+            <Loader2 className="w-8 h-8 sm:w-10 sm:h-10 text-indigo-500 animate-spin" />
+            <p className="text-gray-500 font-nunito text-sm sm:text-base">Loading subjects...</p>
           </div>
         ) : error ? (
-          <div className="bg-white rounded-xl shadow-sm border border-indigo-100 p-8 text-center">
-            <div className="mx-auto w-24 h-24 bg-indigo-50 rounded-full flex items-center justify-center mb-4 animate-pulse">
-              <BookOpen className="w-10 h-10 text-indigo-500" />
+          <div className="bg-white rounded-xl shadow-sm border border-indigo-100 p-6 sm:p-8 text-center">
+            <div className="mx-auto w-20 h-20 sm:w-24 sm:h-24 bg-indigo-50 rounded-full flex items-center justify-center mb-4 animate-pulse">
+              <BookOpen className="w-8 h-8 sm:w-10 sm:h-10 text-indigo-500" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-2 font-nunito">
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2 font-nunito">
               Error
             </h3>
-            <p className="text-gray-500 font-nunito">
+            <p className="text-gray-500 font-nunito text-sm sm:text-base">
               {error?.data?.message || "Failed to load subjects. Please try again."}
             </p>
           </div>
         ) : filteredSubjects.length === 0 ? (
-          <div className="bg-white rounded-xl shadow-sm border border-indigo-100 p-8 text-center">
-            <div className="mx-auto w-24 h-24 bg-indigo-50 rounded-full flex items-center justify-center mb-4 animate-pulse">
-              <BookOpen className="w-10 h-10 text-indigo-500" />
+          <div className="bg-white rounded-xl shadow-sm border border-indigo-100 p-6 sm:p-8 text-center">
+            <div className="mx-auto w-20 h-20 sm:w-24 sm:h-24 bg-indigo-50 rounded-full flex items-center justify-center mb-4 animate-pulse">
+              <BookOpen className="w-8 h-8 sm:w-10 sm:h-10 text-indigo-500" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-2 font-nunito">
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2 font-nunito">
               No Subjects Found
             </h3>
-            <p className="text-gray-500 font-nunito">
+            <p className="text-gray-500 font-nunito text-sm sm:text-base">
               There are currently no subjects matching the selected filters.
             </p>
           </div>
         ) : (
           <div className="bg-white rounded-xl shadow-sm border border-indigo-100 overflow-hidden">
-            <div className="p-6 border-b border-indigo-200">
-              <h2 className="text-lg font-semibold text-gray-900 font-nunito">
+            <div className="p-4 sm:p-6 border-b border-indigo-200">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-900 font-nunito">
                 Subjects List
               </h2>
-              <p className="text-sm text-gray-500 mt-1 font-nunito">
+              <p className="text-xs sm:text-sm text-gray-500 mt-1 font-nunito">
                 All subjects with their respective classes and teachers
               </p>
             </div>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-indigo-200">
+              <table className="min-w-[600px] w-full divide-y divide-indigo-200">
                 <thead className="bg-indigo-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider font-nunito">
+                    <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-700 uppercase tracking-wider font-nunito">
                       Subject
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider font-nunito">
+                    <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-700 uppercase tracking-wider font-nunito">
                       Class
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider font-nunito">
+                    <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-700 uppercase tracking-wider font-nunito">
                       Section
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider font-nunito">
+                    <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-700 uppercase tracking-wider font-nunito">
                       Teacher
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-700 uppercase tracking-wider font-nunito">
+                    <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 text-right text-[10px] sm:text-xs font-medium text-gray-700 uppercase tracking-wider font-nunito">
                       Actions
                     </th>
                   </tr>
@@ -258,50 +236,50 @@ export default function SubjectList() {
                 <tbody className="bg-white divide-y divide-indigo-200">
                   {filteredSubjects.map((subject) => (
                     <tr key={subject._id} className="hover:bg-indigo-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-2 sm:px-4 md:px-6 py-3 sm:py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <BookOpen className="h-4 w-4 text-indigo-500" />
-                          <span className="ml-2 font-medium text-gray-900 font-nunito">
+                          <BookOpen className="h-3 sm:h-4 w-3 sm:w-4 text-indigo-500" />
+                          <span className="ml-2 font-medium text-gray-900 font-nunito text-xs sm:text-sm">
                             {capitalizeWords(subject.subjectName)}
                           </span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800 font-nunito">
+                      <td className="px-2 sm:px-4 md:px-6 py-3 sm:py-4 whitespace-nowrap">
+                        <span className="px-2 inline-flex text-[10px] sm:text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800 font-nunito">
                           Class {subject.classTitle}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-gray-500 font-nunito">
+                      <td className="px-2 sm:px-4 md:px-6 py-3 sm:py-4 text-gray-500 font-nunito text-xs sm:text-sm">
                         Section {subject.section}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-2 sm:px-4 md:px-6 py-3 sm:py-4 whitespace-nowrap">
                         {subject.subjectTeacher?.name ? (
                           <div className="flex items-center">
-                            <User className="h-4 w-4 text-gray-400" />
-                            <span className="ml-2 text-gray-900 font-nunito">
+                            <User className="h-3 sm:h-4 w-3 sm:w-4 text-gray-400" />
+                            <span className="ml-2 text-gray-900 font-nunito text-xs sm:text-sm">
                               {capitalizeWords(subject.subjectTeacher.name)}
                             </span>
                           </div>
                         ) : (
-                          <span className="text-gray-500 italic font-nunito">
+                          <span className="text-gray-500 italic font-nunito text-xs sm:text-sm">
                             Not assigned
                           </span>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-right text-sm font-medium">
+                      <td className="px-2 sm:px-4 md:px-6 py-3 sm:py-4 text-right text-sm font-medium">
                         <button
                           onClick={() => navigate(`/admin-dashboard/subjects/${subject._id}/edit`)}
-                          className="text-indigo-500 hover:text-indigo-600 p-1 mr-2"
+                          className="text-indigo-500 hover:text-indigo-600 p-1 mr-1 sm:mr-2"
                           disabled={isDeleting}
                         >
-                          <Pencil className="h-4 w-4" />
+                          <Pencil className="h-3 sm:h-4 w-3 sm:w-4" />
                         </button>
                         <button
                           onClick={() => handleDelete(subject._id)}
                           className="text-red-500 hover:text-red-700 p-1"
                           disabled={isDeleting}
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3 sm:h-4 w-3 sm:w-4" />
                         </button>
                       </td>
                     </tr>

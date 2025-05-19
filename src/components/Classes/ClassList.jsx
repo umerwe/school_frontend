@@ -101,24 +101,6 @@ export default function ClassList() {
     message.success({ content: "Class restored successfully", key: `deleteClass-${classId}` });
   };
 
-  if (!currentUser || currentUser.role !== "admin") {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-4 md:p-8">
-        <div className="max-w-6xl mx-auto bg-white p-8 rounded-2xl shadow-lg border border-indigo-100 text-center">
-          <div className="w-24 h-24 mx-auto bg-indigo-100 rounded-full flex items-center justify-center mb-4">
-            <BookOpen className="w-10 h-10 text-indigo-500" />
-          </div>
-          <h3 className="text-2xl font-semibold text-gray-800 mb-2 font-nunito">
-            Access Denied
-          </h3>
-          <p className="text-gray-500 max-w-md mx-auto font-nunito">
-            You must be an admin to view classes. Please contact the administration.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-4 md:p-8">
       <div className="max-w-6xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-indigo-100">
@@ -126,13 +108,13 @@ export default function ClassList() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <div className="flex items-center gap-3 mb-4 md:mb-0">
             <div className="p-3 bg-indigo-100 rounded-full">
-              <BookOpen className="w-8 h-8 text-indigo-600" />
+              <BookOpen className="md:h-8 md:w-8 text-indigo-600" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-gray-800 font-nunito">
-                Class Management
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800 font-nunito">
+                Classes
               </h2>
-              <p className="text-gray-500 font-nunito">
+              <p className="text-sm md:text-base text-gray-500 font-nunito">
                 View and manage all classes in the system
               </p>
             </div>

@@ -120,44 +120,26 @@ export default function StudentList() {
     });
   };
 
-  // Check if user is admin
-  if (!currentUser || currentUser.role !== "admin") {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-4 md:p-8">
-        <div className="max-w-6xl mx-auto bg-white p-8 rounded-2xl shadow-lg border border-indigo-100 text-center">
-          <div className="w-24 h-24 mx-auto bg-indigo-100 rounded-full flex items-center justify-center mb-4">
-            <User className="w-10 h-10 text-indigo-500" />
-          </div>
-          <h3 className="text-2xl font-semibold text-gray-800 mb-2 font-nunito">
-            Access Denied
-          </h3>
-          <p className="text-gray-500 max-w-md mx-auto font-nunito">
-            You must be an admin to view students. Please contact the administration.
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 bg-white rounded-xl shadow-sm border border-indigo-100 p-6">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-indigo-100 rounded-full">
-              <User className="w-8 h-8 text-indigo-600" />
+              <User className="md:w-8 md:h-8 text-indigo-600" />
             </div>
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-800 font-nunito">
+              <h1 className="text-xl md:text-2xl font-bold text-gray-800 font-nunito">
                 Students
               </h1>
-              <p className="text-gray-500 font-nunito">
+              <p className="text-sm md:text-base text-gray-500 font-nunito">
                 {filteredStudents.length} students enrolled
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-4 flex-wrap">
+          <div className="flex flex-col md:flex-row w-full md:w-auto gap-4">
             {/* Class Filter */}
             <div className="relative">
               <select

@@ -121,24 +121,6 @@ const AdminReports = () => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  // Check if user is admin
-  if (!currentUser || currentUser.role !== 'admin') {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-4 md:p-8">
-        <div className="max-w-6xl mx-auto bg-white p-8 rounded-2xl shadow-lg border border-indigo-100 text-center">
-          <div className="w-24 h-24 mx-auto bg-indigo-100 rounded-full flex items-center justify-center mb-4">
-            <FileText className="w-10 h-10 text-indigo-500" />
-          </div>
-          <h3 className="text-2xl font-semibold text-gray-800 mb-2 font-nunito">
-            Access Denied
-          </h3>
-          <p className="text-gray-500 max-w-md mx-auto font-nunito">
-            You must be an admin to view reports. Please contact the administration.
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-6 md:p-8">
@@ -148,13 +130,13 @@ const AdminReports = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="bg-indigo-100 p-3 rounded-xl shadow-md">
-                <FileText className="h-8 w-8 text-indigo-600" />
+                <FileText className="md:h-8 md:w-8 text-indigo-600" />
               </div>
               <div>
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-800 font-nunito">
-                  Parent Reports Dashboard
+                <h1 className="text-xl md:text-2xl font-bold text-gray-800 font-nunito">
+                  Parent Reports
                 </h1>
-                <p className="text-gray-500 font-nunito">
+                <p className="text-sm md:text-base text-gray-500 font-nunito">
                   Manage and respond to reports submitted by parents
                 </p>
               </div>
