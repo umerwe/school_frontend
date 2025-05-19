@@ -37,19 +37,10 @@ const AdminAnnouncementForm = () => {
   return (
     <div className="flex items-center justify-center p-2 sm:p-4 pt-0 min-w-[340px]">
       <div className="w-full max-w-3xl mx-auto mt-4 sm:mt-12 bg-white rounded-lg sm:rounded-2xl shadow-md sm:shadow-lg border border-indigo-100 sm:border-indigo-200 animate-fade-in">
-        {/* Header */}
-        <div className="bg-indigo-500 px-4 sm:px-8 py-4 sm:py-6 rounded-t-lg sm:rounded-t-xl flex items-center space-x-3 sm:space-x-4 hover:brightness-105 transition-all duration-300">
-          <div className="bg-indigo-100 p-1 sm:p-2 rounded-md sm:rounded-lg animate-pulse">
-            <Megaphone className="h-6 w-6 sm:h-8 sm:w-8 text-indigo-500" />
-          </div>
-          <div>
-            <h2 className="text-lg sm:text-2xl  font-bold sm:font-extrabold text-white" style={{ fontFamily: 'Nunito, sans-serif' }}>
-              Create New Announcement
-            </h2>
-            <p className="text-indigo-100 text-xs sm:text-base -mt-1 " style={{ fontFamily: 'Nunito, sans-serif' }}>
-              Broadcast updates to your school community!
-            </p>
-          </div>
+        {/* Simplified Header */}
+        <div className="bg-indigo-500 px-4 sm:px-8 py-3 sm:py-4 rounded-t-lg sm:rounded-t-xl flex items-center space-x-2 hover:brightness-105 transition-all duration-300">
+          <Megaphone className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
+          <span className="text-white font-medium text-sm sm:text-base">New Announcement</span>
         </div>
 
         {/* Form */}

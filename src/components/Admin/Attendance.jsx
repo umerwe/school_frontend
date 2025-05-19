@@ -8,7 +8,7 @@ export default function Attendance() {
         isLoading: loadingAttendance,
         error
     } = useGetDashboardSummaryQuery();
-
+    console.log(data)
     const today = new Date().toISOString().split('T')[0];
     const [selectedDate, setSelectedDate] = useState(today);
 
@@ -17,7 +17,7 @@ export default function Attendance() {
     const [mergedRecords, setMergedRecords] = useState([]);
     const [totalRecords, setTotalRecords] = useState(0);
     const [totalPresent, setTotalPresent] = useState(0);
-    
+
     // Status configuration with colors and icons
     const statusConfig = {
         present: {
@@ -150,13 +150,15 @@ export default function Attendance() {
             <div className="max-w-6xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-indigo-100">
                 {/* Header Section */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-                    <div className="flex items-center gap-3">
-                        <BookOpen className="w-8 h-8 text-indigo-600" />
+                    <div className="flex items-center gap-2 md:gap-3">
+                        <div className="p-3 bg-indigo-100 rounded-full">
+                            <BookOpen className="h-5 w-5 md:h-8 md:w-8 text-indigo-600" />
+                        </div>
                         <div>
-                            <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+                            <h2 className="text-xl md:text-2xl font-bold text-gray-800">
                                 Attendance History
                             </h2>
-                            <p className="text-indigo-600 font-medium flex items-center gap-1">
+                            <p className="text-xs sm:text-base text-indigo-600 font-medium flex items-center gap-1">
                                 <Users className="w-4 h-4" />
                                 Attendance for {formatDisplayDate(selectedDate)}
                             </p>
@@ -228,26 +230,15 @@ export default function Attendance() {
                 {loadingAttendance ? (
                     <div className="bg-white rounded-xl shadow-sm border border-indigo-100 p-8 h-64 flex flex-col items-center justify-center gap-4">
                         <Loader2 className="w-10 h-10 text-indigo-500 animate-spin" />
-                        <p className="text-gray-500">
-                            Loading attendance records...
-                        </p>
                     </div>
                 ) : displayRecords.length > 0 ? (
                     <div className="space-y-6">
                         {displayRecords.map((record) => (
                             <div key={formatDate(record.date)} className="border border-indigo-100 rounded-xl overflow-hidden shadow-xs">
-                                <div className="bg-indigo-50 px-6 py-3 border-b border-indigo-100 flex justify-between items-center">
-                                    <h3 className="text-sm font-medium text-indigo-800 flex items-center gap-2">
-                                        <Calendar className="w-4 h-4" />
-                                        {formatDisplayDate(record.date)}
-                                    </h3>
-                                    <div className="text-xs font-medium text-indigo-600">
-                                        {record.presentCount} present / {record.students.length} total
-                                    </div>
-                                </div>
+
                                 <div className="overflow-x-auto">
                                     <table className="w-full divide-y divide-indigo-100">
-                                        <thead className="bg-white">
+                                        <thead className="bg-indigo-50">
                                             <tr>
                                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                                                     Student

@@ -172,7 +172,7 @@ const AdminNavbar = () => {
   ];
 
   return (
-    <div className="flex min-h-screen min-w-[340px] overflow-hidden bg-gray-50 relative">
+    <div className="flex h-screen min-w-[340px] overflow-hidden bg-gray-50 relative">
       {/* Sidebar */}
       <div
         ref={sidebarRef}
@@ -202,11 +202,11 @@ const AdminNavbar = () => {
             onClick={toggleSidebar}
             className="text-white hover:text-white p-1 sm:p-1.5 rounded-md hover:bg-indigo-400 transition-colors ml-1"
           >
-            {(isSidebarOpen || isMobile) ? <X size={20} /> : <Menu size={20} />}
+            {(isSidebarOpen || isMobile) ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
 
-        <div className="px-2 sm:px-3 pb-0 pt-2">
+        <div className="px-2 sm:px-3 pb-0 pt-3">
           <ul className="space-y-2">
             {menuItems.map((item, index) => (
               <li

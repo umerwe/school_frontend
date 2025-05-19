@@ -28,7 +28,7 @@ export const teacherDashboardApi = createApi({
         method: 'POST',
         body: attendanceData,
       }),
-      invalidatesTags: ['TeacherDashboard','StudentDashboard','ParentDashboard'],
+      invalidatesTags: ['TeacherDashboard','StudentDashboard','ParentDashboard','Dashboard'],
     }),
     submitMarks: builder.mutation({
       query: (marksData) => ({
