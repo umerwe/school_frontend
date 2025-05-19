@@ -4,12 +4,11 @@ import { logout, updateTokens } from '../store/slices/userSlice';
 
 const baseUrl =
   import.meta.env.MODE === 'production'
-    ? import.meta.env.VITE_API_BASE_URL_PROD
-    : import.meta.env.VITE_API_BASE_URL_LOCAL;
-    
+    ? import.meta.env.VITE_API_BASE_URL_PROD || 'https://api.production.com'
+    : import.meta.env.VITE_API_BASE_URL_LOCAL || 'http://localhost:3000';
 
 const api = axios.create({
-  baseUrl,
+  baseURL: baseUrl, // Fixed typo
   withCredentials: true,
   timeout: 8000 // 8 seconds timeout
 });
