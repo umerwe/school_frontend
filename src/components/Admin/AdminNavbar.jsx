@@ -200,11 +200,10 @@ const AdminNavbar = () => {
       {/* Sidebar - Desktop */}
       <div
         ref={sidebarRef}
-        className={`bg-indigo-500 text-white h-full transition-all duration-300 ease-in-out ${
-          isMobile 
+        className={`bg-indigo-500 text-white h-full transition-all duration-300 ease-in-out ${isMobile
             ? `fixed top-0 left-0 z-20 w-64 shadow-xl rounded-sm ${showMobileSidebar ? 'translate-x-0' : '-translate-x-full'}`
             : isSidebarOpen ? "w-64" : "w-20"
-        } shadow-xl z-10 rounded-sm`}
+          } shadow-xl z-10 rounded-sm`}
       >
         <div className="flex items-center justify-between p-4 border-b border-indigo-400">
           {isSidebarOpen || isMobile ? (
@@ -240,28 +239,25 @@ const AdminNavbar = () => {
                   if (item.onClick) item.onClick();
                   if (isMobile) setShowMobileSidebar(false);
                 }}
-                className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all duration-200 ${
-                  location.pathname === item.path
+                className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all duration-200 ${location.pathname === item.path
                     ? "bg-indigo-400 shadow-lg shadow-indigo-900/20"
                     : "text-white hover:bg-indigo-400 hover:text-white hover:translate-x-1"
-                }`}
+                  }`}
               >
                 <span
-                  className={`flex-shrink-0 ${
-                    location.pathname === item.path
+                  className={`flex-shrink-0 ${location.pathname === item.path
                       ? "text-indigo-100"
                       : "text-white hover:text-white transition-colors"
-                  }`}
+                    }`}
                 >
                   {item.icon}
                 </span>
                 {(isSidebarOpen || isMobile) && (
                   <span
-                    className={`text-sm font-medium ${
-                      location.pathname === item.path
+                    className={`text-sm font-medium ${location.pathname === item.path
                         ? "text-white"
                         : "text-white hover:text-white transition-colors"
-                    }`}
+                      }`}
                     style={{ fontFamily: "Nunito, sans-serif" }}
                   >
                     {item.label}
@@ -275,8 +271,8 @@ const AdminNavbar = () => {
 
       {/* Mobile Sidebar Overlay */}
       {showMobileSidebar && isMobile && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-10"
+        <div
+          className="fixed inset-0 bg-gray-800/30 backdrop-blur-md z-10"
           onClick={() => setShowMobileSidebar(false)}
         />
       )}
@@ -298,11 +294,11 @@ const AdminNavbar = () => {
               <Landmark size={22} className="text-indigo-500 mr-2" />
               <span
                 style={{ fontFamily: "Nunito, sans-serif" }}
-                className="text-lg font-bold mt-1 text-gray-700 flex items-center"
+                className="text-md sm:text-lg font-bold mt-1 text-gray-700 flex items-center"
               >
-                {isMobile ? "Admin" : "Admin Dashboard"}
-                {!isMobile && (
-                  <span className="text-indigo-500 ml-1 text-sm bg-indigo-100 px-2 py-0.5 rounded-full">
+                {isMobile ? "Admin" : "Admin"}
+                {(!isMobile || isMobile) && (
+                  <span className="text-indigo-500 ml-1 text-xs sm:text-sm bg-indigo-100 px-2 py-0.5 rounded-full">
                     Dashboard
                   </span>
                 )}
@@ -355,7 +351,7 @@ const AdminNavbar = () => {
                 className="flex items-center gap-2 cursor-pointer group"
                 onClick={() => setIsDropdownVisible(!isDropdownVisible)}
               >
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br border-1 border-indigo-500 from-indigo-500 to-indigo-700 flex items-center justify-center text-white font-medium shadow-md ring-2 ring-white">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br border-2 border-indigo-400 flex items-center justify-center text-white font-medium shadow-md ring-2 ring-white">
                   {currentUser?.logo ? (
                     <img
                       src={currentUser.logo}
@@ -370,9 +366,8 @@ const AdminNavbar = () => {
                   <div className="flex items-center">
                     <ChevronDown
                       size={16}
-                      className={`text-gray-600 transition-transform duration-200 ${
-                        isDropdownVisible ? "rotate-180" : ""
-                      }`}
+                      className={`text-gray-600 transition-transform duration-200 ${isDropdownVisible ? "rotate-180" : ""
+                        }`}
                     />
                   </div>
                 )}
