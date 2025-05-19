@@ -33,7 +33,7 @@ const StudentDashboard = () => {
 
     // Fetch dashboard summary using RTK Query
     const { data, isLoading, error } = useGetDashboardSummaryQuery();
-
+    
     // Process metrics from the summary data
     const metrics = data
         ? {

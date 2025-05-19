@@ -43,8 +43,11 @@ const StudentAi = () => {
     setError(null);
 
     try {
+      const baseUrl =
+                import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+            
       const response = await axios.post(
-        'http://localhost:8000/api/v1/student-ai',
+        `${baseUrl}/student-ai`, // Adjust endpoint as needed
         { prompt },
         { withCredentials: true }
       );
