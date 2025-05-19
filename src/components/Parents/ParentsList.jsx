@@ -119,9 +119,9 @@ export default function ParentList() {
                 </div>
                 <button
                   onClick={() => navigate("/admin-dashboard/parents/new")}
-                  className="flex items-center text-xs sm:text-sm justify-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors w-full md:w-auto font-nunito shadow-sm hover:shadow-md"
+                  className="flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors w-full md:w-auto font-nunito shadow-sm hover:shadow-md"
                 >
-                  <Plus className="h-4 w-4" />
+                  <Plus className="h-5 w-5" />
                   Add Parent
                 </button>
               </div>
