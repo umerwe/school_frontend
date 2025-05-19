@@ -33,6 +33,7 @@ const AdminNavbar = () => {
   const location = useLocation();
   const currentUser = useSelector((store) => store.userSlice.user);
   const dropdownRef = useRef();
+  const sidebarRef = useRef();
 
   const { data: dashboardData, error: dashboardError } = useGetDashboardSummaryQuery();
   const [resetAdminNumber] = useResetAdminNumberMutation();
@@ -41,18 +42,41 @@ const AdminNavbar = () => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [newReportsCount, setNewReportsCount] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
 
-  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+  const toggleSidebar = () => {
+    if (isMobile) {
+      setShowMobileSidebar(!showMobileSidebar);
+    } else {
+      setIsSidebarOpen(!isSidebarOpen);
+    }
+  };
 
-  // Handle clicks outside dropdown to close it
+  // Handle clicks outside dropdown and sidebar to close them
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsDropdownVisible(false);
       }
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target) && isMobile) {
+        setShowMobileSidebar(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMobile]);
+
+  // Check for mobile view
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+      if (window.innerWidth >= 640) {
+        setShowMobileSidebar(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   // Update reports count from dashboard data
@@ -171,16 +195,19 @@ const AdminNavbar = () => {
     { icon: <BookOpen size={20} />, label: "Attendance", path: "/admin-dashboard/attendance" },
   ];
 
-
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
-      {/* Sidebar */}
+    <div className="flex h-screen min-h-[340px] overflow-hidden bg-gray-50 relative">
+      {/* Sidebar - Desktop */}
       <div
-        className={`bg-indigo-500 text-white h-full transition-all duration-300 ease-in-out ${isSidebarOpen ? "w-64" : "w-20"
-          } shadow-xl z-10 rounded-sm`}
+        ref={sidebarRef}
+        className={`bg-indigo-500 text-white h-full transition-all duration-300 ease-in-out ${
+          isMobile 
+            ? `fixed top-0 left-0 z-20 w-64 shadow-xl rounded-sm ${showMobileSidebar ? 'translate-x-0' : '-translate-x-full'}`
+            : isSidebarOpen ? "w-64" : "w-20"
+        } shadow-xl z-10 rounded-sm`}
       >
         <div className="flex items-center justify-between p-4 border-b border-indigo-400">
-          {isSidebarOpen ? (
+          {isSidebarOpen || isMobile ? (
             <div className="flex items-center gap-1">
               <GraduationCap className="h-10 w-10 text-amber-400 -rotate-[15deg]" />
               <span
@@ -199,7 +226,7 @@ const AdminNavbar = () => {
             onClick={toggleSidebar}
             className="text-white hover:text-white p-1.5 rounded-md hover:bg-indigo-400 transition-colors ml-1"
           >
-            {isSidebarOpen ? <X size={23} /> : <Menu size={24} />}
+            {isSidebarOpen || isMobile ? <X size={23} /> : <Menu size={24} />}
           </button>
         </div>
 
@@ -211,26 +238,30 @@ const AdminNavbar = () => {
                 onClick={() => {
                   navigate(item.path);
                   if (item.onClick) item.onClick();
+                  if (isMobile) setShowMobileSidebar(false);
                 }}
-                className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all duration-200 ${location.pathname === item.path
-                  ? "bg-indigo-400 shadow-lg shadow-indigo-900/20"
-                  : "text-white hover:bg-indigo-400 hover:text-white hover:translate-x-1"
-                  }`}
+                className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all duration-200 ${
+                  location.pathname === item.path
+                    ? "bg-indigo-400 shadow-lg shadow-indigo-900/20"
+                    : "text-white hover:bg-indigo-400 hover:text-white hover:translate-x-1"
+                }`}
               >
                 <span
-                  className={`flex-shrink-0 ${location.pathname === item.path
-                    ? "text-indigo-100"
-                    : "text-white hover:text-white transition-colors"
-                    }`}
+                  className={`flex-shrink-0 ${
+                    location.pathname === item.path
+                      ? "text-indigo-100"
+                      : "text-white hover:text-white transition-colors"
+                  }`}
                 >
                   {item.icon}
                 </span>
-                {isSidebarOpen && (
+                {(isSidebarOpen || isMobile) && (
                   <span
-                    className={`text-sm font-medium ${location.pathname === item.path
-                      ? "text-white"
-                      : "text-white hover:text-white transition-colors"
-                      }`}
+                    className={`text-sm font-medium ${
+                      location.pathname === item.path
+                        ? "text-white"
+                        : "text-white hover:text-white transition-colors"
+                    }`}
                     style={{ fontFamily: "Nunito, sans-serif" }}
                   >
                     {item.label}
@@ -242,26 +273,44 @@ const AdminNavbar = () => {
         </div>
       </div>
 
+      {/* Mobile Sidebar Overlay */}
+      {showMobileSidebar && isMobile && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-10"
+          onClick={() => setShowMobileSidebar(false)}
+        />
+      )}
+
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Topbar */}
-        <div className="flex items-center justify-between bg-white px-6 py-4 border-b border-gray-200 shadow-sm">
+        <div className="flex items-center justify-between bg-white px-4 sm:px-6 py-4 border-b border-gray-200 shadow-sm">
           <div className="flex items-center gap-2">
+            {isMobile && (
+              <button
+                onClick={toggleSidebar}
+                className="text-gray-600 hover:text-indigo-600 mr-2"
+              >
+                <Menu size={24} />
+              </button>
+            )}
             <div className="flex items-center">
               <Landmark size={22} className="text-indigo-500 mr-2" />
               <span
                 style={{ fontFamily: "Nunito, sans-serif" }}
                 className="text-lg font-bold mt-1 text-gray-700 flex items-center"
               >
-                Admin
-                <span className="text-indigo-500 ml-1 text-sm bg-indigo-100 px-2 py-0.5 rounded-full">
-                  Dashboard
-                </span>
+                {isMobile ? "Admin" : "Admin Dashboard"}
+                {!isMobile && (
+                  <span className="text-indigo-500 ml-1 text-sm bg-indigo-100 px-2 py-0.5 rounded-full">
+                    Dashboard
+                  </span>
+                )}
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-3 sm:gap-5">
             <div className="relative pt-1.5">
               <button
                 onClick={() => {
@@ -306,7 +355,7 @@ const AdminNavbar = () => {
                 className="flex items-center gap-2 cursor-pointer group"
                 onClick={() => setIsDropdownVisible(!isDropdownVisible)}
               >
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br border-1 border-indigo-500 from-indigo-500 to-indigo-700 flex items-center justify-center text-white font-medium shadow-md ring-2 ring-white">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br border-1 border-indigo-500 from-indigo-500 to-indigo-700 flex items-center justify-center text-white font-medium shadow-md ring-2 ring-white">
                   {currentUser?.logo ? (
                     <img
                       src={currentUser.logo}
@@ -314,20 +363,23 @@ const AdminNavbar = () => {
                       className="w-full h-full rounded-full object-cover"
                     />
                   ) : (
-                    <UserCircle size={20} />
+                    <UserCircle size={18} />
                   )}
                 </div>
-                <div className="flex items-center">
-                  <ChevronDown
-                    size={16}
-                    className={`text-gray-600 transition-transform duration-200 ${isDropdownVisible ? "rotate-180" : ""
+                {!isMobile && (
+                  <div className="flex items-center">
+                    <ChevronDown
+                      size={16}
+                      className={`text-gray-600 transition-transform duration-200 ${
+                        isDropdownVisible ? "rotate-180" : ""
                       }`}
-                  />
-                </div>
+                    />
+                  </div>
+                )}
               </div>
 
               {isDropdownVisible && (
-                <div className="absolute right-0 mt-3 w-64 bg-white rounded-xl shadow-xl z-50 border border-gray-100 overflow-hidden">
+                <div className="absolute right-0 mt-3 w-56 sm:w-64 bg-white rounded-xl shadow-xl z-50 border border-gray-100 overflow-hidden">
                   <div className="px-4 py-4 border-b bg-gradient-to-r from-indigo-50 to-gray-50">
                     <p
                       className="text-sm font-semibold text-gray-900"
@@ -378,7 +430,7 @@ const AdminNavbar = () => {
         </div>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto bg-gray-50 px-6 bg-gradient-to-br from-indigo-50 to-purple-50">
+        <main className="flex-1 overflow-y-auto bg-gray-50 px-4 sm:px-6 bg-gradient-to-br from-indigo-50 to-purple-50">
           <Outlet />
         </main>
       </div>
