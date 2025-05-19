@@ -124,7 +124,7 @@ const AdminReports = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-6 md:p-8">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-indigo-100">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">

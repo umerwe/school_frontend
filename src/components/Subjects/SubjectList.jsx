@@ -5,6 +5,7 @@ import {
   Loader2,
   Trash2,
   Pencil,
+  Plus,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Modal, message } from "antd";
@@ -92,8 +93,8 @@ export default function SubjectList() {
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-4 sm:p-6 md:p-8">
       <div className="max-w-7xl mx-auto bg-white p-4 sm:p-6 md:p-8 rounded-2xl shadow-lg border border-indigo-100">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-col lg:flex-row justify-between items-start mb-6 gap-4">
+          <div className="flex gap-3">
             <div className="p-3 bg-indigo-100 rounded-full">
               <BookOpen className="w-6 h-6 md:w-8 md:h-8 text-indigo-600" />
             </div>
@@ -106,8 +107,9 @@ export default function SubjectList() {
               </p>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-            <div className="relative w-full sm:w-36">
+          <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+           <div className="flex gap-3">
+             <div className="relative w-full sm:w-36">
               <select
                 value={filterClass}
                 onChange={(e) => setFilterClass(e.target.value)}
@@ -163,11 +165,13 @@ export default function SubjectList() {
                 </svg>
               </div>
             </div>
+           </div>
             <button
-              className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium font-nunito text-xs sm:text-sm transition-colors shadow-sm hover:shadow-md w-full sm:w-auto"
+              className="flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors w-full md:w-auto text-xs sm:text-sm font-nunito shadow-sm hover:shadow-md"
               onClick={() => navigate("/admin-dashboard/subjects/new")}
             >
-              + Create Subject
+              <Plus className="w-4 h-4" />
+              Create Subject
             </button>
           </div>
         </div>

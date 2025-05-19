@@ -119,15 +119,13 @@ export default function ClassList() {
               </p>
             </div>
           </div>
-          <div>
           <button
             onClick={() => navigate("/admin-dashboard/classes/new")}
-            className="flex text-sm items-center gap-2 px-4 py-2 bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg font-medium font-nunito transition-colors shadow-sm hover:shadow-md"
+            className="flex text-xs sm:text-sm items-center justify-center gap-2 px-4 py-2 bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg font-medium font-nunito transition-colors shadow-sm hover:shadow-md"
           >
             <BookOpen className="w-4 h-4" />
             Add Class
           </button>
-          </div>
         </div>
 
         {/* Classes Table */}

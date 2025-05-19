@@ -141,24 +141,6 @@ const VoucherList = () => {
         setSelectedSection("");
     };
 
-    if (!currentUser || currentUser.role !== "admin") {
-        return (
-            <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-4 md:p-8">
-                <div className="max-w-6xl mx-auto bg-white p-8 rounded-2xl shadow-lg border border-indigo-100 text-center">
-                    <div className="w-24 h-24 mx-auto bg-indigo-100 rounded-full flex items-center justify-center mb-4">
-                        <Ticket className="w-10 h-10 text-indigo-500" />
-                    </div>
-                    <h3 className="text-2xl font-semibold text-gray-800 mb-2 font-nunito">
-                        Access Denied
-                    </h3>
-                    <p className="text-gray-500 max-w-md mx-auto font-nunito">
-                        You must be an admin to view vouchers. Please contact the administration.
-                    </p>
-                </div>
-            </div>
-        );
-    }
-
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-4 md:p-8">
             <div className="max-w-6xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-indigo-100">
@@ -166,14 +148,14 @@ const VoucherList = () => {
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
                     <div className="flex items-center gap-3 mb-4 md:mb-0">
                         <div className="p-3 bg-indigo-100 rounded-full">
-                            <Currency className="w-8 h-8 text-indigo-600" />
+                            <Currency className="md:w-8 md:h-8 text-indigo-600" />
                         </div>
                         <div>
-                            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 font-nunito">
-                                Fee Voucher Records
+                            <h2 className="text-xl md:text-2xl font-bold text-gray-800 font-nunito">
+                                Fee Vouchers
                             </h2>
-                            <p className="text-gray-500 font-nunito">
-                                View and manage fee voucher records for your institute students
+                            <p className="text-sm md:text-base text-gray-500 font-nunito">
+                                View and manage fee voucher records
                             </p>
                         </div>
                     </div>
@@ -189,7 +171,7 @@ const VoucherList = () => {
                         )}
                         <button
                             onClick={() => navigate("/admin-dashboard/create-voucher")}
-                            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg font-medium font-nunito transition-colors shadow-sm hover:shadow-md"
+                            className="flex text-sm md:text-md items-center gap-2 px-4 py-2 bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg font-medium font-nunito transition-colors shadow-sm hover:shadow-md"
                         >
                             <FileText className="w-4 h-4" />
                             Create Fee Voucher
@@ -211,7 +193,7 @@ const VoucherList = () => {
                             <select
                                 value={selectedMonth}
                                 onChange={handleMonthChange}
-                                className="w-full pl-10 pr-10 py-2.5 border border-indigo-200 rounded-lg bg-white text-gray-700 appearance-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 font-nunito hover:bg-indigo-50 transition-colors"
+                                className="w-full text-sm md:text-md pl-10 pr-10 py-2.5 border border-indigo-200 rounded-lg bg-white text-gray-700 appearance-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 font-nunito hover:bg-indigo-50 transition-colors"
                                 disabled={isLoading}
                             >
                                 <option value="">All Months</option>
@@ -237,7 +219,7 @@ const VoucherList = () => {
                             <select
                                 value={selectedClass}
                                 onChange={handleClassChange}
-                                className="w-full pl-10 pr-10 py-2.5 border border-indigo-200 rounded-lg bg-white text-gray-700 appearance-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 font-nunito hover:bg-indigo-50 transition-colors"
+                                className="w-full text-sm md:text-md pl-10 pr-10 py-2.5 border border-indigo-200 rounded-lg bg-white text-gray-700 appearance-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 font-nunito hover:bg-indigo-50 transition-colors"
                                 disabled={isLoading}
                             >
                                 <option value="">All Classes</option>
@@ -263,7 +245,7 @@ const VoucherList = () => {
                             <select
                                 value={selectedSection}
                                 onChange={handleSectionChange}
-                                className="w-full pl-10 pr-10 py-2.5 border border-indigo-200 rounded-lg bg-white text-gray-700 appearance-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 font-nunito hover:bg-indigo-50 transition-colors"
+                                className="w-full text-sm md:text-md pl-10 pr-10 py-2.5 border border-indigo-200 rounded-lg bg-white text-gray-700 appearance-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 font-nunito hover:bg-indigo-50 transition-colors"
                                 disabled={isLoading}
                             >
                                 <option value="">All Sections</option>

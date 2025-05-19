@@ -119,9 +119,9 @@ export default function ParentList() {
                 </div>
                 <button
                   onClick={() => navigate("/admin-dashboard/parents/new")}
-                  className="flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors w-full md:w-auto font-nunito shadow-sm hover:shadow-md"
+                  className="flex items-center text-xs sm:text-sm justify-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors w-full md:w-auto font-nunito shadow-sm hover:shadow-md"
                 >
-                  <Plus className="h-5 w-5" />
+                  <Plus className="h-4 w-4" />
                   Add Parent
                 </button>
               </div>
@@ -133,7 +133,6 @@ export default function ParentList() {
         {isLoading ? (
           <div className="bg-white rounded-xl shadow-sm border border-indigo-100 p-8 h-64 flex flex-col items-center justify-center gap-4">
             <Loader2 className="w-10 h-10 text-indigo-500 animate-spin" />
-            <p className="text-gray-500 font-nunito">Loading parents...</p>
           </div>
         ) : error ? (
           <div className="bg-white rounded-xl shadow-sm border border-indigo-100 p-8 text-center">

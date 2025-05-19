@@ -202,9 +202,9 @@ export default function StudentList() {
 
             <button
               onClick={() => navigate("/admin-dashboard/students/new")}
-              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm hover:shadow-md font-nunito"
+              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 justify-center text-xs sm:text-sm transition-colors shadow-sm hover:shadow-md font-nunito"
             >
-              <Plus className="w-5 h-5" />
+              <Plus className="w-4 h-4" />
               Add Student
             </button>
           </div>
