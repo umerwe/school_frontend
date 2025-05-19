@@ -146,7 +146,7 @@ const VoucherList = () => {
             <div className="max-w-6xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-indigo-100">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-                    <div className="flex items-center gap-3 mb-4 md:mb-0">
+                    <div className="flex items-center gap-3 mb-1 md:mb-0">
                         <div className="p-3 bg-indigo-100 rounded-full">
                             <Currency className="md:w-8 md:h-8 text-indigo-600" />
                         </div>

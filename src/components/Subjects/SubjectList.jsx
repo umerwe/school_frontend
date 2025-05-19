@@ -167,7 +167,7 @@ export default function SubjectList() {
             </div>
            </div>
             <button
-              className="flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors w-full md:w-auto text-xs sm:text-sm font-nunito shadow-sm hover:shadow-md"
+              className="flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors w-full md:w-auto font-medium text-xs sm:text-sm font-nunito shadow-sm hover:shadow-md"
               onClick={() => navigate("/admin-dashboard/subjects/new")}
             >
               <Plus className="w-4 h-4" />

@@ -42,7 +42,7 @@ const AdminNavbar = () => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [newReportsCount, setNewReportsCount] = useState(0);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768); // Changed to 768px
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
 
   const toggleSidebar = () => {
@@ -53,7 +53,6 @@ const AdminNavbar = () => {
     }
   };
 
-  // Handle clicks outside dropdown and sidebar to close them
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -67,19 +66,19 @@ const AdminNavbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isMobile]);
 
-  // Check for mobile view
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 640);
-      if (window.innerWidth >= 640) {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (!mobile) {
         setShowMobileSidebar(false);
       }
     };
     window.addEventListener('resize', handleResize);
+    handleResize(); // Initial check
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Update reports count from dashboard data
   useEffect(() => {
     if (dashboardData?.adminNumber !== undefined) {
       setNewReportsCount(dashboardData.adminNumber.number);
@@ -89,14 +88,12 @@ const AdminNavbar = () => {
     }
   }, [dashboardData, dashboardError]);
 
-  // Validate user presence
   useEffect(() => {
     if (!currentUser?._id) {
       message.error("User ID not found. Please log in again.");
     }
   }, [currentUser?._id]);
 
-  // Reset reports count when navigating to Parent Reports page
   const resetReportsCount = async () => {
     try {
       await resetAdminNumber().unwrap();
@@ -114,30 +111,21 @@ const AdminNavbar = () => {
 
   const handleLogout = async () => {
     setIsDropdownVisible(false);
-
     const baseUrl =
       import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
 
     try {
-      // Call logout API
-      await axios(`${baseUrl}auth/logout`, {
+      await axios(`${baseUrl}/auth/logout`, {
         method: "POST",
         credentials: "include",
       });
-
-      // Clear RTK Query cache
       dispatch(adminDashboardApi.util.resetApiState());
       localStorage.removeItem('persist:adminDashboardApi');
-
-      // Dispatch logout action to clear user state
       dispatch(logout());
-
-      // Navigate and reload
       navigate("/", { replace: true });
       window.location.reload();
     } catch (error) {
       console.error("Error during logout:", error);
-      // Fallback: Clear everything even if API fails
       dispatch(adminDashboardApi.util.resetApiState());
       localStorage.removeItem('persist:adminDashboardApi');
       dispatch(logout());
@@ -146,24 +134,18 @@ const AdminNavbar = () => {
     }
   };
 
-  // Capitalize name for display
   const capitalizeName = (name) =>
     name
       ?.split(" ")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(" ") || "";
 
-  // Menu items with Parent Reports badge
   const menuItems = [
     { icon: <LayoutDashboard size={20} />, label: "Dashboard", path: "/admin-dashboard" },
-
-    // Academic
     { icon: <Users size={20} />, label: "Classes", path: "/admin-dashboard/classes" },
     { icon: <BookOpen size={20} />, label: "Subjects", path: "/admin-dashboard/subjects" },
     { icon: <User size={20} />, label: "Teachers", path: "/admin-dashboard/teachers" },
     { icon: <UserPlus size={20} />, label: "Students", path: "/admin-dashboard/students" },
-
-    // Parent & Reports
     { icon: <User size={20} />, label: "Parents", path: "/admin-dashboard/parents" },
     {
       icon: (
@@ -181,56 +163,51 @@ const AdminNavbar = () => {
       ),
       label: "Parent Reports",
       path: "/admin-dashboard/reports",
-      onClick: async () => {
-        await resetReportsCount();
-      },
+      onClick: resetReportsCount,
     },
-
-    // Management
     { icon: <FileText size={20} />, label: "Fee Vouchers", path: "/admin-dashboard/vouchers" },
     { icon: <Bell size={20} />, label: "Announcements", path: "/admin-dashboard/announcement/new" },
     { icon: <Bot size={20} />, label: "AI Assistant", path: "/admin-dashboard/ai-assistant" },
-
-    // Newly Added
     { icon: <BookOpen size={20} />, label: "Attendance", path: "/admin-dashboard/attendance" },
   ];
 
   return (
-    <div className="flex h-screen min-h-[340px] overflow-hidden bg-gray-50 relative">
-      {/* Sidebar - Desktop */}
+    <div className="flex min-h-screen min-w-[340px] overflow-hidden bg-gray-50 relative">
+      {/* Sidebar */}
       <div
         ref={sidebarRef}
-        className={`bg-indigo-500 text-white h-full transition-all duration-300 ease-in-out ${isMobile
+        className={`bg-indigo-500 text-white h-full transition-all duration-300 ease-in-out ${
+          isMobile
             ? `fixed top-0 left-0 z-20 w-64 shadow-xl rounded-sm ${showMobileSidebar ? 'translate-x-0' : '-translate-x-full'}`
-            : isSidebarOpen ? "w-64" : "w-20"
-          } shadow-xl z-10 rounded-sm`}
+            : isSidebarOpen
+            ? 'w-64 md:w-56'
+            : 'w-20'
+        } shadow-xl z-10 rounded-sm`}
       >
-        <div className="flex items-center justify-between p-4 border-b border-indigo-400">
-          {isSidebarOpen || isMobile ? (
+        <div className="flex items-center justify-between p-3 sm:p-4 border-b border-indigo-400">
+          {(isSidebarOpen || isMobile) && (
             <div className="flex items-center gap-1">
-              <GraduationCap className="h-10 w-10 text-amber-400 -rotate-[15deg]" />
+              <GraduationCap className="h-8 sm:h-10 w-8 sm:w-10 text-amber-400 -rotate-[15deg]" />
               <span
                 style={{ fontFamily: "Nunito, sans-serif" }}
-                className="text-[22px] font-extrabold tracking-wide mt-1"
+                className="text-xl sm:text-[22px] font-extrabold tracking-wide mt-1"
               >
                 <span className="text-white">e</span>
                 <span className="text-white">School</span>
                 <span className="text-white">.</span>
               </span>
             </div>
-          ) : (
-            ""
           )}
           <button
             onClick={toggleSidebar}
-            className="text-white hover:text-white p-1.5 rounded-md hover:bg-indigo-400 transition-colors ml-1"
+            className="text-white hover:text-white p-1 sm:p-1.5 rounded-md hover:bg-indigo-400 transition-colors ml-1"
           >
-            {isSidebarOpen || isMobile ? <X size={23} /> : <Menu size={24} />}
+            {(isSidebarOpen || isMobile) ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
-        <div className="px-3 pb-0 pt-2">
-          <ul className="space-y-2.5">
+        <div className="px-2 sm:px-3 pb-0 pt-2">
+          <ul className="space-y-2">
             {menuItems.map((item, index) => (
               <li
                 key={index}
@@ -239,25 +216,28 @@ const AdminNavbar = () => {
                   if (item.onClick) item.onClick();
                   if (isMobile) setShowMobileSidebar(false);
                 }}
-                className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all duration-200 ${location.pathname === item.path
+                className={`flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg cursor-pointer transition-all duration-200 ${
+                  location.pathname === item.path
                     ? "bg-indigo-400 shadow-lg shadow-indigo-900/20"
                     : "text-white hover:bg-indigo-400 hover:text-white hover:translate-x-1"
-                  }`}
+                }`}
               >
                 <span
-                  className={`flex-shrink-0 ${location.pathname === item.path
+                  className={`flex-shrink-0 ${
+                    location.pathname === item.path
                       ? "text-indigo-100"
-                      : "text-white hover:text-white transition-colors"
-                    }`}
+                      : "text-white hover:text-white"
+                  }`}
                 >
                   {item.icon}
                 </span>
                 {(isSidebarOpen || isMobile) && (
                   <span
-                    className={`text-sm font-medium ${location.pathname === item.path
+                    className={`text-sm font-medium ${
+                      location.pathname === item.path
                         ? "text-white"
-                        : "text-white hover:text-white transition-colors"
-                      }`}
+                        : "text-white hover:text-white"
+                    }`}
                     style={{ fontFamily: "Nunito, sans-serif" }}
                   >
                     {item.label}
@@ -280,46 +260,44 @@ const AdminNavbar = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Topbar */}
-        <div className="flex items-center justify-between bg-white px-4 sm:px-6 py-4 border-b border-gray-200 shadow-sm">
+        <div className="flex items-center justify-between bg-white px-3 sm:px-4 md:px-6 py-3 sm:py-4 border-b border-gray-200 shadow-sm">
           <div className="flex items-center gap-2">
             {isMobile && (
               <button
                 onClick={toggleSidebar}
                 className="text-gray-600 hover:text-indigo-600 mr-2"
               >
-                <Menu size={24} />
+                <Menu size={20} />
               </button>
             )}
             <div className="flex items-center">
-              <Landmark size={22} className="text-indigo-500 mr-2" />
+              <Landmark size={20} className="text-indigo-500 mr-1 sm:mr-2" />
               <span
                 style={{ fontFamily: "Nunito, sans-serif" }}
-                className="text-md sm:text-lg font-bold mt-1 text-gray-700 flex items-center"
+                className="text-sm sm:text-md md:text-lg font-bold mt-1 text-gray-700 flex items-center"
               >
                 {isMobile ? "Admin" : "Admin"}
-                {(!isMobile || isMobile) && (
-                  <span className="text-indigo-500 ml-1 text-xs sm:text-sm bg-indigo-100 px-2 py-0.5 rounded-full">
-                    Dashboard
-                  </span>
-                )}
+                <span className="text-indigo-500 ml-1 text-xs sm:text-sm bg-indigo-100 px-1.5 sm:px-2 py-0.5 rounded-full">
+                  Dashboard
+                </span>
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 sm:gap-5">
-            <div className="relative pt-1.5">
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-5">
+            <div className="relative pt-1">
               <button
                 onClick={() => {
                   navigate('/admin-dashboard/reports');
                   if (currentUser?._id) {
-                    resetNotificationCount(currentUser._id).unwrap().catch((err) => {
+                    resetAdminNumber().unwrap().catch((err) => {
                       message.error(err?.data?.message || "Error resetting notifications count");
                     });
                   }
                 }}
                 className="text-gray-600 hover:text-indigo-600 transition-colors relative"
               >
-                <Bell className="h-5 w-5" />
+                <Bell className="h-4 sm:h-5 w-4 sm:w-5" />
                 {newReportsCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold h-4 w-4 flex items-center justify-center rounded-full">
                     {newReportsCount}
@@ -333,25 +311,25 @@ const AdminNavbar = () => {
                 <input
                   type="text"
                   placeholder="Search..."
-                  className="px-4 py-2 pr-8 border border-gray-200 bg-gray-50 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent text-gray-900 w-64 shadow-sm"
+                  className="px-3 sm:px-4 py-1.5 sm:py-2 pr-8 border border-gray-200 bg-gray-50 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent text-gray-900 w-48 sm:w-64 shadow-sm"
                   style={{ fontFamily: "Nunito, sans-serif" }}
                   autoFocus
                 />
                 <button
                   onClick={() => setIsSearchVisible(false)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-indigo-600"
+                  className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-indigo-600"
                 >
-                  <X size={16} />
+                  <X size={14} />
                 </button>
               </div>
             )}
 
             <div className="relative" ref={dropdownRef}>
               <div
-                className="flex items-center gap-2 cursor-pointer group"
+                className="flex items-center gap-1 sm:gap-2 cursor-pointer group"
                 onClick={() => setIsDropdownVisible(!isDropdownVisible)}
               >
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br border-2 border-indigo-400 flex items-center justify-center text-white font-medium shadow-md ring-2 ring-white">
+                <div className="w-7 sm:w-8 h-7 sm:h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-br border-2 border-indigo-400 flex items-center justify-center text-white font-medium shadow-md ring-2 ring-white">
                   {currentUser?.logo ? (
                     <img
                       src={currentUser.logo}
@@ -359,25 +337,24 @@ const AdminNavbar = () => {
                       className="w-full h-full rounded-full object-cover"
                     />
                   ) : (
-                    <UserCircle size={18} />
+                    <UserCircle size={16} />
                   )}
                 </div>
                 {!isMobile && (
                   <div className="flex items-center">
                     <ChevronDown
-                      size={16}
-                      className={`text-gray-600 transition-transform duration-200 ${isDropdownVisible ? "rotate-180" : ""
-                        }`}
+                      size={14}
+                      className={`text-gray-600 transition-transform duration-200 ${isDropdownVisible ? "rotate-180" : ""}`}
                     />
                   </div>
                 )}
               </div>
 
               {isDropdownVisible && (
-                <div className="absolute right-0 mt-3 w-56 sm:w-64 bg-white rounded-xl shadow-xl z-50 border border-gray-100 overflow-hidden">
-                  <div className="px-4 py-4 border-b bg-gradient-to-r from-indigo-50 to-gray-50">
+                <div className="absolute right-0 mt-2 sm:mt-3 w-48 sm:w-56 md:w-64 bg-white rounded-xl shadow-xl z-50 border border-gray-100 overflow-hidden">
+                  <div className="px-3 sm:px-4 py-3 sm:py-4 border-b bg-gradient-to-r from-indigo-50 to-gray-50">
                     <p
-                      className="text-sm font-semibold text-gray-900"
+                      className="text-xs sm:text-sm font-semibold text-gray-900"
                       style={{ fontFamily: "Nunito, sans-serif" }}
                     >
                       {capitalizeName(currentUser?.instituteName) || "School Admin"}
@@ -389,17 +366,17 @@ const AdminNavbar = () => {
                       {currentUser?.email || "admin@school.edu"}
                     </p>
                   </div>
-                  <ul className="py-2">
+                  <ul className="py-1 sm:py-2">
                     <li
                       onClick={() => {
                         setIsDropdownVisible(false);
                         navigate("/admin-dashboard/profile");
                       }}
-                      className="px-4 py-2.5 flex items-center gap-3 hover:bg-indigo-50 cursor-pointer text-gray-700 transition-colors"
+                      className="px-3 sm:px-4 py-2 sm:py-2.5 flex items-center gap-2 sm:gap-3 hover:bg-indigo-50 cursor-pointer text-gray-700 transition-colors"
                     >
-                      <Settings className="text-indigo-500" size={18} />
+                      <Settings className="text-indigo-500" size={16} />
                       <span
-                        className="text-sm"
+                        className="text-xs sm:text-sm"
                         style={{ fontFamily: "Nunito, sans-serif" }}
                       >
                         Profile Settings
@@ -407,11 +384,11 @@ const AdminNavbar = () => {
                     </li>
                     <li
                       onClick={handleLogout}
-                      className="px-4 py-2.5 flex items-center gap-3 hover:bg-red-50 cursor-pointer text-red-500 transition-colors"
+                      className="px-3 sm:px-4 py-2 sm:py-2.5 flex items-center gap-2 sm:gap-3 hover:bg-red-50 cursor-pointer text-red-500 transition-colors"
                     >
-                      <LogOut size={18} />
+                      <LogOut size={16} />
                       <span
-                        className="text-sm font-medium"
+                        className="text-xs sm:text-sm font-medium"
                         style={{ fontFamily: "Nunito, sans-serif" }}
                       >
                         Logout
@@ -425,7 +402,7 @@ const AdminNavbar = () => {
         </div>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto bg-gray-50 px-4 sm:px-6 bg-gradient-to-br from-indigo-50 to-purple-50">
+        <main className="flex-1 overflow-y-auto bg-gray-50 px-3 sm:px-4 md:px-6 bg-gradient-to-br from-indigo-50 to-purple-50">
           <Outlet />
         </main>
       </div>

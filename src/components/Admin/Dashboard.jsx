@@ -286,10 +286,10 @@ const Dashboard = () => {
             <div>
               <h1 className="text-2xl font-bold text-gray-800 mb-1">Dashboard Overview</h1>
               <p className="text-gray-500 text-sm">
-                Welcome back! Here's what's happening with your school today.
+                Welcome back!
               </p>
             </div>
-            <div className="mt-3 sm:mt-0 px-4 py-2 bg-indigo-50 rounded-full text-indigo-700 font-medium flex items-center">
+            <div className="mt-3 text-sm sm:mt-0 px-4 py-2 bg-indigo-50 rounded-full text-indigo-700 font-medium flex items-center">
               <FaCalendarAlt className="mr-2" />
               {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
             </div>
