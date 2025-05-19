@@ -111,15 +111,26 @@ export default function AdminRegisterForm() {
 
     try {
       const baseUrl =
+<<<<<<< HEAD
         import.meta.env.VITE_API_BASE_URL_LOCAL;
 
       setLoading(true);
       await axios.post(
+=======
+        import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+console.log(baseUrl)
+      setLoading(true);
+      let x = await axios.post(
+>>>>>>> 90bf01d57ae33d58e642e1050de33e81fec3cfc9
         `${baseUrl}/auth/register-admin`,
         payload,
         { headers: { 'Content-Type': 'multipart/form-data' }, withCredentials: true }
       );
+<<<<<<< HEAD
 
+=======
+console.log(x)
+>>>>>>> 90bf01d57ae33d58e642e1050de33e81fec3cfc9
       message.success('Admin Registration Successfully!');
 
       setSuccess(true);
@@ -130,7 +141,12 @@ export default function AdminRegisterForm() {
         setSuccess(false);
       }, 3000);
     } catch (err) {
+<<<<<<< HEAD
       const errorMessage = err?.response?.data?.message || 'Registration failed';
+=======
+      const errorMessage = err || 'Registration failed';
+console.log(err)
+>>>>>>> 90bf01d57ae33d58e642e1050de33e81fec3cfc9
       message.error(errorMessage);
     } finally {
       setLoading(false);
@@ -318,4 +334,8 @@ export default function AdminRegisterForm() {
       </div>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 90bf01d57ae33d58e642e1050de33e81fec3cfc9
