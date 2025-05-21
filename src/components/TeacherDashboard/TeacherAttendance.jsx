@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { message } from "antd";
-import { Loader2 } from "lucide-react";
+import { Loader2, BookOpen } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -89,10 +89,18 @@ export default function TeacherAttendance() {
 
   return (
     <div className="min-h-screen bg-indigo-50 p-6">
-      <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-indigo-200">
-        <h2 className="text-3xl font-bold text-gray-800 mb-8 font-nunito">
-          Mark Attendance
-        </h2>
+      <div className="max-w-5xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-indigo-200">
+        <div className="flex items-center gap-3 mb-6">
+            <BookOpen className="md:w-7 md:h-7 text-indigo-600" />
+            <div>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800">
+                Mark Attendance
+              </h2>
+              <p className="text-indigo-600 text-xs md:text-sm font-medium flex items-center gap-1">
+                {classInfo.classTitle}-{classInfo.section}
+              </p>
+            </div>
+          </div>
 
         {!classInfo?._id ? (
           NoClassAssigned
@@ -133,54 +141,58 @@ export default function TeacherAttendance() {
                   Students
                 </h3>
                 <div className="overflow-x-auto">
-                  <table className="w-full border-collapse bg-white rounded-lg shadow-sm border border-indigo-200">
-                    <thead>
-                      <tr className="bg-indigo-50 text-gray-700">
-                        <th className="p-4 text-left text-sm font-medium font-nunito">
-                          Roll Number
-                        </th>
-                        <th className="p-4 text-left text-sm font-medium font-nunito">
-                          Student Name
-                        </th>
-                        <th className="p-4 text-center text-sm font-medium font-nunito">
-                          Present
-                        </th>
-                        <th className="p-4 text-center text-sm font-medium font-nunito">
-                          Absent
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {students.map(student => (
-                        <tr key={student._id} className="border-b hover:bg-indigo-50 transition-all duration-300">
-                          <td className="p-4 text-gray-800 font-nunito">
-                            {student.rollNumber}
-                          </td>
-                          <td className="p-4 text-gray-800 font-nunito">
-                            {capitalizeName(student.name)}
-                          </td>
-                          <td className="p-4 text-center">
-                            <input
-                              type="radio"
-                              name={`attendance-${student._id}`}
-                              checked={attendance[student._id] === "present"}
-                              onChange={() => handleAttendanceChange(student._id, "present")}
-                              className="h-4 w-4 text-indigo-500 focus:ring-indigo-500"
-                            />
-                          </td>
-                          <td className="p-4 text-center">
-                            <input
-                              type="radio"
-                              name={`attendance-${student._id}`}
-                              checked={attendance[student._id] === "absent"}
-                              onChange={() => handleAttendanceChange(student._id, "absent")}
-                              className="h-4 w-4 text-indigo-500 focus:ring-indigo-500"
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                  <div className="inline-block min-w-full py-2 align-middle">
+                    <div className="overflow-hidden shadow ring-1 ring-gray-200 ring-opacity-5 sm:rounded-lg">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 font-nunito">
+                              Roll Number
+                            </th>
+                            <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 font-nunito">
+                              Student Name
+                            </th>
+                            <th scope="col" className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900 font-nunito">
+                              Present
+                            </th>
+                            <th scope="col" className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900 font-nunito">
+                              Absent
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200 bg-white">
+                          {students.map(student => (
+                            <tr key={student._id} className="hover:bg-gray-50">
+                              <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-800 sm:pl-6 font-nunito">
+                                {student.rollNumber}
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-800 font-nunito">
+                                {capitalizeName(student.name)}
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-4 text-sm text-center">
+                                <input
+                                  type="radio"
+                                  name={`attendance-${student._id}`}
+                                  checked={attendance[student._id] === "present"}
+                                  onChange={() => handleAttendanceChange(student._id, "present")}
+                                  className="h-4 w-4 text-indigo-500 focus:ring-indigo-500"
+                                />
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-4 text-sm text-center">
+                                <input
+                                  type="radio"
+                                  name={`attendance-${student._id}`}
+                                  checked={attendance[student._id] === "absent"}
+                                  onChange={() => handleAttendanceChange(student._id, "absent")}
+                                  className="h-4 w-4 text-indigo-500 focus:ring-indigo-500"
+                                />
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
               </div>
             ) : (
@@ -192,8 +204,7 @@ export default function TeacherAttendance() {
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className={`mt-8 w-full bg-indigo-500 text-white py-3 rounded-md font-medium transition-all duration-300 flex items-center justify-center gap-2 ${isSubmitting ? 'bg-indigo-300 cursor-not-allowed' : 'hover:bg-indigo-600'
-                  } font-nunito`}
+                className={`mt-8 w-full bg-indigo-500 text-white py-3 rounded-md font-medium transition-all duration-300 flex items-center justify-center gap-2 ${isSubmitting ? 'bg-indigo-300 cursor-not-allowed' : 'hover:bg-indigo-600'} font-nunito`}
               >
                 {isSubmitting ? (
                   <>

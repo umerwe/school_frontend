@@ -16,9 +16,7 @@ export default function SubmitMarks() {
     assessmentType: ''
   });
   const [grade, setGrade] = useState(null);
-  const [
-
-percentage, setPercentage] = useState(null);
+  const [percentage, setPercentage] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,12 +63,17 @@ percentage, setPercentage] = useState(null);
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white mt-14 rounded-lg">
+    <div className="max-w-7xl mx-6 md:mx-8 p-8 bg-white mt-8 rounded-2xl">
       <div className="flex items-center gap-3 mb-6">
-        <BookOpen className="h-8 w-8 text-indigo-600" />
-        <h1 className="text-2xl font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
-          Student Marks Submission
-        </h1>
+        <BookOpen className="md:h-7 md:w-7 text-indigo-600" />
+        <div>
+          <h1 className="sm:text-2xl text-xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+            Submit Marks
+          </h1>
+          <p className="text-sm text-gray-600 -mt-1" style={{ fontFamily: 'Nunito, sans-serif' }}>
+            Enter student details and assessment marks below.
+          </p>
+        </div>
       </div>
       <div className="rounded-xl shadow-sm border border-indigo-200 p-6">
         <form onSubmit={handleSubmit}>
@@ -251,7 +254,7 @@ percentage, setPercentage] = useState(null);
               type="submit"
               disabled={loading}
               className={`px-6 py-2 rounded-md text-white font-medium ${loading ? 'bg-indigo-300' : 'bg-indigo-500 hover:bg-indigo-600'} transition-colors`}
-              style={{ fontFamily: 'Nun slightest-serif' }}
+              style={{ fontFamily: 'Nunito, sans-serif' }}
             >
               {loading ? 'Submitting...' : 'Submit Marks'}
             </button>

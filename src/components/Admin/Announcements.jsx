@@ -36,24 +36,6 @@ export default function Announcements() {
     setExpandedId(expandedId === id ? null : id);
   };
 
-  // Check if user is admin
-  if (!currentUser || currentUser.role !== 'admin') {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-4 md:p-8">
-        <div className="max-w-6xl mx-auto bg-white p-8 rounded-2xl shadow-lg border border-indigo-100 text-center">
-          <div className="w-24 h-24 mx-auto bg-indigo-100 rounded-full flex items-center justify-center mb-4">
-            <ClipboardList className="w-10 h-10 text-indigo-500" />
-          </div>
-          <h3 className="text-2xl font-semibold text-gray-800 mb-2 font-nunito">
-            Access Denied
-          </h3>
-          <p className="text-gray-500 max-w-md mx-auto font-nunito">
-            You must be an admin to view announcements. Please contact the administration.
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-4 md:p-8">

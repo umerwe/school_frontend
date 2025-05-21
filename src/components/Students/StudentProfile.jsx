@@ -8,18 +8,20 @@ import {
   PhoneIcon,
   UserCircleIcon,
   ChevronLeftIcon,
-  ShieldCheckIcon
+  ShieldCheckIcon,
+  BookOpenIcon
 } from "@heroicons/react/24/outline";
 import { PencilIcon } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { message } from "antd";
 
 export default function StudentProfile() {
   const user = useSelector((store) => store.userSlice.user);
   const navigate = useNavigate();
   const { state } = useLocation();
   const student = state?.student || user;
-  console.log(student)
+
   if (!student) {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
@@ -38,22 +40,11 @@ export default function StudentProfile() {
   }
 
   const capitalizeName = (name) =>
-    name
-      ?.split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(" ") || "";
-
-  const label = (icon, text) => (
-    <span className="flex items-center gap-2 text-gray-600">
-      {icon}
-      {text}
-    </span>
-  );
+    name?.split(" ").map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(" ") || "";
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
-        {/* Back button */}
         <button
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 mb-6 text-indigo-600 hover:text-indigo-700 transition-colors"
@@ -62,13 +53,11 @@ export default function StudentProfile() {
           Back to Students
         </button>
 
-        {/* Profile card */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
-          {/* Header */}
           <div className="bg-gradient-to-r from-indigo-600 to-indigo-500 p-6">
-            <div className="flex flex-col sm:flex-row items-center gap-6">
+            <div className="flex flex-col md:flex-row items-center gap-6">
               <div className="relative">
-                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">
                   {student.logo ? (
                     <img
                       src={student.logo}
@@ -83,13 +72,13 @@ export default function StudentProfile() {
                 </div>
               </div>
 
-              <div className="flex-1 text-center sm:text-left">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex-1 text-center md:text-left">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                   <div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-white mb-1">
+                    <h2 className="text-2xl md:text-3xl font-bold text-white mb-1">
                       {capitalizeName(student.name)}
                     </h2>
-                    <div className="flex flex-wrap gap-x-4 gap-y-2 justify-center sm:justify-start">
+                    <div className="flex flex-wrap gap-x-4 gap-y-2 justify-center md:justify-start">
                       <p className="text-indigo-100 flex items-center gap-1 text-sm">
                         <AcademicCapIcon className="h-4 w-4" />
                         Class {student.studentClass} - {student.section}
@@ -103,7 +92,7 @@ export default function StudentProfile() {
                   {user?.role !== 'teacher' && (
                     <button
                       onClick={() => navigate(`/admin-dashboard/students/${student._id}/update`)}
-                      className="mt-4 sm:mt-0 flex items-center gap-2 px-4 py-2 bg-white text-indigo-600 rounded-lg shadow-sm hover:bg-gray-50 transition-colors"
+                      className="mt-4 md:mt-0 flex items-center gap-1 px-6 m-auto pr-7 md:m-0 py-2 bg-white text-indigo-600 rounded-lg shadow-sm hover:bg-gray-50 transition-colors"
                       title="Edit Profile"
                     >
                       <PencilIcon className="h-4 w-4" />
@@ -115,10 +104,8 @@ export default function StudentProfile() {
             </div>
           </div>
 
-          {/* Body content */}
           <div className="p-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Left Column */}
               <div className="space-y-5">
                 <Section title="Personal Information" icon={<UserCircleIcon className="h-5 w-5" />}>
                   <InfoGrid
@@ -193,7 +180,6 @@ export default function StudentProfile() {
                 </Section>
               </div>
 
-              {/* Right Column */}
               <div className="space-y-5">
                 <Section title="Guardian Information" icon={<ShieldCheckIcon className="h-5 w-5" />}>
                   {student.guardian ? (
@@ -240,6 +226,28 @@ export default function StudentProfile() {
                     </div>
                   )}
                 </Section>
+
+                <Section title="Academic Information" icon={<BookOpenIcon className="h-5 w-5" />}>
+                  <InfoGrid
+                    data={[
+                      {
+                        icon: <AcademicCapIcon className="h-5 w-5" />,
+                        label: "Class",
+                        value: `Class ${student.studentClass} - Section ${student.section}`
+                      },
+                      {
+                        icon: <CalendarDaysIcon className="h-5 w-5" />,
+                        label: "Academic Year",
+                        value: student.academicYear || "Not provided"
+                      },
+                      {
+                        icon: <IdentificationIcon className="h-5 w-5" />,
+                        label: "Attendance",
+                        value: student.attendance ? `${student.attendance}%` : "Not provided"
+                      }
+                    ]}
+                  />
+                </Section>
               </div>
             </div>
           </div>
@@ -249,7 +257,6 @@ export default function StudentProfile() {
   );
 }
 
-// Section Component
 const Section = ({ title, icon, children }) => (
   <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
     <div className="px-4 py-3 bg-gray-50 border-b border-gray-200 flex items-center gap-2">
@@ -260,7 +267,6 @@ const Section = ({ title, icon, children }) => (
   </div>
 );
 
-// InfoGrid Component
 const InfoGrid = ({ data }) => (
   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
     {data.map((item, index) => (

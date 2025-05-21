@@ -57,14 +57,19 @@ export default function ClassDetailView() {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto bg-gray-50 min-h-screen">
+    <div className="p-8 max-w-7xl mx-6 md:mx-8 bg-gray-50 min-h-screen mt-8 rounded-2xl shadow-lg border border-indigo-100">
       {/* Header Section */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Class Dashboard</h1>
-          <p className="text-gray-600 text-lg">Manage and track your assigned class</p>
+        <div className="flex gap-4">
+          <div>
+            <Users className="md:w-7 md:h-7 text-indigo-600" />
+          </div>
+          <div className="-mt-2">
+            <h1 className="text-2xl font-bold text-gray-900">Class Dashboard</h1>
+            <p className="text-gray-600 text-sm">Manage and track your assigned class</p>
+          </div>
         </div>
-        <span className="text-sm px-4 py-2 rounded-full font-medium text-indigo-700 bg-indigo-50 border border-indigo-100">
+        <span className="text-sm hidden md:block px-4 py-2 rounded-full -mt-2 font-medium text-indigo-700 bg-indigo-50 border border-indigo-100">
           Class Teacher
         </span>
       </div>

@@ -9,6 +9,7 @@ import {
   FaCalendarAlt,
   FaArrowRight,
   FaBullhorn,
+  FaSpinner,
 } from 'react-icons/fa';
 import { IoMdAlert, IoMdTrendingUp, IoMdTrendingDown } from 'react-icons/io';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
@@ -199,10 +200,9 @@ const TeacherDashboard = () => {
     <div className="min-h-screen bg-gray-50 p-4 md:p-6">
       {/* Loading State */}
       {isLoading && (
-        <div className="flex justify-center items-center h-64">
+        <div className="flex justify-center items-center min-h-[80vh] h-64">
           <div className="flex flex-col items-center">
-            <FaClipboardCheck className="animate-spin text-4xl text-indigo-600 mb-4" />
-            <p className="text-gray-600 font-medium">Loading teacher dashboard...</p>
+            <FaSpinner className="animate-spin text-4xl text-indigo-600 mb-4" />
           </div>
         </div>
       )}
@@ -227,9 +227,9 @@ const TeacherDashboard = () => {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-5 rounded-lg shadow-sm">
             <div>
               <h1 className="text-2xl font-bold text-gray-800 mb-1">Welcome, {capitalizeWords(user.name)}</h1>
-              <p className="text-gray-500 text-sm">Here's an overview of your class and teaching activities.</p>
+              <p className="text-gray-500 text-sm">Here's an overview of your class.</p>
             </div>
-            <div className="mt-3 sm:mt-0 px-4 py-2 bg-indigo-50 rounded-full text-indigo-700 font-medium flex items-center">
+            <div className="mt-3 sm:mt-0 px-4 py-2 text-sm bg-indigo-50 rounded-full text-indigo-700 font-medium flex items-center">
               <FaCalendarAlt className="mr-2" />
               {new Date().toLocaleDateString('en-US', {
                 weekday: 'long',

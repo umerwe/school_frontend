@@ -176,21 +176,20 @@ const AdminNavbar = () => {
       {/* Sidebar */}
       <div
         ref={sidebarRef}
-        className={`bg-indigo-500 text-white h-full transition-all duration-300 ease-in-out ${
-          isMobile
-            ? `fixed top-0 left-0 z-20 w-64 shadow-xl rounded-sm ${showMobileSidebar ? 'translate-x-0' : '-translate-x-full'}`
-            : isSidebarOpen
-            ? 'w-64 md:w-56'
+        className={`bg-indigo-500 text-white h-full transition-all duration-300 ease-in-out ${isMobile
+          ? `fixed top-0 left-0 z-20 w-64 shadow-xl rounded-sm ${showMobileSidebar ? 'translate-x-0' : '-translate-x-full'}`
+          : isSidebarOpen
+            ? 'w-64 md:w-58'
             : 'w-20'
-        } shadow-xl z-10 rounded-sm`}
+          } shadow-xl z-10 rounded-sm`}
       >
         <div className="flex items-center justify-between p-3 sm:p-4 border-b border-indigo-400">
           {(isSidebarOpen || isMobile) && (
             <div className="flex items-center gap-1">
-              <GraduationCap className="h-8 sm:h-10 w-8 sm:w-10 text-amber-400 -rotate-[15deg]" />
+              <GraduationCap className="h-8 md:h-10 w-8 md:w-10 text-amber-400 -rotate-[15deg]" />
               <span
                 style={{ fontFamily: "Nunito, sans-serif" }}
-                className="text-xl sm:text-[22px] font-extrabold tracking-wide mt-1"
+                className="text-xl md:text-[22px] font-extrabold tracking-wide mt-1"
               >
                 <span className="text-white">e</span>
                 <span className="text-white">School</span>
@@ -206,8 +205,8 @@ const AdminNavbar = () => {
           </button>
         </div>
 
-        <div className="px-2 sm:px-3 pb-0 pt-3">
-          <ul className="space-y-2">
+        <div className="px-2 sm:px-3 pb-0 pt-3 md:pt-1.5">
+          <ul className="space-y-1.5">
             {menuItems.map((item, index) => (
               <li
                 key={index}
@@ -216,29 +215,28 @@ const AdminNavbar = () => {
                   if (item.onClick) item.onClick();
                   if (isMobile) setShowMobileSidebar(false);
                 }}
-                className={`flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg cursor-pointer transition-all duration-200 ${
-                  location.pathname === item.path
-                    ? "bg-indigo-400 shadow-lg shadow-indigo-900/20"
-                    : "text-white hover:bg-indigo-400 hover:text-white hover:translate-x-1"
-                }`}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200 ${location.pathname === item.path
+                  ? "bg-indigo-400 shadow-lg shadow-indigo-900/20"
+                  : "text-white hover:bg-indigo-400 hover:text-white hover:translate-x-1"
+                  }`}
               >
                 <span
-                  className={`flex-shrink-0 ${
-                    location.pathname === item.path
-                      ? "text-indigo-100"
-                      : "text-white hover:text-white"
-                  }`}
+                  className={`flex-shrink-0 ${location.pathname === item.path
+                    ? "text-indigo-100"
+                    : "text-white hover:text-white"
+                    }`}
                 >
                   {item.icon}
                 </span>
                 {(isSidebarOpen || isMobile) && (
                   <span
-                    className={`text-sm font-medium ${
-                      location.pathname === item.path
-                        ? "text-white"
-                        : "text-white hover:text-white"
-                    }`}
-                    style={{ fontFamily: "Nunito, sans-serif" }}
+                    className={`text-sm font-medium ${location.pathname === item.path
+                      ? "text-white"
+                      : "text-white hover:text-white"
+                      }`}
+                    style={{
+                      fontFamily: "Nunito, sans-serif",
+                    }}
                   >
                     {item.label}
                   </span>
@@ -267,24 +265,24 @@ const AdminNavbar = () => {
                 onClick={toggleSidebar}
                 className="text-gray-600 hover:text-indigo-600 mr-2"
               >
-                <Menu size={20} />
+                <Menu size={22} />
               </button>
             )}
             <div className="flex items-center">
               <Landmark size={20} className="text-indigo-500 mr-1 sm:mr-2" />
               <span
                 style={{ fontFamily: "Nunito, sans-serif" }}
-                className="text-sm sm:text-md md:text-lg font-bold mt-1 text-gray-700 flex items-center"
+                className="text-md md:text-lg font-bold mt-1 text-gray-700 flex items-center"
               >
                 {isMobile ? "Admin" : "Admin"}
-                <span className="text-indigo-500 ml-1 text-xs sm:text-sm bg-indigo-100 px-1.5 sm:px-2 py-0.5 rounded-full">
+                <span className="text-indigo-500 ml-1 text-xs sm:text-sm bg-indigo-100 px-2 md:px-3 py-0.5 mt-0.5 md:mt-0 rounded-full">
                   Dashboard
                 </span>
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3 md:gap-5">
+          <div className="flex items-center gap-3 sm:gap-4 md:gap-5">
             <div className="relative pt-1">
               <button
                 onClick={() => {
@@ -297,7 +295,7 @@ const AdminNavbar = () => {
                 }}
                 className="text-gray-600 hover:text-indigo-600 transition-colors relative"
               >
-                <Bell className="h-4 sm:h-5 w-4 sm:w-5" />
+                <Bell className="h-4.5 w-4.5" />
                 {newReportsCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold h-4 w-4 flex items-center justify-center rounded-full">
                     {newReportsCount}
@@ -329,7 +327,7 @@ const AdminNavbar = () => {
                 className="flex items-center gap-1 sm:gap-2 cursor-pointer group"
                 onClick={() => setIsDropdownVisible(!isDropdownVisible)}
               >
-                <div className="w-7 sm:w-8 h-7 sm:h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-br border-2 border-indigo-400 flex items-center justify-center text-white font-medium shadow-md ring-2 ring-white">
+                <div className="w-8 sm:w-8 h-8 sm:h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-br border-2 border-indigo-400 flex items-center justify-center text-white font-medium shadow-md ring-2 ring-white">
                   {currentUser?.logo ? (
                     <img
                       src={currentUser.logo}

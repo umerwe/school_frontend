@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { message } from 'antd';
-import { Brain, Send, CheckCircle, Loader2, Copy, BookOpen, Users, ClipboardList, BarChart2 } from 'lucide-react';
+import { Brain, Send, CheckCircle, Loader2, Copy, BookOpen, Users, ClipboardList, BarChart2, ChevronRight } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { useSelector } from 'react-redux';
 
@@ -11,7 +11,7 @@ const TeacherAi = () => {
   const [loading, setLoading] = useState(false);
   const [copyLoading, setCopyLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState('query');
+  const [showSidebar, setShowSidebar] = useState(false);
   const outputRef = useRef(null);
   const user = useSelector((store) => store.userSlice.user);
 
@@ -44,11 +44,11 @@ const TeacherAi = () => {
     setError(null);
 
     try {
-     const baseUrl =
-                import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+      const baseUrl =
+        import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
             
       const response = await axios.post(
-        `${baseUrl}/teacher-ai`, // Adjust endpoint as needed
+        `${baseUrl}/teacher-ai`,
         { prompt },
         { withCredentials: true }
       );
@@ -94,28 +94,38 @@ const TeacherAi = () => {
 
   const handleQuickPrompt = (text) => {
     setPrompt(text);
+    setShowSidebar(false); // Close sidebar on mobile after selecting prompt
   };
 
   return (
     <div className="bg-gradient-to-br from-indigo-50 to-purple-50 min-h-screen p-4 md:p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 bg-white rounded-xl shadow-sm border border-indigo-100 p-6">
           <div className="flex items-center space-x-4">
             <div className="bg-indigo-100 p-3 rounded-xl">
               <Brain className="h-6 w-6 text-indigo-600" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-800">Teacher Assistant</h1>
-              <p className="text-gray-500">AI-powered assistant for your classroom needs</p>
+              <h1 className="text-lg sm:text-2xl font-bold text-gray-800">Teacher Assistant</h1>
+              <p className="text-sm sm:text-md text-gray-500 -mt-0.5">AI-powered assistant for your classroom needs</p>
             </div>
           </div>
         </div>
 
+        {/* Mobile toggle button */}
+        <button
+          onClick={() => setShowSidebar(!showSidebar)}
+          className="md:hidden flex items-center gap-2 mb-6 bg-white px-4 py-2 rounded-lg border border-gray-200 shadow-sm"
+        >
+          <span>Quick Prompts</span>
+          <ChevronRight className={`h-4 w-4 transition-transform ${showSidebar ? 'rotate-90' : ''}`} />
+        </button>
+
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Sidebar */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 h-fit">
+          {/* Left Sidebar - Hidden on mobile unless toggled */}
+          <div className={`bg-white rounded-xl shadow-sm border border-gray-200 p-5 h-fit ${showSidebar ? 'block' : 'hidden'} lg:block`}>
             <h2 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
               <BookOpen className="h-5 w-5 text-indigo-500" />
               Quick Prompts
@@ -219,6 +229,7 @@ const TeacherAi = () => {
                     ) : (
                       <Copy className="w-4 h-4" />
                     )}
+                    <span>Copy</span>
                   </button>
                 </div>
                 <div className="p-5">

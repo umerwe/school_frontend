@@ -151,13 +151,12 @@ export default function TeacherAttendanceHistory() {
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <div className="flex items-center gap-3">
-            <BookOpen className="w-8 h-8 text-indigo-600" />
+            <BookOpen className="md:w-7 md:h-7 text-indigo-600" />
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800">
                 Attendance History
               </h2>
-              <p className="text-indigo-600 font-medium flex items-center gap-1">
-                <User className="w-4 h-4" />
+              <p className="text-indigo-600 text-xs md:text-sm font-medium flex items-center gap-1">
                 {classInfo.classTitle}-{classInfo.section}
               </p>
             </div>
