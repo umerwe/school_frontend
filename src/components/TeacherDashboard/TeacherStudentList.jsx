@@ -30,7 +30,7 @@ export default function TeacherStudentList() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-4 sm:p-6 md:p-8">
+    <div className="min-h-screen p-4 sm:p-6 md:p-8">
       <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg border border-indigo-100 p-4 sm:p-6 md:p-8">
         <div className="flex flex-col md:flex-row rounded-xl shadow-sm border-1 border-indigo-100 justify-between items-start md:items-center mb-6 sm:mb-8 gap-4 overflow-visible">
           {/* Header Section */}

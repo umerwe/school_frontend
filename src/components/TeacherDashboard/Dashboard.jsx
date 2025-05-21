@@ -270,7 +270,7 @@ const TeacherDashboard = () => {
             <div className="bg-white rounded-lg shadow-sm p-5">
               <div className="flex justify-between items-center mb-6">
                 <div>
-                  <h2 className="text-lg font-semibold text-gray-800">Attendance Trend</h2>
+                  <h2 className="text-md md:text-lg font-semibold text-gray-800">Attendance Trend</h2>
                   <p className="text-sm text-gray-500">Last 7 days performance</p>
                 </div>
                 <button
@@ -281,7 +281,7 @@ const TeacherDashboard = () => {
                   <FaArrowRight className="ml-1 text-xs" />
                 </button>
               </div>
-              <div className="h-64">
+              <div className="h-64 -ml-7 md:-ml-6">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={metrics.attendanceTrend}>
                     <XAxis
@@ -324,7 +324,7 @@ const TeacherDashboard = () => {
             <div className="bg-white rounded-lg shadow-sm p-5">
               <div className="flex justify-between items-center mb-6">
                 <div>
-                  <h2 className="text-lg font-semibold text-gray-800">Average Marks per Subject</h2>
+                  <h2 className="text-md md:text-lg font-semibold text-gray-800">Average Marks</h2>
                   <p className="text-sm text-gray-500">Performance overview</p>
                 </div>
                 <button
@@ -388,10 +388,10 @@ const TeacherDashboard = () => {
                     <div className="flex items-center">
                       <span
                         className={`p-2 bg-white rounded-lg mr-3 ${action.label.includes('Attendance')
-                            ? 'text-blue-500'
-                            : action.label.includes('Marks')
-                              ? 'text-indigo-500'
-                              : 'text-purple-500'
+                          ? 'text-blue-500'
+                          : action.label.includes('Marks')
+                            ? 'text-indigo-500'
+                            : 'text-purple-500'
                           }`}
                       >
                         {action.icon}
@@ -408,7 +408,7 @@ const TeacherDashboard = () => {
             <div className="bg-white rounded-lg shadow-sm p-5 lg:col-span-2">
               <div className="flex justify-between items-center mb-6">
                 <div>
-                  <h2 className="text-lg font-semibold text-gray-800">Latest Announcements</h2>
+                  <h2 className="text-md md:text-lg font-semibold text-gray-800">Latest Announcements</h2>
                   <p className="text-sm text-gray-500">School-wide communications</p>
                 </div>
                 <div className="flex items-center">

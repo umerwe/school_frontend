@@ -295,7 +295,7 @@ const AdminNavbar = () => {
                 }}
                 className="text-gray-600 hover:text-indigo-600 transition-colors relative"
               >
-                <Bell className="h-4.5 w-4.5" />
+                <Bell className="h-5 w-5" />
                 {newReportsCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold h-4 w-4 flex items-center justify-center rounded-full">
                     {newReportsCount}
@@ -327,7 +327,7 @@ const AdminNavbar = () => {
                 className="flex items-center gap-1 sm:gap-2 cursor-pointer group"
                 onClick={() => setIsDropdownVisible(!isDropdownVisible)}
               >
-                <div className="w-8 sm:w-8 h-8 sm:h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-br border-2 border-indigo-400 flex items-center justify-center text-white font-medium shadow-md ring-2 ring-white">
+                <div className="w-9 h-9 md:w-9 md:h-9 rounded-full bg-gradient-to-br border-2 border-indigo-400 flex items-center justify-center text-white font-medium shadow-md ring-2 ring-white">
                   {currentUser?.logo ? (
                     <img
                       src={currentUser.logo}
@@ -400,7 +400,7 @@ const AdminNavbar = () => {
         </div>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto bg-gray-50 px-3 sm:px-4 md:px-6 bg-gradient-to-br from-indigo-50 to-purple-50">
+        <main className="flex-1 overflow-y-auto bg-white">
           <Outlet />
         </main>
       </div>

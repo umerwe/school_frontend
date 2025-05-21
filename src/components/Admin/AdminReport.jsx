@@ -123,8 +123,8 @@ const AdminReports = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-6 md:p-8">
-      <div className="max-w-7xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-indigo-100">
+    <div className="min-h-screen p-4 md:p-8">
+      <div className="max-w-7xl mx-auto bg-white p-3 py-6 sm:px-8 rounded-2xl shadow-lg border border-indigo-100">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
@@ -185,7 +185,7 @@ const AdminReports = () => {
         <div className="bg-white rounded-xl shadow-lg border border-indigo-100 overflow-hidden">
           <div className="p-6 border-b border-indigo-100 bg-white flex justify-between items-center">
             <div>
-              <h2 className="text-lg font-semibold text-gray-800 font-nunito">All Reports</h2>
+              <h2 className="text-xl font-semibold text-gray-800 font-nunito">All Reports</h2>
               <p className="text-sm text-gray-500 mt-1 font-nunito">
                 Showing {reports.length} {reports.length === 1 ? 'report' : 'reports'}
               </p>

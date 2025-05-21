@@ -88,8 +88,8 @@ export default function TeacherAttendance() {
   );
 
   return (
-    <div className="min-h-screen bg-indigo-50 p-6">
-      <div className="max-w-5xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-indigo-200">
+    <div className="min-h-screen p-4 py-6 sm:px-8">
+      <div className="max-w-5xl mx-auto bg-white p-3 py-6 sm:px-8 rounded-xl shadow-sm border border-indigo-200">
         <div className="flex items-center gap-3 mb-6">
             <BookOpen className="md:w-7 md:h-7 text-indigo-600" />
             <div>

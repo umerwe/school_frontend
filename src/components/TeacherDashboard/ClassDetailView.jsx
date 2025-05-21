@@ -57,16 +57,16 @@ export default function ClassDetailView() {
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-6 md:mx-8 bg-gray-50 min-h-screen mt-8 rounded-2xl shadow-lg border border-indigo-100">
+    <div className="p-5 sm:p-8 max-w-7xl mx-4 md:mx-8 bg-gray-50 min-h-screen mt-8 rounded-2xl shadow-lg border border-indigo-100">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+      <div className="flex p-4 flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div className="flex gap-4">
           <div>
             <Users className="md:w-7 md:h-7 text-indigo-600" />
           </div>
           <div className="-mt-2">
-            <h1 className="text-2xl font-bold text-gray-900">Class Dashboard</h1>
-            <p className="text-gray-600 text-sm">Manage and track your assigned class</p>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Class Dashboard</h1>
+            <p className="text-gray-600 text-xs sm:text-sm">Manage and track your assigned class</p>
           </div>
         </div>
         <span className="text-sm hidden md:block px-4 py-2 rounded-full -mt-2 font-medium text-indigo-700 bg-indigo-50 border border-indigo-100">
@@ -76,14 +76,14 @@ export default function ClassDetailView() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
           <div className="flex items-center gap-5">
             <div className="bg-indigo-50 p-3 rounded-lg">
               <BookOpen className="h-6 w-6 text-indigo-600" strokeWidth={1.5} />
             </div>
             <div>
               <p className="text-sm font-medium text-gray-500 mb-1">Class Section</p>
-              <p className="text-xl font-semibold text-gray-800">
+              <p className="text-lg md:text-xl font-semibold text-gray-800">
                 Grade {classData.classTitle} - {classData.section}
               </p>
             </div>
@@ -97,7 +97,7 @@ export default function ClassDetailView() {
             </div>
             <div>
               <p className="text-sm font-medium text-gray-500 mb-1">Class Teacher</p>
-              <p className="text-xl font-semibold text-gray-800">
+              <p className="text-lg md:text-xl font-semibold text-gray-800">
                 {capitalizeName(classData.classTeacher.name)}
               </p>
             </div>
@@ -110,8 +110,8 @@ export default function ClassDetailView() {
               <Users className="h-6 w-6 text-indigo-600" strokeWidth={1.5} />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500 mb-1">Student Enrollment</p>
-              <p className="text-xl font-semibold text-gray-800">
+              <p className="text-sm font-medium text-gray-500 mb-1">Students</p>
+              <p className="text-lg md:text-xl font-semibold text-gray-800">
                 {classData.students.length} Students
               </p>
             </div>
@@ -124,14 +124,14 @@ export default function ClassDetailView() {
         {/* Subjects Section */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           <div
-            className="flex items-center justify-between cursor-pointer px-6 py-4 hover:bg-gray-50 transition-colors"
+            className="flex items-center justify-between cursor-pointer px-3 sm:px-6 py-4 hover:bg-gray-50 transition-colors"
             onClick={() => toggleSection("subjects")}
           >
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <div className="bg-indigo-50 p-2 rounded-lg">
-                <BookOpen className="h-5 w-5 text-indigo-600" strokeWidth={1.5} />
+                <BookOpen className="h-4 w-4 sm:h-5 md:w-5 text-indigo-600" strokeWidth={1.5} />
               </div>
-              <span className="font-semibold text-lg text-gray-800">Subject List</span>
+              <span className="font-semibold text-md sm:text-lg text-gray-800">Subject List</span>
               <span className="rounded-full px-3 py-1 text-xs font-medium bg-indigo-50 text-indigo-700">
                 {classData.subjects.length}
               </span>
@@ -155,9 +155,6 @@ export default function ClassDetailView() {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Teacher
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Teacher ID
-                      </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
@@ -180,11 +177,6 @@ export default function ClassDetailView() {
                             {capitalizeName(subj.subjectTeacher?.name) || "Not Assigned"}
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-50 text-indigo-700">
-                            {subj.subjectTeacher?.teacherId || "N/A"}
-                          </span>
-                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -197,14 +189,14 @@ export default function ClassDetailView() {
         {/* Students Section */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           <div
-            className="flex items-center justify-between cursor-pointer px-6 py-4 hover:bg-gray-50 transition-colors"
+            className="flex items-center justify-between cursor-pointer px-3 sm:px-6 py-4 hover:bg-gray-50 transition-colors"
             onClick={() => toggleSection("students")}
           >
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <div className="bg-indigo-50 p-2 rounded-lg">
-                <Users className="h-5 w-5 text-indigo-600" strokeWidth={1.5} />
+                <Users className="h-4 w-4 md:h-5 md:w-5 text-indigo-600" strokeWidth={1.5} />
               </div>
-              <span className="font-semibold text-lg text-gray-800">Student List</span>
+              <span className="font-semibold text-md sm:text-lg text-gray-800">Student List</span>
               <span className="px-3 py-1 text-xs font-medium rounded-full bg-indigo-50 text-indigo-700">
                 {classData.students.length}
               </span>

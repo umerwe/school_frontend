@@ -38,7 +38,7 @@ export default function Announcements() {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-4 md:p-8">
+    <div className="min-h-screen p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-2xl md:text-3xl font-bold mb-8 text-gray-800 border-b pb-4 border-indigo-200 font-nunito">
           Announcements

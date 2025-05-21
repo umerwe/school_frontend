@@ -63,7 +63,7 @@ export default function SubmitMarks() {
   };
 
   return (
-    <div className="max-w-7xl mx-6 md:mx-8 p-8 bg-white mt-8 rounded-2xl">
+    <div className="max-w-7xl mx-3 md:mx-8 p-3 py-6 sm:px-8 bg-white mt-4 rounded-2xl">
       <div className="flex items-center gap-3 mb-6">
         <BookOpen className="md:h-7 md:w-7 text-indigo-600" />
         <div>
@@ -75,7 +75,7 @@ export default function SubmitMarks() {
           </p>
         </div>
       </div>
-      <div className="rounded-xl shadow-sm border border-indigo-200 p-6">
+      <div className="rounded-xl shadow-sm border border-indigo-200 p-3 py-6 sm:px-8">
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>

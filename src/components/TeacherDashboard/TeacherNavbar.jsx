@@ -415,7 +415,7 @@ export default function TeacherNavbar() {
         </div>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto bg-gray-50 px-3 sm:px-4 md:px-6 bg-gradient-to-br from-indigo-50 to-purple-50">
+        <main className="flex-1 overflow-y-auto">
           <Outlet />
         </main>
       </div>

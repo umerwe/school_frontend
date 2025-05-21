@@ -333,7 +333,7 @@ const Dashboard = () => {
                   <FaArrowRight className="ml-1 text-xs" />
                 </button>
               </div>
-              <div className="h-[250px] sm:h-[350px] mr-10 pt-10">
+              <div className="h-[250px] sm:h-[350px] -ml-6 md:-ml-3 mr-3 md:mr-6 pt-10">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={metrics.attendanceTrend}>
                     <XAxis
@@ -376,7 +376,7 @@ const Dashboard = () => {
               <div className="flex justify-between items-center mb-4 sm:mb-6">
                 <div>
                   <h2 className="text-lg font-semibold text-gray-800">Fee Submission Status</h2>
-                  <p className="text-sm text-gray-500">Payment overview of all students</p>
+                  <p className="text-sm text-gray-500">Payment overview</p>
                 </div>
                 <button
                   onClick={() => navigate('/admin-dashboard/vouchers')}
@@ -386,7 +386,7 @@ const Dashboard = () => {
                   <FaArrowRight className="ml-1 text-xs" />
                 </button>
               </div>
-              <div className="h-[250px] sm:h-[300px]">
+              <div className="h-[320px] sm:h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
@@ -512,10 +512,10 @@ const Dashboard = () => {
                   <h2 className="text-lg font-semibold text-gray-800">Latest Announcements</h2>
                   <p className="text-sm text-gray-500">School-wide communications</p>
                 </div>
-                <div className="flex items-center">
+                <div className="flex flex-col pt-6 md:0 items-end gap-2 sm:gap:0 sm:flex-row sm:items-center">
                   <button
                     onClick={() => navigate('/admin-dashboard/announcement/new')}
-                    className="flex items-center mr-3 px-3 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
+                    className="flex items-center md:mr-3 px-3 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
                   >
                     <FaPlus className="mr-1" /> New
                   </button>

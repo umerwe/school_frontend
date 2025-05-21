@@ -90,8 +90,8 @@ export default function SubjectList() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-4 sm:p-6 md:p-8">
-      <div className="max-w-7xl mx-auto bg-white p-4 sm:p-6 md:p-8 rounded-2xl shadow-lg border border-indigo-100">
+    <div className="min-h-screen p-4 sm:p-6 md:p-8">
+      <div className="max-w-7xl mx-auto bg-white p-3 py-6 sm:px-8 rounded-2xl shadow-lg border border-indigo-100">
         {/* Header */}
         <div className="flex flex-col lg:flex-row justify-between items-start mb-6 gap-4">
           <div className="flex gap-3">

@@ -35,7 +35,7 @@ const AdminAnnouncementForm = () => {
   };
 
   return (
-    <div className="flex items-center justify-center p-2 sm:p-4 pt-0 min-w-[340px]">
+    <div className="flex items-center justify-center p-4 pt-0 min-w-[340px]">
       <div className="w-full max-w-3xl mx-auto mt-4 sm:mt-12 bg-white rounded-lg sm:rounded-2xl shadow-md sm:shadow-lg border border-indigo-100 sm:border-indigo-200 animate-fade-in">
         {/* Simplified Header */}
         <div className="bg-indigo-500 px-4 sm:px-8 py-3 sm:py-4 rounded-t-lg sm:rounded-t-xl flex items-center space-x-2 hover:brightness-105 transition-all duration-300">
