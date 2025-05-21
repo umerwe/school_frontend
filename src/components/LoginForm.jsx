@@ -12,7 +12,7 @@ import {
     UserCircleIcon,
     UserIcon,
     UserGroupIcon,
-    UsersIcon // Added for Parent role
+    UsersIcon
 } from '@heroicons/react/24/outline';
 
 const roleConfig = {
@@ -31,7 +31,7 @@ const roleConfig = {
         placeholder: 'Enter Roll Number or Email',
         icon: <UserGroupIcon className="h-5 w-5" />
     },
-    parent: { // Added Parent role
+    parent: {
         label: 'Parent Email',
         placeholder: 'Enter Parent Email',
         icon: <UsersIcon className="h-5 w-5" />
@@ -99,7 +99,7 @@ export default function LoginForm() {
         } else if (selectedRole === 'student') {
             payload['rollNumberOrEmail'] = formData.instituteNameOrEmail;
             payload.password = formData.password;
-        } else if (selectedRole === 'parent') { 
+        } else if (selectedRole === 'parent') {
             payload['email'] = formData.instituteNameOrEmail;
             payload.password = formData.password;
         }
@@ -107,8 +107,8 @@ export default function LoginForm() {
         try {
             const baseUrl =
                 import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
-            
-                const { data } = await axios.post(
+
+            const { data } = await axios.post(
                 `${baseUrl}/auth/login-${selectedRole}`,
                 payload,
                 { withCredentials: true }
@@ -124,7 +124,7 @@ export default function LoginForm() {
                 navigate('/teacher-dashboard');
             } else if (user.role === 'student') {
                 navigate('/student-dashboard');
-            } else if (user.role === 'parent') { // Added navigation for Parent
+            } else if (user.role === 'parent') {
                 navigate('/parent-dashboard');
             }
         } catch (err) {
@@ -135,7 +135,12 @@ export default function LoginForm() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-indigo-50 to-gray-100 relative overflow-hidden">
+        <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-indigo-50 to-gray-100 relative overflow-hidden">
+            {/* Notification Banner */}
+            <div className="mb-3 p-3 bg-amber-100 border-l-4 border-amber-500 text-amber-800 text-sm sm:text-base rounded-md text-center font-medium">
+                This is a preview version. Full release coming in 2-3 days.
+            </div>
+
             {/* Animated background elements */}
             <div className="absolute inset-0 overflow-hidden">
                 <div className={`absolute top-0 left-0 w-64 h-64 rounded-full bg-indigo-500 opacity-5 transition-all duration-5000 ease-in-out ${animateBackground ? 'translate-x-10 translate-y-10' : '-translate-x-6 -translate-y-6'}`}></div>
