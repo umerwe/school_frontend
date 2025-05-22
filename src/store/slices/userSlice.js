@@ -18,12 +18,6 @@ export const userSlice = createSlice({
       state.user = null;
       state.isAuthenticated = false;
       localStorage.removeItem('loggedInUser');
-      // Clear cookies when logging out
-      document.cookie.split(";").forEach((c) => {
-        document.cookie = c
-          .replace(/^ +/, "")
-          .replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
-      });
     },
     updateTokens: (state, action) => {
       if (state.user) {

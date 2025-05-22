@@ -115,10 +115,10 @@ const AdminNavbar = () => {
       import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
 
     try {
-      await axios(`${baseUrl}/auth/logout`, {
-        method: "POST",
-        credentials: "include",
+      await axios.post(`${baseUrl}/auth/logout`, {}, {
+        withCredentials: true,
       });
+
       dispatch(adminDashboardApi.util.resetApiState());
       localStorage.removeItem('persist:adminDashboardApi');
       dispatch(logout());
