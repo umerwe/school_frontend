@@ -122,28 +122,19 @@ export default function TeacherNavbar() {
 
   const handleLogout = async () => {
     setIsDropdownVisible(false);
-
-    const baseUrl =
-      import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+    const baseUrl = import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
 
     try {
-      await axios.post(
-        `${baseUrl}auth/logout`,
-        {},
-        { withCredentials: true }
-      );
-      dispatch(teacherDashboardApi.util.resetApiState());
-      localStorage.removeItem('persist:teacherDashboardApi');
-      dispatch(logout());
-      navigate("/", { replace: true });
-      window.location.reload();
+      await axios.post(`${baseUrl}/auth/logout`, {}, {
+        withCredentials: true,
+      });
     } catch (error) {
       console.error("Error during logout:", error);
+    } finally {
+      // Clear all states and redirect
       dispatch(teacherDashboardApi.util.resetApiState());
       localStorage.removeItem('persist:teacherDashboardApi');
       dispatch(logout());
-      navigate("/", { replace: true });
-      window.location.reload();
     }
   };
 
@@ -303,9 +294,9 @@ export default function TeacherNavbar() {
                 onClick={() => {
                   navigate('/teacher-dashboard/announcements');
                   if (currentUser?._id) {
-                     resetNotificationCount(currentUser._id).unwrap().catch((err) => {
-                        message.error(err?.data?.message || "Error resetting notifications count");
-                      });
+                    resetNotificationCount(currentUser._id).unwrap().catch((err) => {
+                      message.error(err?.data?.message || "Error resetting notifications count");
+                    });
                   }
                 }}
                 className="text-gray-600 hover:text-indigo-600 transition-colors relative"

@@ -25,10 +25,10 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios'
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { logout } from "../../store/slices/userSlice";
-import { 
+import {
   studentDashboardApi,
   useGetDashboardSummaryQuery,
-  useResetAnnouncementsCountMutation 
+  useResetAnnouncementsCountMutation
 } from "../../store/slices/studentDashboardApi";
 
 export default function StudentNavbar() {
@@ -61,30 +61,19 @@ export default function StudentNavbar() {
 
   const handleLogout = async () => {
     setIsDropdownVisible(false);
-
-    const baseUrl =
-      import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+    const baseUrl = import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
 
     try {
-      await axios.post(
-        `${baseUrl}auth/logout`,
-        {},
-        { withCredentials: true }
-      );
-
-      dispatch(studentDashboardApi.util.resetApiState());
-      localStorage.removeItem('persist:studentDashboardApi');
-      dispatch(logout());
-
-      navigate("/", { replace: true });
-      window.location.reload();
+      await axios.post(`${baseUrl}/auth/logout`, {}, {
+        withCredentials: true,
+      });
     } catch (error) {
       console.error("Error during logout:", error);
+    } finally {
+      // Clear all states and redirect
       dispatch(studentDashboardApi.util.resetApiState());
       localStorage.removeItem('persist:studentDashboardApi');
       dispatch(logout());
-      navigate("/", { replace: true });
-      window.location.reload();
     }
   };
 

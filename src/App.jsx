@@ -83,6 +83,7 @@ import ViewReports from './components/ParentDashboard/ViewReport.jsx';
 import AdminReports from './components/Admin/AdminReport.jsx';
 import SubmitReport from './components/ParentDashboard/SubmitReport.jsx';
 import Attendance from './components/Admin/Attendance.jsx';
+import DotPulseLoader from './components/DotPulseLoader.jsx'
 
 function PrivateRoute({ children, allowedRoles = [] }) {
   const { user, isAuthenticated } = useSelector((store) => store.userSlice);
@@ -92,30 +93,23 @@ function PrivateRoute({ children, allowedRoles = [] }) {
 
   useEffect(() => {
     let isMounted = true;
-    let sessionCheckTimer = null;
-    let intervalTimer = null;
 
-    // Function to verify user session
     const checkSession = async () => {
-      // Skip session check if not authenticated or no user
       if (!isAuthenticated || !user) {
-        if (isMounted) {
-          setIsLoading(false);
-        }
+        if (isMounted) setIsLoading(false);
         return;
       }
 
       try {
-        await api.get('/auth/verify-session');
-        // Session is valid
+        await api.get('/auth/verify-session', {
+          withCredentials: true
+        });
+        
         if (isMounted) {
           setIsLoading(false);
           setIsServerDown(false);
         }
       } catch (error) {
-        console.error('Session verification error:', error);
-
-        // Handle server down scenario
         if (!error.response) {
           if (isMounted) {
             setIsServerDown(true);
@@ -124,48 +118,27 @@ function PrivateRoute({ children, allowedRoles = [] }) {
           return;
         }
 
-        // If server responds but session is invalid (401), let axios interceptor handle token refresh
-        if (error.response?.status === 401) {
-          if (isMounted) {
-            setIsLoading(false); // Allow interceptor to retry
-          }
+        // If 401, let interceptor handle it
+        if (error.response?.status === 401 && isMounted) {
+          setIsLoading(false);
         }
       }
     };
 
-    // Initial check
     checkSession();
 
-    // Set timeout for initial loading state
-    sessionCheckTimer = setTimeout(() => {
-      if (isMounted && isLoading) {
-        setIsLoading(false);
-      }
-    }, 5000);
-
-    // Periodic session verification
-    intervalTimer = setInterval(checkSession, 60000); // Check every minute
-
-    // Cleanup
     return () => {
       isMounted = false;
-      clearTimeout(sessionCheckTimer);
-      clearInterval(intervalTimer);
     };
   }, [isAuthenticated, user, dispatch]);
 
-  // Initial loading state
   if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
-      </div>
-    );
+    return <DotPulseLoader />;
   }
 
-  // If not authenticated or no user, redirect to session expired
+  // If not authenticated, redirect to home (login) page
   if (!isAuthenticated || !user) {
-    return <Navigate to="/session-expired" replace />;
+    return <Navigate to="/" replace />; // Changed from /session-expired to /
   }
 
   // Server down UI

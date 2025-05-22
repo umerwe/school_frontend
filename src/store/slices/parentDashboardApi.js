@@ -4,7 +4,7 @@ const baseUrl =
   import.meta.env.MODE === 'production'
     ? import.meta.env.VITE_API_BASE_URL_PROD
     : import.meta.env.VITE_API_BASE_URL_LOCAL;
-    
+
 export const parentDashboardApi = createApi({
   reducerPath: 'parentDashboardApi',
   baseQuery: fetchBaseQuery({
@@ -44,7 +44,7 @@ export const parentDashboardApi = createApi({
         method: 'POST',
         body: voucherData,
       }),
-      transformResponse: (response) => response.data,
+      transformResponse: (response) => response, // Remove .data since the backend returns the response directly
       invalidatesTags: ['ParentDashboard'],
     }),
     resetNotificationCount: builder.mutation({

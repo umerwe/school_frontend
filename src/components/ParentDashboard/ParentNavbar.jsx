@@ -86,40 +86,22 @@ const ParentNavbar = () => {
   }, []);
 
   const handleLogout = async () => {
-    setIsDropdownVisible(false);
-
-    const baseUrl =
-      import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
-
-    try {
-      // 1. Call logout API
-      await axios.post(
-        `${baseUrl}auth/logout`,
-        {},
-        { withCredentials: true }
-      );
-
-      // 2. Clear RTK Query cache for parent dashboard only
-      dispatch(parentDashboardApi.util.resetApiState());
-      localStorage.removeItem('persist:parentDashboardApi');
-
-      // 3. Dispatch logout to clear user slice
-      dispatch(logout());
-
-      // 4. Navigate and reload
-      navigate("/", { replace: true });
-      window.location.reload();
-    } catch (error) {
-      console.error("Error during logout:", error);
-
-      // Fallback clearing cache and logout even if API call fails
-      dispatch(parentDashboardApi.util.resetApiState());
-      localStorage.removeItem('persist:parentDashboardApi');
-      dispatch(logout());
-      navigate("/", { replace: true });
-      window.location.reload();
-    }
-  };
+     setIsDropdownVisible(false);
+     const baseUrl = import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+ 
+     try {
+       await axios.post(`${baseUrl}/auth/logout`, {}, {
+         withCredentials: true,
+       });
+     } catch (error) {
+       console.error("Error during logout:", error);
+     } finally {
+       // Clear all states and redirect
+       dispatch(parentDashboardApi.util.resetApiState());
+       localStorage.removeItem('persist:parentDashboardApi');
+       dispatch(logout());
+     }
+   };
 
   const capitalizeName = (name) =>
     name
@@ -230,14 +212,14 @@ const ParentNavbar = () => {
                   if (item.onClick) item.onClick();
                 }}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200 ${location.pathname === item.path
-                    ? "bg-indigo-400 shadow-lg shadow-indigo-900/20"
-                    : "text-white hover:bg-indigo-400 hover:text-white hover:translate-x-1"
+                  ? "bg-indigo-400 shadow-lg shadow-indigo-900/20"
+                  : "text-white hover:bg-indigo-400 hover:text-white hover:translate-x-1"
                   }`}
               >
                 <span
                   className={`flex-shrink-0 ${location.pathname === item.path
-                      ? "text-indigo-100"
-                      : "text-white hover:text-white transition-colors"
+                    ? "text-indigo-100"
+                    : "text-white hover:text-white transition-colors"
                     }`}
                 >
                   {item.icon}
@@ -245,8 +227,8 @@ const ParentNavbar = () => {
                 {isSidebarOpen && (
                   <span
                     className={`text-sm font-medium ${location.pathname === item.path
-                        ? "text-white"
-                        : "text-white hover:text-white transition-colors"
+                      ? "text-white"
+                      : "text-white hover:text-white transition-colors"
                       }`}
                     style={{ fontFamily: "Nunito, sans-serif" }}
                   >

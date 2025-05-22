@@ -110,29 +110,28 @@ const AdminNavbar = () => {
   }, [location.pathname]);
 
   const handleLogout = async () => {
-    setIsDropdownVisible(false);
-    const baseUrl =
-      import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+  setIsDropdownVisible(false);
+  const baseUrl = import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
 
-    try {
-      await axios.post(`${baseUrl}/auth/logout`, {}, {
-        withCredentials: true,
-      });
-
-      dispatch(adminDashboardApi.util.resetApiState());
-      localStorage.removeItem('persist:adminDashboardApi');
-      dispatch(logout());
-      navigate("/", { replace: true });
-      window.location.reload();
-    } catch (error) {
-      console.error("Error during logout:", error);
-      dispatch(adminDashboardApi.util.resetApiState());
-      localStorage.removeItem('persist:adminDashboardApi');
-      dispatch(logout());
-      navigate("/", { replace: true });
-      window.location.reload();
-    }
-  };
+  try {
+    await axios.post(`${baseUrl}/auth/logout`, {}, {
+      withCredentials: true,
+    });
+  } catch (error) {
+    console.error("Error during logout:", error);
+  } finally {
+    // Clear all states and redirect
+    dispatch(adminDashboardApi.util.resetApiState());
+    localStorage.removeItem('persist:adminDashboardApi');
+    dispatch(logout());
+    
+    // Clear cookies on client side
+    document.cookie.split(';').forEach(cookie => {
+      const name = cookie.split('=')[0].trim();
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+    });
+  }
+};
 
   const capitalizeName = (name) =>
     name
