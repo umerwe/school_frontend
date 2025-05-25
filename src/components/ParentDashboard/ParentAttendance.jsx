@@ -32,7 +32,7 @@ export default function ParentAttendance() {
   // Get status color and icon based on attendance status
   const getStatusInfo = (status) => {
     const statusLower = (status || "").toLowerCase();
-    
+
     const statusConfig = {
       present: {
         class: "bg-green-100 text-green-800 border-green-200",
@@ -115,13 +115,15 @@ export default function ParentAttendance() {
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <AcademicCapIcon className="w-8 h-8 text-indigo-600" />
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 font-nunito">
-              Attendance Records
-            </h2>
+            <div>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800 font-nunito">
+                Attendance Records
+              </h2>
+              <p className="text-gray-500 font-nunito -mt-0.5">
+                View and track attendance records for your children
+              </p>
+            </div>
           </div>
-          <p className="text-gray-500 font-nunito">
-            View and track attendance records for your children
-          </p>
         </div>
 
         {/* Student Selection */}
@@ -175,18 +177,18 @@ export default function ParentAttendance() {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
           {[
-            { 
-              label: "Total Days", 
+            {
+              label: "Total Days",
               value: totalDays,
               icon: <CalendarIcon className="w-6 h-6 text-indigo-500" />
             },
-            { 
-              label: "Present Days", 
+            {
+              label: "Present Days",
               value: presentDays,
               icon: <CheckCircleIcon className="w-6 h-6 text-green-500" />
             },
-            { 
-              label: "Attendance %", 
+            {
+              label: "Attendance %",
               value: `${attendancePercentage}%`,
               icon: <ChartBarIcon className="w-6 h-6 text-blue-500" />
             },
@@ -226,8 +228,8 @@ export default function ParentAttendance() {
           </div>
         ) : records.length > 0 ? (
           <div className="border border-indigo-100 rounded-xl overflow-hidden shadow-xs">
-            <div className="overflow-x-auto">
-              <table className="w-full divide-y divide-indigo-100">
+            <div className="overflow-x-auto max-w-full">
+              <table className="min-w-[800px] w-full divide-y divide-indigo-100">
                 <thead className="bg-indigo-50">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider font-nunito">
@@ -246,6 +248,12 @@ export default function ParentAttendance() {
                       <div className="flex items-center gap-1">
                         <AcademicCapIcon className="w-4 h-4" />
                         Class
+                      </div>
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider font-nunito">
+                      <div className="flex items-center gap-1">
+                        <UserCircleIcon className="w-4 h-4" />
+                        Class Teacher
                       </div>
                     </th>
                   </tr>
@@ -272,11 +280,12 @@ export default function ParentAttendance() {
                             </span>
                           </div>
                         </td>
-                        <td
-                          className="px-6 py-4 text-sm text-gray-700 font-nunito"
-                        >
+                        <td className="px-6 py-4 text-sm text-gray-700 font-nunito">
                           {selectedStudent?.studentClass || "N/A"} -{" "}
                           {selectedStudent?.section || "N/A"}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-700 font-nunito">
+                          {capitalizeWords(record.teacher?.name) || "N/A"}
                         </td>
                       </tr>
                     );

@@ -16,7 +16,7 @@ export default function ChildMarks() {
   const [selectedStudentId, setSelectedStudentId] = useState("");
   const { data, error, isLoading } = useGetParentDashboardSummaryQuery();
   const childrenDetails = data?.childrenDetails || [];
-console.log(childrenDetails)
+  console.log(childrenDetails)
   // Capitalize words for display
   const capitalizeWords = (str) =>
     str
@@ -49,7 +49,7 @@ console.log(childrenDetails)
   const selectedStudentDetails = childrenDetails.find(
     (child) => child.studentId === selectedStudentId
   );
-  
+
   const marks = selectedStudentDetails?.marks || [];
 
   // Calculate marks metrics
@@ -85,13 +85,15 @@ console.log(childrenDetails)
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <AcademicCapIcon className="w-8 h-8 text-indigo-600" />
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 font-nunito">
-              Marks Records
-            </h2>
+            <div>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800 font-nunito">
+                Marks Records
+              </h2>
+              <p className="text-gray-500 font-nunito text-xs sm:text-sm">
+                View and track marks records for your children
+              </p>
+            </div>
           </div>
-          <p className="text-gray-500 font-nunito">
-            View and track marks records for your children
-          </p>
         </div>
 
         {/* Student Selection */}
@@ -145,18 +147,18 @@ console.log(childrenDetails)
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
           {[
-            { 
-              label: "Total Marks", 
+            {
+              label: "Total Marks",
               value: totalMarks,
               icon: <DocumentTextIcon className="w-6 h-6 text-indigo-500" />
             },
-            { 
-              label: "Obtained Marks", 
+            {
+              label: "Obtained Marks",
               value: obtainedMarks,
               icon: <CheckCircleIcon className="w-6 h-6 text-green-500" />
             },
-            { 
-              label: "Percentage", 
+            {
+              label: "Percentage",
               value: `${marksPercentage}%`,
               icon: <ChartBarIcon className="w-6 h-6 text-blue-500" />
             },

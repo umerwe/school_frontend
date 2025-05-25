@@ -77,8 +77,8 @@ export default function ParentVouchers() {
     } catch (err) {
       setError(
         err.data?.error ||
-          err.message ||
-          "Failed to initiate payment. Please try again."
+        err.message ||
+        "Failed to initiate payment. Please try again."
       );
       setLoadingVouchers((prev) => ({ ...prev, [voucherId]: false }));
     }
@@ -137,13 +137,15 @@ export default function ParentVouchers() {
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <CurrencyDollarIcon className="w-8 h-8 text-indigo-600" />
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 font-nunito">
-              Voucher Records
-            </h2>
+            <div>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800 font-nunito">
+                Voucher Records
+              </h2>
+              <p className="text-gray-500 font-nunito text-xs sm:text-sm">
+                View and manage voucher records for your children
+              </p>
+            </div>
           </div>
-          <p className="text-gray-500 font-nunito">
-            View and manage voucher records for your children
-          </p>
         </div>
 
         {/* Student Selection */}
@@ -272,11 +274,10 @@ export default function ParentVouchers() {
                           <button
                             onClick={() => handlePayment(voucher.voucherId)}
                             disabled={statusInfo.disabled || isLoading}
-                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-2 min-w-[100px] ${
-                              statusInfo.disabled || isLoading
+                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-2 min-w-[100px] ${statusInfo.disabled || isLoading
                                 ? "bg-gray-300 text-gray-600 cursor-not-allowed"
                                 : "bg-indigo-600 text-white hover:bg-indigo-700"
-                            }`}
+                              }`}
                             style={{ fontFamily: "Nunito, sans-serif" }}
                           >
                             {isLoading ? (

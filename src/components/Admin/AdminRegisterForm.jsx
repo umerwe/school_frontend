@@ -146,7 +146,7 @@ export default function AdminRegisterForm() {
         <div className={`absolute top-1/3 right-1/4 w-32 h-32 rounded-full bg-indigo-400 opacity-5 transition-all duration-3000 ease-in-out ${animateBackground ? 'scale-110' : 'scale-100'}`}></div>
       </div>
 
-      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl flex flex-col md:flex-row overflow-hidden transform transition-all duration-500 hover:shadow-2xl z-10">
+      <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl flex flex-col md:flex-row overflow-hidden transform transition-all duration-500 hover:shadow-2xl z-10">
         {/* Form Section */}
         <div className="w-full md:w-1/2 p-8 bg-white">
           <div className="flex items-center mb-8 transition-all duration-300 hover:translate-x-1">
@@ -296,7 +296,7 @@ export default function AdminRegisterForm() {
         </div>
 
         {/* Right Side - Promotional Poster */}
-        <div className="hidden md:flex w-1/2 bg-gradient-to-br from-indigo-500 to-indigo-700 text-white p-8 flex-col justify-between relative overflow-hidden">
+        <div className="hidden md:flex w-1/2  bg-gradient-to-br from-indigo-600 to-indigo-800 text-white p-8 flex-col justify-between relative overflow-hidden">
           {/* Background abstract shapes */}
           <div className={`absolute -bottom-16 -right-16 w-64 h-64 rounded-full bg-indigo-400 opacity-20 transition-transform duration-3000 ease-in-out ${animateBackground ? 'scale-110' : 'scale-100'}`}></div>
           <div className={`absolute -top-8 -left-8 w-40 h-40 rounded-full bg-indigo-300 opacity-20 transition-transform duration-3000 ease-in-out ${animateBackground ? 'scale-90' : 'scale-100'}`}></div>

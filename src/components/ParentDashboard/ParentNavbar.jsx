@@ -18,6 +18,7 @@ import {
   GraduationCap,
   Bot,
   NotebookPen,
+  FileCheck,
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
@@ -132,66 +133,99 @@ const ParentNavbar = () => {
       .join(" ") || "";
 
   const menuItems = [
-    { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/parent-dashboard' },
-    { icon: <Users size={20} />, label: 'My Children', path: '/parent-dashboard/children' },
-    { icon: <Calendar size={20} />, label: 'Attendance', path: '/parent-dashboard/attendance' },
-    { icon: <CreditCard size={20} />, label: 'Fee Payment', path: '/parent-dashboard/fees' },
-    {
-      icon: (
-        <div className="relative">
-          <Bell size={20} />
-          {newNotificationsCount > 0 ? (
-            <span
-              className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold h-5 w-5 flex items-center justify-center rounded-full"
-              data-testid="notification-badge"
-            >
-              {newNotificationsCount}
-            </span>
-          ) : null}
-        </div>
-      ),
-      label: 'Announcements',
-      path: '/parent-dashboard/announcements',
-      onClick: () => {
-        if (currentUser?._id) {
-          resetNotificationCount(currentUser._id).unwrap().catch((err) => {
-            message.error(err?.data?.message || "Error resetting notifications count");
-          });
-        }
-      },
+  {
+    icon: <LayoutDashboard size={20} />,
+    label: 'Dashboard',
+    path: '/parent-dashboard',
+    separator: false,
+  },
+  {
+    icon: <Users size={20} />,
+    label: 'My Children',
+    path: '/parent-dashboard/children',
+    separator: true,
+  },
+  {
+    icon: <Calendar size={20} />,
+    label: 'Attendance',
+    path: '/parent-dashboard/attendance',
+    separator: false,
+  },
+  {
+    icon: <CreditCard size={20} />,
+    label: 'Fee Payment',
+    path: '/parent-dashboard/fees',
+    separator: true,
+  },
+  {
+    icon: (
+      <div className="relative">
+        <Bell size={20} />
+        {newNotificationsCount > 0 ? (
+          <span
+            className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold h-5 w-5 flex items-center justify-center rounded-full"
+            data-testid="notification-badge"
+          >
+            {newNotificationsCount}
+          </span>
+        ) : null}
+      </div>
+    ),
+    label: 'Announcements',
+    path: '/parent-dashboard/announcements',
+    onClick: () => {
+      if (currentUser?._id) {
+        resetNotificationCount(currentUser._id).unwrap().catch((err) => {
+          message.error(err?.data?.message || "Error resetting notifications count");
+        });
+      }
     },
-    { icon: <FileText size={20} />, label: 'Report Card', path: '/parent-dashboard/marks' },
-    { icon: <Bot size={20} />, label: 'AI Assistant', path: '/parent-dashboard/ai-assistant' },
-    {
-      icon: <MessageSquare size={20} />,
-      label: 'Submit Report',
-      path: '/parent-dashboard/submit-report',
+    separator: false,
+  },
+  {
+    icon: <FileText size={20} />,
+    label: 'Report Card',
+    path: '/parent-dashboard/marks',
+    separator: true,
+  },
+  {
+    icon: <Bot size={20} />,
+    label: 'AI Assistant',
+    path: '/parent-dashboard/ai-assistant',
+    separator: false,
+  },
+  {
+    icon: <MessageSquare size={20} />,
+    label: 'Submit Report',
+    path: '/parent-dashboard/submit-report',
+    separator: true,
+  },
+  {
+    icon: (
+      <div className="relative">
+        <FileCheck size={20} />
+        {newReportsCount > 0 ? (
+          <span
+            className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold h-5 w-5 flex items-center justify-center rounded-full"
+            data-testid="reports-badge"
+          >
+            {newReportsCount}
+          </span>
+        ) : null}
+      </div>
+    ),
+    label: 'View Reports',
+    path: '/parent-dashboard/view-reports',
+    onClick: () => {
+      if (currentUser?._id) {
+        resetReportCommentsCount(currentUser._id).unwrap().catch((err) => {
+          message.error(err?.data?.message || "Error resetting report comments count");
+        });
+      }
     },
-    {
-      icon: (
-        <div className="relative">
-          <MessageSquare size={20} />
-          {newReportsCount > 0 ? (
-            <span
-              className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold h-5 w-5 flex items-center justify-center rounded-full"
-              data-testid="reports-badge"
-            >
-              {newReportsCount}
-            </span>
-          ) : null}
-        </div>
-      ),
-      label: 'View Reports',
-      path: '/parent-dashboard/view-reports',
-      onClick: () => {
-        if (currentUser?._id) {
-          resetReportCommentsCount(currentUser._id).unwrap().catch((err) => {
-            message.error(err?.data?.message || "Error resetting report comments count");
-          });
-        }
-      },
-    },
-  ];
+    separator: false,
+  },
+];
 
   return (
     <div className="flex h-screen min-w-[340px] overflow-hidden bg-gray-50 relative">

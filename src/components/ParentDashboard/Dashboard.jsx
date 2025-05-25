@@ -333,8 +333,8 @@ const ParentDashboard = () => {
                           { name: 'Paid', value: metrics.feeVouchers.paid },
                           { name: 'Unpaid', value: metrics.feeVouchers.unpaid }
                         ]}
-                        dataKey="value"
                         nameKey="name"
+                        dataKey="value"
                         cx="50%"
                         cy="50%"
                         outerRadius={70}
