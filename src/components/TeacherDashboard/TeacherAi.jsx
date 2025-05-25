@@ -102,12 +102,12 @@ const TeacherAi = () => {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 bg-white rounded-xl shadow-sm border border-indigo-200 p-3 py-6 sm:px-8">
-          <div className="flex items-center space-x-4">
-            <div className="border-indigo-200 p-3 rounded-xl">
+          <div className="flex items-center space-x-3">
+            <div className="bg-indigo-100 p-3 rounded-xl">
               <Brain className="h-6 w-6 text-indigo-600" />
             </div>
             <div>
-              <h1 className="text-lg sm:text-2xl font-bold text-gray-800">Teacher Assistant</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Teacher Assistant</h1>
               <p className="text-sm sm:text-md text-gray-500 -mt-0.5">AI-powered assistant for your classroom needs</p>
             </div>
           </div>

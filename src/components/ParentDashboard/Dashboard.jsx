@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
   FaUserGraduate, FaClipboardCheck, FaCreditCard, FaBullhorn,
-  FaCalendarAlt, FaArrowRight
+  FaCalendarAlt, FaArrowRight,
+  FaSpinner
 } from 'react-icons/fa';
 import { IoMdAlert } from 'react-icons/io';
+import { MessageSquare } from 'lucide-react';
 import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import AIAssistantButton from '../AIAssistantButton.jsx';
 import { useGetParentDashboardSummaryQuery } from '../../store/slices/parentDashboardApi';
@@ -162,7 +164,8 @@ const ParentDashboard = () => {
   // Quick actions
   const quickActions = [
     { label: "View Attendance", path: "/parent-dashboard/attendance", icon: <FaClipboardCheck />, color: "bg-blue-600" },
-    { label: "View Announcements", path: "/parent-dashboard/announcements", icon: <FaBullhorn />, color: "bg-purple-600" }
+    { label: "View Announcements", path: "/parent-dashboard/announcements", icon: <FaBullhorn />, color: "bg-purple-600" },
+    { label: "Submit Report", path: "/parent-dashboard/submit-report", icon: <MessageSquare size={16} />, color: "bg-pink-600" }
   ];
 
   // Date formatter
@@ -186,8 +189,7 @@ const ParentDashboard = () => {
       {isLoading && (
         <div className="flex justify-center items-center h-64">
           <div className="flex flex-col items-center">
-            <FaClipboardCheck className="animate-spin text-4xl text-indigo-600 mb-4" />
-            <p className="text-gray-600 font-medium">Loading parent dashboard...</p>
+            <FaSpinner className="animate-spin text-4xl text-indigo-600 mb-4" />
           </div>
         </div>
       )}
@@ -207,18 +209,20 @@ const ParentDashboard = () => {
 
       {/* Main Content */}
       {!isLoading && (
-        <div className="space-y-6">
+        <div className="max-w-6xl mx-auto space-y-6">
           {/* Header */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-5 rounded-lg shadow-sm">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-800 mb-1">Welcome, {capitalizeWords(user?.name || 'Parent')}</h1>
-              <p className="text-gray-500 text-sm">
-                Monitor your children's academic progress and school activities.
-              </p>
-            </div>
-            <div className="mt-3 sm:mt-0 px-4 py-2 bg-indigo-50 rounded-full text-indigo-700 font-medium flex items-center">
-              <FaCalendarAlt className="mr-2" />
-              {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+          <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
+            <div className="flex justify-between items-start">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-800 mb-1">Welcome, {capitalizeWords(user?.name || 'Parent')}</h1>
+                <p className="text-gray-600 text-sm">
+                  Monitor your children's academic progress and school activities.
+                </p>
+              </div>
+              <div className="mt-3 sm:mt-3 text-sm hidden sm:flex px-4 py-2 bg-indigo-50 rounded-full text-indigo-700 font-medium  items-center">
+                <FaCalendarAlt className="mr-2" />
+                {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+              </div>
             </div>
           </div>
 
@@ -227,16 +231,16 @@ const ParentDashboard = () => {
             {metricCards.map((card, index) => (
               <div
                 key={index}
-                className="bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition-all duration-300"
+                className="bg-white p-4 rounded-lg shadow border border-gray-200 hover:shadow-md transition-all"
               >
-                <div className="flex justify-between items-start">
-                  <div className={`p-3 rounded-full ${card.bgColor}`}>
-                    <span className={`text-xl ${card.textColor}`}>{card.icon}</span>
+                <div className="flex items-center justify-between">
+                  <div className={`p-2 rounded-lg ${card.bgColor}`}>
+                    <span className={`text-lg ${card.textColor}`}>{card.icon}</span>
                   </div>
+                  <span className="text-xs text-gray-500">{card.title}</span>
                 </div>
-                <div className="mt-4">
-                  <p className="text-gray-500 text-sm font-medium">{card.title}</p>
-                  <p className="text-2xl font-bold mt-1 text-gray-800">{card.value}</p>
+                <div className="mt-2">
+                  <p className="text-2xl font-bold text-gray-800">{card.value}</p>
                 </div>
               </div>
             ))}
@@ -245,119 +249,128 @@ const ParentDashboard = () => {
           {/* Charts Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Attendance Trend */}
-            <div className="bg-white rounded-lg shadow-sm p-5">
-              <div className="flex justify-between items-center mb-6">
-                <div>
-                  <h2 className="text-lg font-semibold text-gray-800">Attendance Trend</h2>
-                  <p className="text-sm text-gray-500">Last 7 days overview</p>
+            <div className="bg-white rounded-lg shadow border border-gray-200">
+              <div className="p-4 border-b border-gray-200">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="font-semibold text-gray-800">Attendance Trend</h2>
+                    <p className="text-gray-600 text-sm">Last 7 days overview</p>
+                  </div>
+                  <button
+                    onClick={() => navigate('/parent-dashboard/attendance')}
+                    className="text-sm text-indigo-600 hover:text-indigo-800 flex items-center"
+                  >
+                    View Details
+                    <FaArrowRight className="ml-1 text-xs" />
+                  </button>
                 </div>
-                <button
-                  onClick={() => navigate('/parent-dashboard/attendance')}
-                  className="flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
-                >
-                  View Details
-                  <FaArrowRight className="ml-1 text-xs" />
-                </button>
               </div>
-              <div className="h-85 pt-4 pr-10">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={metrics.attendanceTrend}>
-                    <XAxis
-                      dataKey="date"
-                      tick={{ fontSize: 12 }}
-                      tickFormatter={(value) => formatDate(value)}
-                      axisLine={{ stroke: '#E5E7EB' }}
-                      tickLine={false}
-                    />
-                    <YAxis
-                      domain={[0, 100]}
-                      tick={{ fontSize: 12 }}
-                      tickFormatter={(value) => `${value}%`}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-                    <Tooltip
-                      formatter={(value) => [`${value}%`, "Attendance"]}
-                      labelFormatter={(label) => `Date: ${formatDate(label)}`}
-                      contentStyle={{
-                        borderRadius: '8px',
-                        border: 'none',
-                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
-                      }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="percentage"
-                      stroke="#4F46E5"
-                      strokeWidth={3}
-                      dot={{ r: 4, fill: '#4F46E5', strokeWidth: 2, stroke: '#fff' }}
-                      activeDot={{ r: 6, fill: '#4F46E5', stroke: '#fff', strokeWidth: 2 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+              <div className="pb-4 pt-12 pr-12">
+                <div className="h-74 flex items-center justify-center">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={metrics.attendanceTrend}>
+                      <XAxis
+                        dataKey="date"
+                        tick={{ fontSize: 10 }}
+                        tickFormatter={(value) => formatDate(value)}
+                        axisLine={{ stroke: '#E5E7EB' }}
+                        tickLine={false}
+                      />
+                      <YAxis
+                        domain={[0, 100]}
+                        tick={{ fontSize: 10 }}
+                        tickFormatter={(value) => `${value}%`}
+                        axisLine={false}
+                        tickLine={false}
+                      />
+                      <Tooltip
+                        formatter={(value) => [`${value}%`, "Attendance"]}
+                        labelFormatter={(label) => `Date: ${formatDate(label)}`}
+                        contentStyle={{
+                          borderRadius: '6px',
+                          border: 'none',
+                          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                          fontSize: '12px'
+                        }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="percentage"
+                        stroke="#4F46E5"
+                        strokeWidth={2}
+                        dot={{ r: 3, fill: '#4F46E5', strokeWidth: 2, stroke: '#fff' }}
+                        activeDot={{ r: 5, fill: '#4F46E5', stroke: '#fff', strokeWidth: 2 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
             </div>
 
             {/* Fee Submission Status */}
-            <div className="bg-white rounded-lg shadow-sm p-5">
-              <div className="flex justify-between items-center mb-6">
-                <div>
-                  <h2 className="text-lg font-semibold text-gray-800">Fee Submission Status</h2>
-                  <p className="text-sm text-gray-500">Payment overview of your children</p>
+            <div className="bg-white rounded-lg shadow border border-gray-200">
+              <div className="p-4 border-b border-gray-200">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="font-semibold text-gray-800">Fee Submission Status</h2>
+                    <p className="text-gray-600 text-sm">Payment overview of your children</p>
+                  </div>
+                  <button
+                    onClick={() => navigate('/parent-dashboard/fees')}
+                    className="text-sm text-indigo-600 hover:text-indigo-800 flex items-center"
+                  >
+                    View Details
+                    <FaArrowRight className="ml-1 text-xs" />
+                  </button>
                 </div>
-                <button
-                  onClick={() => navigate('/parent-dashboard/fees')}
-                  className="flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
-                >
-                  View Details
-                  <FaArrowRight className="ml-1 text-xs" />
-                </button>
               </div>
-              <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={[
-                        { name: 'Paid', value: metrics.feeVouchers.paid },
-                        { name: 'Unpaid', value: metrics.feeVouchers.unpaid }
-                      ]}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={80}
-                      innerRadius={50}
-                      labelLine={false}
-                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                    >
-                      <Cell key="cell-paid" fill="#10B981" stroke="none" />
-                      <Cell key="cell-unpaid" fill="#F59E0B" stroke="none" />
-                    </Pie>
-                    <Tooltip
-                      formatter={(value, name) => [`${value} vouchers`, name]}
-                      contentStyle={{
-                        borderRadius: '8px',
-                        border: 'none',
-                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
-                      }}
-                    />
-                    <Legend
-                      verticalAlign="bottom"
-                      height={36}
-                      iconType="circle"
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-              {/* Payment Stats */}
-              <div className="grid grid-cols-2 gap-4 mt-4">
-                <div className="bg-blue-50 p-3 rounded-lg">
-                  <p className="text-xs text-blue-600 font-medium">Total Collected</p>
-                  <p className="text-lg font-bold text-gray-800">PKR {metrics.collectedFee?.toLocaleString() || '0'}</p>
+              <div className="p-4">
+                <div className="h-62 flex items-center justify-center">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Paid', value: metrics.feeVouchers.paid },
+                          { name: 'Unpaid', value: metrics.feeVouchers.unpaid }
+                        ]}
+                        dataKey="value"
+                        nameKey="name"
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={70}
+                        innerRadius={45}
+                        labelLine={false}
+                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      >
+                        <Cell key="cell-paid" fill="#10B981" stroke="none" />
+                        <Cell key="cell-unpaid" fill="#F59E0B" stroke="none" />
+                      </Pie>
+                      <Tooltip
+                        formatter={(value, name) => [`${value} vouchers`, name]}
+                        contentStyle={{
+                          borderRadius: '8px',
+                          border: 'none',
+                          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                        }}
+                      />
+                      <Legend
+                        verticalAlign="bottom"
+                        height={36}
+                        iconType="circle"
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
                 </div>
-                <div className="bg-pink-50 p-3 rounded-lg">
-                  <p className="text-xs text-pink-600 font-medium">Pending Payments</p>
-                  <p className="text-lg font-bold text-gray-800">{metrics.feeVouchers.unpaid || 0} vouchers</p>
+                {/* Payment Stats */}
+                <div className="grid grid-cols-2 gap-4 mt-2">
+                  <div className="bg-blue-50 p-3 rounded-lg">
+                    <p className="text-xs text-blue-600 font-medium">Total Collected</p>
+                    <p className="text-lg font-bold text-gray-800">PKR {metrics.collectedFee?.toLocaleString() || '0'}</p>
+                  </div>
+                  <div className="bg-pink-50 p-3 rounded-lg">
+                    <p className="text-xs text-pink-600 font-medium">Pending Payments</p>
+                    <p className="text-lg font-bold text-gray-800">{metrics.feeVouchers.unpaid || 0} vouchers</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -366,75 +379,82 @@ const ParentDashboard = () => {
           {/* Quick Actions and Announcements */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Quick Actions */}
-            <div className="bg-white rounded-lg shadow-sm p-5">
-              <h2 className="text-lg font-semibold text-gray-800 mb-6">Quick Actions</h2>
-              <div className="space-y-3">
-                {quickActions.map((action, index) => (
-                  <button
-                    key={index}
-                    onClick={() => navigate(action.path)}
-                    className="w-full flex items-center justify-between px-4 py-3 bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 transition-all"
-                  >
-                    <div className="flex items-center">
-                      <span className={`p-2 bg-white rounded-lg mr-3 ${action.label.includes('Attendance') ? 'text-blue-500' : 'text-purple-500'}`}>
-                        {action.icon}
-                      </span>
-                      <span className="font-medium text-[15px]">{action.label}</span>
-                    </div>
-                    <FaArrowRight className="text-indigo-400" />
-                  </button>
-                ))}
+            <div className="bg-white rounded-lg shadow border border-gray-200">
+              <div className="p-4 border-b border-gray-200">
+                <h2 className="font-semibold text-gray-800">Quick Actions</h2>
+              </div>
+              <div className="p-4">
+                <div className="space-y-2">
+                  {quickActions.map((action, index) => (
+                    <button
+                      key={index}
+                      onClick={() => navigate(action.path)}
+                      className="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 rounded transition-colors"
+                    >
+                      <div className="flex items-center">
+                        <span className={`p-2 ${action.color} text-white rounded mr-3`}>
+                          {action.icon}
+                        </span>
+                        <span className="font-medium text-gray-700">{action.label}</span>
+                      </div>
+                      <FaArrowRight className="text-gray-400 text-sm" />
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
             {/* Latest Announcements */}
-            <div className="bg-white rounded-lg shadow-sm p-5 lg:col-span-2">
-              <div className="flex justify-between items-center mb-6">
-                <div>
-                  <h2 className="text-lg font-semibold text-gray-800">Latest Announcements</h2>
-                  <p className="text-sm text-gray-500">School-wide communications</p>
+            <div className="bg-white rounded-lg shadow border border-gray-200 lg:col-span-2">
+              <div className="p-4 border-b border-gray-200">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="font-semibold text-gray-800">Latest Announcements</h2>
+                    <p className="text-gray-600 text-sm">School-wide communications</p>
+                  </div>
+                  <button
+                    onClick={() => navigate('/parent-dashboard/announcements')}
+                    className="text-sm text-indigo-600 hover:text-indigo-800 flex items-center"
+                  >
+                    View All
+                    <FaArrowRight className="ml-1 text-xs" />
+                  </button>
                 </div>
-                <button
-                  onClick={() => navigate('/parent-dashboard/announcements')}
-                  className="flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
-                >
-                  View All
-                  <FaArrowRight className="ml-1 text-xs" />
-                </button>
               </div>
-              <div className="space-y-4">
-                {metrics.announcements.length > 0 ? (
-                  metrics.announcements.slice(0, 3).map((announcement, idx) => (
-                    <div
-                      key={idx}
-                      className="p-4 bg-white border border-gray-100 rounded-lg hover:border-indigo-200 transition-colors shadow-sm"
-                    >
-                      <div className="flex items-start">
-                        <div className="p-2 bg-amber-100 text-amber-600 rounded-lg mr-3 mt-0.5">
-                          <FaBullhorn className="text-sm" />
-                        </div>
-                        <div>
-                          <div className="flex items-center">
-                            <h3 className="font-medium text-gray-800">{capitalizeWords(announcement.title)}</h3>
+              <div className="p-4">
+                <div className="space-y-3">
+                  {metrics.announcements.length > 0 ? (
+                    metrics.announcements.slice(0, 3).map((announcement, idx) => (
+                      <div
+                        key={idx}
+                        className="p-4 bg-white border border-gray-100 rounded-lg hover:border-indigo-200 transition-colors shadow-sm"
+                      >
+                        <div className="flex items-start">
+                          <div className="p-2 bg-amber-100 text-amber-600 rounded-lg mr-3 mt-0.5">
+                            <FaBullhorn className="text-sm" />
                           </div>
-                          <p className="text-xs text-gray-500 mb-2">{announcement.date}</p>
-                          <button
-                            onClick={() => navigate('/parent-dashboard/announcements')}
-                            className="mt-2 text-xs font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
-                          >
-                            Read more
-                          </button>
+                          <div>
+                            <div className="flex items-center">
+                              <h3 className="font-medium text-gray-800">{capitalizeWords(announcement.title)}</h3>
+                            </div>
+                            <p className="text-xs text-gray-500 mb-2">{announcement.date}</p>
+                            <button
+                              onClick={() => navigate('/parent-dashboard/announcements')}
+                              className="mt-2 text-xs font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
+                            >
+                              Read more
+                            </button>
+                          </div>
                         </div>
                       </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-6">
+                      <FaBullhorn className="mx-auto text-gray-300 text-2xl mb-2" />
+                      <p className="text-gray-500">No announcements found</p>
                     </div>
-                  ))
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-8 bg-gray-50 rounded-lg">
-                    <FaBullhorn className="text-gray-300 text-3xl mb-3" />
-                    <p className="text-gray-500 font-medium">No announcements found</p>
-                    <p className="text-gray-400 text-sm">Check back later for updates</p>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -445,4 +465,4 @@ const ParentDashboard = () => {
   );
 };
 
-export default ParentDashboard; 
+export default ParentDashboard;

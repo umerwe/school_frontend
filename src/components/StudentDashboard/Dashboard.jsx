@@ -8,6 +8,8 @@ import {
     FaBullhorn,
     FaCalendarAlt,
     FaClock,
+    FaRobot,
+    FaSpinner,
 } from 'react-icons/fa';
 import { IoMdAlert } from 'react-icons/io';
 import {
@@ -33,7 +35,7 @@ const StudentDashboard = () => {
 
     // Fetch dashboard summary using RTK Query
     const { data, isLoading, error } = useGetDashboardSummaryQuery();
-    
+
     // Process metrics from the summary data
     const metrics = data
         ? {
@@ -177,6 +179,7 @@ const StudentDashboard = () => {
     const quickActions = [
         { label: 'Attendance', path: '/student-dashboard/attendance', icon: <FaClipboardCheck />, color: 'bg-blue-600' },
         { label: 'Fee Vouchers', path: '/student-dashboard/fee-status', icon: <FaWallet />, color: 'bg-purple-600' },
+        { label: 'AI Assistant', path: '/student-dashboard/ai-assistant', icon: <FaRobot />, color: 'bg-indigo-600' },
     ];
 
     // Date formatter
@@ -200,8 +203,7 @@ const StudentDashboard = () => {
             {isLoading && (
                 <div className="flex justify-center items-center h-64">
                     <div className="flex flex-col items-center">
-                        <FaClipboardCheck className="animate-spin text-4xl text-indigo-600 mb-4" />
-                        <p className="text-gray-600 font-medium">Loading your dashboard...</p>
+                        <FaSpinner className="animate-spin text-4xl text-indigo-600 mb-4" />
                     </div>
                 </div>
             )}
@@ -231,12 +233,9 @@ const StudentDashboard = () => {
                                 </h1>
                                 <p className="text-gray-600 text-sm">Here's your academic overview</p>
                             </div>
-                            <div className="px-3 py-1 bg-gray-100 rounded-full text-gray-700 text-sm flex items-center">
+                            <div className="mt-3 text-sm sm:mt-3 hidden sm:flex px-4 py-2 bg-indigo-50 rounded-full text-indigo-700 font-medium  items-center">
                                 <FaCalendarAlt className="mr-2" />
-                                {new Date().toLocaleDateString('en-US', {
-                                    month: 'short',
-                                    day: 'numeric',
-                                })}
+                                {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                             </div>
                         </div>
                     </div>
@@ -278,7 +277,7 @@ const StudentDashboard = () => {
                                 </div>
                             </div>
                             <div className="pb-4 pt-12 pr-12">
-                                <div className="h-64 flex items-center justify-center">
+                                <div className="h-74 flex items-center justify-center">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <LineChart data={metrics.attendanceTrend}>
                                             <XAxis
@@ -333,7 +332,7 @@ const StudentDashboard = () => {
                                 </div>
                             </div>
                             <div className="p-4">
-                                <div className="h-52 flex items-center justify-center">
+                                <div className="h-62 flex items-center justify-center">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <PieChart>
                                             <Pie

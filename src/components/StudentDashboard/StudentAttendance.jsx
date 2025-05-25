@@ -1,15 +1,14 @@
 import React from 'react';
-import { Loader2, BookOpen, X, Calendar, User, Bookmark, CheckCircle2, XCircle, Clock, RotateCw } from 'lucide-react';
+import { Loader2, BookOpen, X, Calendar, User, Bookmark, CheckCircle2, XCircle, Clock } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import {
-  AcademicCapIcon,
-  ChartBarIcon,
   CalendarIcon,
   CheckCircleIcon,
   XCircleIcon,
   ClockIcon,
   ArrowPathIcon,
   UserCircleIcon,
+  ChartBarIcon
 } from '@heroicons/react/24/outline';
 import { useGetDashboardSummaryQuery } from '../../store/slices/studentDashboardApi';
 
@@ -79,15 +78,23 @@ export default function StudentAttendance() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-4 md:p-8">
+    <div className="min-h-screen p-4 md:p-8">
       <div className="max-w-6xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-indigo-100">
         {/* Header Section */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <AcademicCapIcon className="w-8 h-8 text-indigo-600" />
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 font-nunito">My Attendance</h2>
+            <div className="p-3 bg-indigo-100 rounded-full">
+              <BookOpen className="md:w-7 md:h-7 text-indigo-600" />
+            </div>
+            <div>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800 font-nunito">
+                My Attendance
+              </h2>
+              <p className="text-xs md:text-sm text-gray-500 font-nunito">
+                View your attendance records and statistics
+              </p>
+            </div>
           </div>
-          <p className="text-gray-500 font-nunito">View your attendance records and statistics</p>
         </div>
 
         {/* Error State */}

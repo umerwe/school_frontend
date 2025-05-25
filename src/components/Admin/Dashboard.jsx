@@ -289,7 +289,7 @@ const Dashboard = () => {
                 Welcome back!
               </p>
             </div>
-            <div className="mt-3 text-sm sm:mt-0 px-4 py-2 bg-indigo-50 rounded-full text-indigo-700 font-medium flex items-center">
+            <div className="mt-3 text-sm sm:mt-0 px-4 py-2 bg-indigo-50 rounded-full text-indigo-700 font-medium hidden sm:flex items-center">
               <FaCalendarAlt className="mr-2" />
               {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
             </div>

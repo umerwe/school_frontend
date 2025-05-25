@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { message } from 'antd';
-import { Brain, Send, CheckCircle, Loader2, Copy, User, BookOpen, Calendar, BarChart2, DollarSign } from 'lucide-react';
+import { Brain, Send, CheckCircle, Loader2, Copy, BookOpen, Calendar, DollarSign, ChevronRight } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { useSelector } from 'react-redux';
 
@@ -11,6 +11,7 @@ const ParentAi = () => {
   const [loading, setLoading] = useState(false);
   const [copyLoading, setCopyLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showSidebar, setShowSidebar] = useState(false);
   const outputRef = useRef(null);
   const user = useSelector((store) => store.userSlice.user);
 
@@ -44,10 +45,10 @@ const ParentAi = () => {
 
     try {
       const baseUrl =
-                import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
-            
+        import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+
       const response = await axios.post(
-        `${baseUrl}/parent-ai`, // Adjust endpoint as needed
+        `${baseUrl}/parent-ai`,
         { prompt },
         { withCredentials: true }
       );
@@ -60,10 +61,8 @@ const ParentAi = () => {
           (res, i, arr) => res.result === arr[0].result
         );
         if (isGeneric) {
-          // For generic prompts, show only the result without student-specific headings
           setResponses([{ id: 'generic', result: childrenResponses[0].result }]);
         } else {
-          // For student-specific prompts, keep individual responses
           setResponses(childrenResponses);
         }
       }
@@ -106,28 +105,38 @@ const ParentAi = () => {
 
   const handleQuickPrompt = (text) => {
     setPrompt(text);
+    setShowSidebar(false);
   };
 
   return (
-    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 min-h-screen p-4 md:p-6">
+    <div className="min-h-screen p-4 md:p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-          <div className="flex items-center space-x-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 bg-white rounded-xl shadow-sm border border-indigo-200 p-3 py-6 sm:px-8">
+          <div className="flex items-center space-x-3">
             <div className="bg-indigo-100 p-3 rounded-xl">
               <Brain className="h-6 w-6 text-indigo-600" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-800">Parent Assistant</h1>
-              <p className="text-gray-500">AI-powered insights about your children's education</p>
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Parent Assistant</h1>
+              <p className="text-sm sm:text-md text-gray-500 -mt-0.5">AI-powered assistant for your children's education</p>
             </div>
           </div>
         </div>
 
+        {/* Mobile toggle button */}
+        <button
+          onClick={() => setShowSidebar(!showSidebar)}
+          className="md:hidden flex items-center gap-2 mb-6 bg-white px-4 py-2 rounded-lg border border-indigo-200 shadow-sm"
+        >
+          <span>Quick Prompts</span>
+          <ChevronRight className={`h-4 w-4 transition-transform ${showSidebar ? 'rotate-90' : ''}`} />
+        </button>
+
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Sidebar */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 h-fit">
+          <div className={`bg-white rounded-xl shadow-sm border border-indigo-200 p-5 h-fit ${showSidebar ? 'block' : 'hidden'} lg:block`}>
             <h2 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
               <BookOpen className="h-5 w-5 text-indigo-500" />
               Quick Prompts
@@ -145,7 +154,7 @@ const ParentAi = () => {
               ))}
             </div>
 
-            <div className="mt-6 pt-5 border-t border-gray-200">
+            <div className="mt-6 pt-5 border-t border-indigo-200">
               <h2 className="font-semibold text-gray-800 mb-3">Tips for Best Results</h2>
               <ul className="space-y-2 text-sm text-gray-600">
                 <li className="flex items-start gap-2">
@@ -167,17 +176,17 @@ const ParentAi = () => {
           {/* Main Panel */}
           <div className="lg:col-span-2 space-y-6">
             {/* Query Box */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="p-5 border-b border-gray-200 bg-gray-50">
-                <h2 className="font-semibold text-gray-800">Ask About Your Children</h2>
+            <div className="bg-white rounded-xl shadow-sm border border-indigo-200 overflow-hidden">
+              <div className="p-5 border-b border-indigo-200 bg-gray-50">
+                <h2 className="font-semibold text-gray-800">Ask Your Question</h2>
               </div>
               <div className="p-5">
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="relative">
                     <textarea
-                      className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-base text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 resize-none pr-12"
+                      className="w-full bg-gray-50 border border-indigo-200 rounded-lg px-4 py-3 text-base text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 resize-none pr-12"
                       rows={4}
-                      placeholder={`e.g., "What's my child's attendance this month?", "Show grades for ${user?.childrens?.[0]?.name || 'your child'}", "Upcoming parent-teacher meetings"`}
+                      placeholder="e.g., 'What's my child's attendance this month?', 'Show grades for my child', 'Upcoming parent-teacher meetings'"
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
                       aria-required="true"
@@ -215,8 +224,8 @@ const ParentAi = () => {
 
             {/* Results Section */}
             {responses.length > 0 && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden" ref={outputRef}>
-                <div className="p-5 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+              <div className="bg-white rounded-xl shadow-sm border border-indigo-200 overflow-hidden" ref={outputRef}>
+                <div className="p-5 border-b border-indigo-200 bg-gray-50 flex justify-between items-center">
                   <h2 className="font-semibold text-gray-800 flex items-center gap-2">
                     <CheckCircle className="h-5 w-5 text-green-500" />
                     AI Response
@@ -239,7 +248,7 @@ const ParentAi = () => {
                 <div className="p-5">
                   <div className="space-y-6">
                     {responses.map((response) => (
-                      <div key={response.id} className="bg-indigo-50 p-4 rounded-lg">
+                      <div key={response.id} className="bg-gray-50 p-4 rounded-lg">
                         {response.name && response.id !== 'generic' && (
                           <div className="flex justify-between items-center mb-3">
                             <h3 className="font-medium text-gray-800">
@@ -310,4 +319,3 @@ const ParentAi = () => {
 };
 
 export default ParentAi;
-

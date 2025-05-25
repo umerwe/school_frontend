@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { message } from "antd";
-import { ClipboardList, ChevronDown, ChevronUp, AlertCircle } from "lucide-react";
+import { ClipboardList, ChevronDown, ChevronUp, AlertCircle, Loader2 } from "lucide-react";
 import { useGetDashboardSummaryQuery } from "../../store/slices/teacherDashboardApi";
 
 export default function TeacherAnnouncements() {
@@ -33,53 +33,9 @@ export default function TeacherAnnouncements() {
     );
   };
 
-  if (loading) {
-    return (
-      <div className="p-6 min-h-screen">
-        <h2 className="text-2xl font-bold mb-8 text-gray-800 border-b pb-4 border-gray-200">
-          Announcements
-        </h2>
-        <div className="space-y-6">
-          {[...Array(5)].map((_, i) => (
-            <div
-              key={i}
-              className="bg-white rounded-xl shadow p-5 animate-pulse h-20 border border-gray-200"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
-                  <div className="h-5 bg-gray-200 rounded w-1/3"></div>
-                </div>
-                <div className="w-6 h-6 bg-gray-200 rounded"></div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="p-6 bg-gray-100 min-h-screen">
-        <h2 className="text-2xl md:text-3xl font-bold mb-8 text-gray-800 border-b pb-4 border-indigo-200 font-nunito">
-          Announcements
-        </h2>
-        <div className="bg-white rounded-xl shadow-md border border-gray-200 p-10 text-center">
-          <div className="mx-auto w-24 h-24 bg-red-50 rounded-full flex items-center justify-center mb-6">
-            <AlertCircle className="h-12 w-12 text-red-500" />
-          </div>
-          <p className="text-gray-800 text-lg">
-            {error?.data?.message || "Failed to load announcements. Please try again later."}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
- <div className="min-h-screen p-4 md:p-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen p-4 md:p-8">
+      <div className="max-w-6xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-indigo-100">
         <h2 className="text-2xl md:text-3xl font-bold mb-8 text-gray-800 border-b pb-4 border-indigo-200 font-nunito">
           Announcements
         </h2>
