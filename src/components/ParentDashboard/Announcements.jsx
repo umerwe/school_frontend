@@ -20,8 +20,8 @@ export default function Announcements() {
 
   return (
     <div className="min-h-screen p-4 md:p-8">
-      <div className="max-w-6xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-indigo-100">
-        <h2 className="text-2xl md:text-3xl font-bold mb-8 text-gray-800 border-b pb-4 border-indigo-200 font-nunito">
+      <div className="max-w-6xl mx-auto bg-white px-4 py-6 md:px-8 md:py-8 rounded-2xl shadow-sm border border-indigo-100">
+        <h2 className="text-2xl md:text-3xl font-bold mb-8 ml-3 sm:ml-0 text-gray-800 border-b pb-4 border-indigo-200 font-nunito">
           Announcements
         </h2>
 

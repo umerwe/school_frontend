@@ -201,7 +201,7 @@ const StudentDashboard = () => {
         <div className="min-h-screen bg-gray-50 p-4 md:p-6">
             {/* Loading State */}
             {isLoading && (
-                <div className="flex justify-center items-center h-64">
+                <div className="flex justify-center items-center min-h-[80vh] h-64">
                     <div className="flex flex-col items-center">
                         <FaSpinner className="animate-spin text-4xl text-indigo-600 mb-4" />
                     </div>

@@ -229,7 +229,7 @@ const TeacherDashboard = () => {
               <h1 className="text-2xl font-bold text-gray-800 mb-1">Welcome, {capitalizeWords(user.name)}</h1>
               <p className="text-gray-500 text-sm">Here's an overview of your class.</p>
             </div>
-            <div className="mt-3 sm:mt-0 px-4 py-2 text-sm bg-indigo-50 rounded-full text-indigo-700 font-medium flex items-center">
+            <div className="mt-3 sm:mt-0 px-4 py-2 text-sm bg-indigo-50 rounded-full text-indigo-700 font-medium hidden sm:flex items-center">
               <FaCalendarAlt className="mr-2" />
               {new Date().toLocaleDateString('en-US', {
                 weekday: 'long',
