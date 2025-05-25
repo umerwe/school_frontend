@@ -135,7 +135,7 @@ export default function LoginForm() {
     };
 
     return (
-        <div className="min-h-[90vh] flex items-center justify-center p-4 bg-gradient-to-br from-indigo-50 to-gray-100 relative overflow-hidden pb-100">
+        <div className="min-h-[100vh] pb-10  flex items-center justify-center p-4 bg-gradient-to-br from-indigo-50 to-gray-100 relative overflow-hidden">
             {/* Animated background elements */}
             <div className="absolute inset-0 overflow-hidden">
                 <div className={`absolute top-0 left-0 w-64 h-64 rounded-full bg-indigo-500 opacity-5 transition-all duration-5000 ease-in-out ${animateBackground ? 'translate-x-10 translate-y-10' : '-translate-x-6 -translate-y-6'}`}></div>
