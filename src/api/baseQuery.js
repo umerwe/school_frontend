@@ -45,7 +45,7 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
       try {
         // Try to refresh tokens
         const refreshResult = await baseQuery(
-          { url: '/auth/refresh-tokensss', method: 'POST' },
+          { url: '/auth/refresh-tokens', method: 'POST' },
           api,
           extraOptions
         );
