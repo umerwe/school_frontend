@@ -4,7 +4,7 @@ import { User, Users, Plus, Trash2, Search, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { message, Modal } from "antd";
 import { useSelector } from "react-redux";
-import { useGetDashboardSummaryQuery, useDeleteParentMutation } from "../../store/slices/adminDashboardApi";
+import { useGetDashboardSummaryQuery, useDeleteParentMutation } from "../../api/adminDashboardApi";
 
 const capitalizeWords = (str) =>
   str

@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { message } from "antd";
 import { AcademicCapIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
-import { useGenerateVoucherMutation } from '../../store/slices/adminDashboardApi';
+import { useGenerateVoucherMutation } from '../../api/adminDashboardApi';
 
 const CreateVoucher = () => {
     const currentUser = useSelector((store) => store.userSlice.user);

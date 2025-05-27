@@ -1,22 +1,11 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
-const baseUrl =
-  import.meta.env.MODE === 'production'
-    ? import.meta.env.VITE_API_BASE_URL_PROD
-    : import.meta.env.VITE_API_BASE_URL_LOCAL;
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { baseQueryWithReauth } from './baseQuery';
 
 export const adminDashboardApi = createApi({
   reducerPath: 'adminDashboardApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl,
-    credentials: 'include',
-    prepareHeaders: (headers, { getState }) => {
-      headers.set('Accept', 'application/json');
-      return headers;
-    },
-  }),
-  keepUnusedDataFor: 24 * 60 * 60, // Cache data for 24 hours
-  refetchOnMountOrArgChange: false, // Prevent refetch on mount
+  baseQuery: baseQueryWithReauth,
+  keepUnusedDataFor: 24 * 60 * 60,
+  refetchOnMountOrArgChange: false,
   tagTypes: ['Dashboard', 'Class', 'Subject', 'Teacher', 'Parent', 'Student'],
   endpoints: (builder) => ({
     getDashboardSummary: builder.query({

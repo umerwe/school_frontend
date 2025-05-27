@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { message } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { useCreateClassMutation } from '../../store/slices/adminDashboardApi';
+import { useCreateClassMutation } from '../../api/adminDashboardApi';
 
 export default function ClassForm() {
   const navigate = useNavigate();

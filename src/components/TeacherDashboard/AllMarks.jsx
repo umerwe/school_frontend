@@ -2,7 +2,7 @@ import { message, Modal, Select } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { BookOpen, User, Trash2, Filter, ChevronDown, FileText, Loader2 } from "lucide-react";
 import { useSelector } from "react-redux";
-import { useGetDashboardSummaryQuery, useDeleteMarksMutation } from "../../store/slices/teacherDashboardApi";
+import { useGetDashboardSummaryQuery, useDeleteMarksMutation } from "../../api/teacherDashboardApi";
 import { useNavigate } from "react-router-dom";
 
 export default function AllMarks() {

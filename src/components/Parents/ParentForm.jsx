@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
 import { UserIcon, ArrowLeftIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import { useCreateParentMutation } from "../../store/slices/adminDashboardApi";
+import { useCreateParentMutation } from "../../api/adminDashboardApi";
 
 const ParentForm = () => {
   const navigate = useNavigate();

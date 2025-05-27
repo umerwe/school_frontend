@@ -10,7 +10,7 @@ import { IoMdAlert } from 'react-icons/io';
 import { MessageSquare } from 'lucide-react';
 import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import AIAssistantButton from '../AIAssistantButton.jsx';
-import { useGetParentDashboardSummaryQuery } from '../../store/slices/parentDashboardApi';
+import { useGetParentDashboardSummaryQuery } from '../../api/parentDashboardApi.js';
 
 const ParentDashboard = () => {
   const navigate = useNavigate();

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { message } from 'antd';
 import { BookOpen, User, CheckCircle, XCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useSubmitMarksMutation } from '../../store/slices/teacherDashboardApi';
+import { useSubmitMarksMutation } from '../../api/teacherDashboardApi';
 
 export default function SubmitMarks() {
   const navigate = useNavigate();

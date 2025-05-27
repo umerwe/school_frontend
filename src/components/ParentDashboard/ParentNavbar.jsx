@@ -29,7 +29,8 @@ import {
   useGetParentDashboardSummaryQuery,
   useResetNotificationCountMutation,
   useResetReportCommentsCountMutation,
-} from "../../store/slices/parentDashboardApi";
+} from "../../api/parentDashboardApi";
+import { setManualLogout } from "../../api/baseQuery";
 
 const ParentNavbar = () => {
   const navigate = useNavigate();
@@ -114,15 +115,28 @@ const ParentNavbar = () => {
     const baseUrl = import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
 
     try {
+      // Explicitly set this as manual logout
+      setManualLogout(true);
+      dispatch(logout({ manual: true }));
+
       await axios.post(`${baseUrl}/auth/logout`, {}, {
         withCredentials: true,
       });
-    } catch (error) {
-      console.error("Error during logout:", error);
-    } finally {
+
+      // Clear all states
       dispatch(parentDashboardApi.util.resetApiState());
       localStorage.removeItem('persist:parentDashboardApi');
-      dispatch(logout());
+
+      // Navigate to login page (not session-expired)
+      navigate('/');
+
+      // Clear cookies on client side
+      document.cookie.split(';').forEach(cookie => {
+        const name = cookie.split('=')[0].trim();
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+      });
+    } catch (error) {
+      navigate('/');
     }
   };
 
@@ -133,114 +147,112 @@ const ParentNavbar = () => {
       .join(" ") || "";
 
   const menuItems = [
-  {
-    icon: <LayoutDashboard size={20} />,
-    label: 'Dashboard',
-    path: '/parent-dashboard',
-    separator: false,
-  },
-  {
-    icon: <Users size={20} />,
-    label: 'My Children',
-    path: '/parent-dashboard/children',
-    separator: true,
-  },
-  {
-    icon: <Calendar size={20} />,
-    label: 'Attendance',
-    path: '/parent-dashboard/attendance',
-    separator: false,
-  },
-  {
-    icon: <CreditCard size={20} />,
-    label: 'Fee Payment',
-    path: '/parent-dashboard/fees',
-    separator: true,
-  },
-  {
-    icon: (
-      <div className="relative">
-        <Bell size={20} />
-        {newNotificationsCount > 0 ? (
-          <span
-            className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold h-5 w-5 flex items-center justify-center rounded-full"
-            data-testid="notification-badge"
-          >
-            {newNotificationsCount}
-          </span>
-        ) : null}
-      </div>
-    ),
-    label: 'Announcements',
-    path: '/parent-dashboard/announcements',
-    onClick: () => {
-      if (currentUser?._id) {
-        resetNotificationCount(currentUser._id).unwrap().catch((err) => {
-          message.error(err?.data?.message || "Error resetting notifications count");
-        });
-      }
+    {
+      icon: <LayoutDashboard size={20} />,
+      label: 'Dashboard',
+      path: '/parent-dashboard',
+      separator: false,
     },
-    separator: false,
-  },
-  {
-    icon: <FileText size={20} />,
-    label: 'Report Card',
-    path: '/parent-dashboard/marks',
-    separator: true,
-  },
-  {
-    icon: <Bot size={20} />,
-    label: 'AI Assistant',
-    path: '/parent-dashboard/ai-assistant',
-    separator: false,
-  },
-  {
-    icon: <MessageSquare size={20} />,
-    label: 'Submit Report',
-    path: '/parent-dashboard/submit-report',
-    separator: true,
-  },
-  {
-    icon: (
-      <div className="relative">
-        <FileCheck size={20} />
-        {newReportsCount > 0 ? (
-          <span
-            className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold h-5 w-5 flex items-center justify-center rounded-full"
-            data-testid="reports-badge"
-          >
-            {newReportsCount}
-          </span>
-        ) : null}
-      </div>
-    ),
-    label: 'View Reports',
-    path: '/parent-dashboard/view-reports',
-    onClick: () => {
-      if (currentUser?._id) {
-        resetReportCommentsCount(currentUser._id).unwrap().catch((err) => {
-          message.error(err?.data?.message || "Error resetting report comments count");
-        });
-      }
+    {
+      icon: <Users size={20} />,
+      label: 'My Children',
+      path: '/parent-dashboard/children',
+      separator: true,
     },
-    separator: false,
-  },
-];
+    {
+      icon: <Calendar size={20} />,
+      label: 'Attendance',
+      path: '/parent-dashboard/attendance',
+      separator: false,
+    },
+    {
+      icon: <CreditCard size={20} />,
+      label: 'Fee Payment',
+      path: '/parent-dashboard/fees',
+      separator: true,
+    },
+    {
+      icon: (
+        <div className="relative">
+          <Bell size={20} />
+          {newNotificationsCount > 0 ? (
+            <span
+              className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold h-5 w-5 flex items-center justify-center rounded-full"
+              data-testid="notification-badge"
+            >
+              {newNotificationsCount}
+            </span>
+          ) : null}
+        </div>
+      ),
+      label: 'Announcements',
+      path: '/parent-dashboard/announcements',
+      onClick: () => {
+        if (currentUser?._id) {
+          resetNotificationCount(currentUser._id).unwrap().catch((err) => {
+            message.error(err?.data?.message || "Error resetting notifications count");
+          });
+        }
+      },
+      separator: false,
+    },
+    {
+      icon: <FileText size={20} />,
+      label: 'Report Card',
+      path: '/parent-dashboard/marks',
+      separator: true,
+    },
+    {
+      icon: <Bot size={20} />,
+      label: 'AI Assistant',
+      path: '/parent-dashboard/ai-assistant',
+      separator: false,
+    },
+    {
+      icon: <MessageSquare size={20} />,
+      label: 'Submit Report',
+      path: '/parent-dashboard/submit-report',
+      separator: true,
+    },
+    {
+      icon: (
+        <div className="relative">
+          <FileCheck size={20} />
+          {newReportsCount > 0 ? (
+            <span
+              className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold h-5 w-5 flex items-center justify-center rounded-full"
+              data-testid="reports-badge"
+            >
+              {newReportsCount}
+            </span>
+          ) : null}
+        </div>
+      ),
+      label: 'View Reports',
+      path: '/parent-dashboard/view-reports',
+      onClick: () => {
+        if (currentUser?._id) {
+          resetReportCommentsCount(currentUser._id).unwrap().catch((err) => {
+            message.error(err?.data?.message || "Error resetting report comments count");
+          });
+        }
+      },
+      separator: false,
+    },
+  ];
 
   return (
     <div className="flex h-screen min-w-[340px] overflow-hidden bg-gray-50 relative">
       {/* Sidebar */}
       <div
         ref={sidebarRef}
-        className={`bg-indigo-500 text-white h-full transition-all duration-300 ease-in-out ${
-          isMobile
-            ? `fixed top-0 left-0 z-20 w-64 shadow-xl rounded-sm ${
-                showMobileSidebar ? 'translate-x-0' : '-translate-x-full'
-              }`
+        className={`bg-indigo-500 text-white h-full transition-all duration-300 ease-in-out ${isMobile
+            ? `fixed top-0 left-0 z-20 w-64 shadow-xl rounded-sm ${showMobileSidebar ? 'translate-x-0' : '-translate-x-full'
+            }`
             : isSidebarOpen
-            ? 'w-64'
-            : 'w-20'
-        } shadow-xl z-10 rounded-sm`}
+              ? 'w-64'
+              : 'w-20'
+          } shadow-xl z-10 rounded-sm`}
       >
         <div className="flex items-center justify-between p-3 sm:p-4 border-b border-indigo-400">
           {(isSidebarOpen || isMobile) && (
@@ -274,28 +286,25 @@ const ParentNavbar = () => {
                   if (item.onClick) item.onClick();
                   if (isMobile) setShowMobileSidebar(false);
                 }}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200 ${
-                  location.pathname === item.path
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200 ${location.pathname === item.path
                     ? "bg-indigo-400 shadow-lg shadow-indigo-900/20"
                     : "text-white hover:bg-indigo-400 hover:text-white hover:translate-x-1"
-                }`}
+                  }`}
               >
                 <span
-                  className={`flex-shrink-0 ${
-                    location.pathname === item.path
+                  className={`flex-shrink-0 ${location.pathname === item.path
                       ? "text-indigo-100"
                       : "text-white hover:text-white"
-                  }`}
+                    }`}
                 >
                   {item.icon}
                 </span>
                 {(isSidebarOpen || isMobile) && (
                   <span
-                    className={`text-sm font-medium ${
-                      location.pathname === item.path
+                    className={`text-sm font-medium ${location.pathname === item.path
                         ? "text-white"
                         : "text-white hover:text-white"
-                    }`}
+                      }`}
                     style={{ fontFamily: "Nunito, sans-serif" }}
                   >
                     {item.label}
@@ -384,9 +393,8 @@ const ParentNavbar = () => {
                   <div className="flex items-center">
                     <ChevronDown
                       size={14}
-                      className={`text-gray-600 transition-transform duration-200 ${
-                        isDropdownVisible ? "rotate-180" : ""
-                      }`}
+                      className={`text-gray-600 transition-transform duration-200 ${isDropdownVisible ? "rotate-180" : ""
+                        }`}
                     />
                   </div>
                 )}

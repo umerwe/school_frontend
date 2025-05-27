@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from 'axios';
+import { setManualLogout } from '../../api/baseQuery';
 import {
   Users,
   BookOpen,
@@ -25,13 +26,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { logout } from "../../store/slices/userSlice";
 import { message } from "antd";
-import { adminDashboardApi, useGetDashboardSummaryQuery, useResetAdminNumberMutation } from '../../store/slices/adminDashboardApi';
+import { adminDashboardApi, useGetDashboardSummaryQuery, useResetAdminNumberMutation } from '../../api/adminDashboardApi';
 
 const AdminNavbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const currentUser = useSelector((store) => store.userSlice.user);
+
   const dropdownRef = useRef();
   const sidebarRef = useRef();
 
@@ -109,29 +111,39 @@ const AdminNavbar = () => {
     }
   }, [location.pathname]);
 
-  const handleLogout = async () => {
-  setIsDropdownVisible(false);
-  const baseUrl = import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
 
-  try {
-    await axios.post(`${baseUrl}/auth/logout`, {}, {
-      withCredentials: true,
-    });
-  } catch (error) {
-    console.error("Error during logout:", error);
-  } finally {
-    // Clear all states and redirect
-    dispatch(adminDashboardApi.util.resetApiState());
-    localStorage.removeItem('persist:adminDashboardApi');
-    dispatch(logout());
-    
-    // Clear cookies on client side
-    document.cookie.split(';').forEach(cookie => {
-      const name = cookie.split('=')[0].trim();
-      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
-    });
-  }
-};
+
+  const handleLogout = async () => {
+    setIsDropdownVisible(false);
+    const baseUrl = import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+
+    try {
+      // Explicitly set this as manual logout
+      setManualLogout(true);
+      dispatch(logout({ manual: true }));
+
+      await axios.post(`${baseUrl}/auth/logout`, {}, {
+        withCredentials: true,
+      });
+
+      // Clear all states
+      dispatch(adminDashboardApi.util.resetApiState());
+      localStorage.removeItem('persist:adminDashboardApi');
+
+      // Navigate to login page (not session-expired)
+      navigate('/');
+
+      // Clear cookies on client side
+      document.cookie.split(';').forEach(cookie => {
+        const name = cookie.split('=')[0].trim();
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+      });
+    } catch (error) {
+      console.error("Error during logout:", error);
+      // Still navigate to login page even if logout fails
+      navigate('/');
+    }
+  };
 
   const capitalizeName = (name) =>
     name

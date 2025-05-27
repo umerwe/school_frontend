@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { BookOpen } from 'lucide-react';
-import { useGetDashboardSummaryQuery } from '../../store/slices/studentDashboardApi';
+import { useGetDashboardSummaryQuery } from '../../api/studentDashboardApi';
 
 export default function StudentSubjects() {
   const user = useSelector((store) => store.userSlice.user);

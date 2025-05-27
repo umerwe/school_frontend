@@ -11,7 +11,7 @@ import {
 import {
   useCreateCheckoutSessionMutation,
   useGetParentDashboardSummaryQuery,
-} from "../../store/slices/parentDashboardApi";
+} from "../../api/parentDashboardApi";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 

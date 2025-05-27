@@ -14,7 +14,7 @@ import {
 import { IoMdAlert, IoMdTrendingUp, IoMdTrendingDown } from 'react-icons/io';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import AIAssistantButton from '../AIAssistantButton.jsx';
-import { useGetDashboardSummaryQuery } from '../../store/slices/teacherDashboardApi';
+import { useGetDashboardSummaryQuery } from '../../api/teacherDashboardApi.js';
 
 const TeacherDashboard = () => {
   const navigate = useNavigate();

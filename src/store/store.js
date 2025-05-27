@@ -1,50 +1,69 @@
+// src/store/store.js
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { persistReducer, persistStore } from "redux-persist";
 import { combineReducers } from "redux";
 import storage from "redux-persist/lib/storage";
 import userSlice from "./slices/userSlice";
-import { adminDashboardApi } from "./slices/adminDashboardApi";
-import { teacherDashboardApi } from "./slices/teacherDashboardApi";
-import { studentDashboardApi } from "./slices/studentDashboardApi";
-import { parentDashboardApi } from "./slices/parentDashboardApi";
+import { authApi } from '../api/authApi';
+import { 
+  adminDashboardApi,
+  teacherDashboardApi,
+  studentDashboardApi,
+  parentDashboardApi,
+  initializeApis 
+} from "../api/lazy";
 
-const rootReducer = combineReducers({
-  userSlice: userSlice,
-  [adminDashboardApi.reducerPath]: adminDashboardApi.reducer,
-  [teacherDashboardApi.reducerPath]: teacherDashboardApi.reducer,
-  [studentDashboardApi.reducerPath]: studentDashboardApi.reducer,
-  [parentDashboardApi.reducerPath]: parentDashboardApi.reducer,
-});
+let store;
+let persistor;
 
-const persistConfig = {
-  key: "root",
-  storage,
-  whitelist: [
-    adminDashboardApi.reducerPath,
-    teacherDashboardApi.reducerPath,
-    studentDashboardApi.reducerPath,
-    parentDashboardApi.reducerPath
-  ],
-};
+export async function createReduxStore() {
+  await initializeApis();
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+  const reducers = combineReducers({
+    userSlice,
+    [authApi.reducerPath]: authApi.reducer,
+    [adminDashboardApi.reducerPath]: adminDashboardApi.reducer,
+    [teacherDashboardApi.reducerPath]: teacherDashboardApi.reducer,
+    [studentDashboardApi.reducerPath]: studentDashboardApi.reducer,
+    [parentDashboardApi.reducerPath]: parentDashboardApi.reducer,
+  });
 
-export const store = configureStore({
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
-      },
-    }).concat(
-      adminDashboardApi.middleware,
-      teacherDashboardApi.middleware,
-      studentDashboardApi.middleware,
-      parentDashboardApi.middleware
-    ),
-});
+  const persistConfig = {
+    key: "root",
+    storage,
+    whitelist: ["userSlice"],
+    blacklist: [
+      authApi.reducerPath,
+      adminDashboardApi.reducerPath,
+      teacherDashboardApi.reducerPath,
+      studentDashboardApi.reducerPath,
+      parentDashboardApi.reducerPath
+    ]
+  };
 
-setupListeners(store.dispatch);
+  const persistedReducer = persistReducer(persistConfig, reducers);
 
-export const persistor = persistStore(store);
+  store = configureStore({
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
+        },
+      }).concat(
+        authApi.middleware,
+        adminDashboardApi.middleware,
+        teacherDashboardApi.middleware,
+        studentDashboardApi.middleware,
+        parentDashboardApi.middleware
+      ),
+  });
+
+  setupListeners(store.dispatch);
+  persistor = persistStore(store);
+
+  return { store, persistor };
+}
+
+export { store, persistor };

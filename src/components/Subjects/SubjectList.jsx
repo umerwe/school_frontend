@@ -10,7 +10,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Modal, message } from "antd";
 import { useSelector } from "react-redux";
-import { useGetDashboardSummaryQuery, useDeleteSubjectMutation } from "../../store/slices/adminDashboardApi";
+import { useGetDashboardSummaryQuery, useDeleteSubjectMutation } from "../../api/adminDashboardApi";
 
 const capitalizeWords = (str) =>
   str

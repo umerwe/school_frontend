@@ -29,7 +29,8 @@ import {
   studentDashboardApi,
   useGetDashboardSummaryQuery,
   useResetAnnouncementsCountMutation
-} from "../../store/slices/studentDashboardApi";
+} from "../../api/studentDashboardApi";
+import { setManualLogout } from "../../api/baseQuery";
 
 export default function StudentNavbar() {
   const navigate = useNavigate();
@@ -89,15 +90,28 @@ export default function StudentNavbar() {
     const baseUrl = import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
 
     try {
+      // Explicitly set this as manual logout
+      setManualLogout(true);
+      dispatch(logout({ manual: true }));
+
       await axios.post(`${baseUrl}/auth/logout`, {}, {
         withCredentials: true,
       });
-    } catch (error) {
-      console.error("Error during logout:", error);
-    } finally {
+
+      // Clear all states
       dispatch(studentDashboardApi.util.resetApiState());
       localStorage.removeItem('persist:studentDashboardApi');
-      dispatch(logout());
+
+      // Navigate to login page (not session-expired)
+      navigate('/');
+
+      // Clear cookies on client side
+      document.cookie.split(';').forEach(cookie => {
+        const name = cookie.split('=')[0].trim();
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+      });
+    } catch (error) {
+      navigate('/');
     }
   };
 
@@ -162,15 +176,13 @@ export default function StudentNavbar() {
       {/* Sidebar */}
       <div
         ref={sidebarRef}
-        className={`bg-indigo-500 text-white h-full transition-all duration-300 ease-in-out ${
-          isMobile
-            ? `fixed top-0 left-0 z-20 w-64 shadow-xl rounded-sm ${
-                showMobileSidebar ? 'translate-x-0' : '-translate-x-full'
-              }`
+        className={`bg-indigo-500 text-white h-full transition-all duration-300 ease-in-out ${isMobile
+            ? `fixed top-0 left-0 z-20 w-64 shadow-xl rounded-sm ${showMobileSidebar ? 'translate-x-0' : '-translate-x-full'
+            }`
             : isSidebarOpen
-            ? 'w-64 md:w-58'
-            : 'w-20'
-        } shadow-xl z-10 rounded-sm`}
+              ? 'w-64 md:w-58'
+              : 'w-20'
+          } shadow-xl z-10 rounded-sm`}
       >
         <div className="flex items-center justify-between p-3 sm:p-4 border-b border-indigo-400">
           {(isSidebarOpen || isMobile) && (
@@ -204,28 +216,25 @@ export default function StudentNavbar() {
                   if (item.onClick) item.onClick();
                   if (isMobile) setShowMobileSidebar(false);
                 }}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200 ${
-                  location.pathname === item.path
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200 ${location.pathname === item.path
                     ? "bg-indigo-400 shadow-lg shadow-indigo-900/20"
                     : "text-white hover:bg-indigo-400 hover:text-white hover:translate-x-1"
-                }`}
+                  }`}
               >
                 <span
-                  className={`flex-shrink-0 ${
-                    location.pathname === item.path
+                  className={`flex-shrink-0 ${location.pathname === item.path
                       ? "text-indigo-100"
                       : "text-white hover:text-white"
-                  }`}
+                    }`}
                 >
                   {item.icon}
                 </span>
                 {(isSidebarOpen || isMobile) && (
                   <span
-                    className={`text-sm font-medium ${
-                      location.pathname === item.path
+                    className={`text-sm font-medium ${location.pathname === item.path
                         ? "text-white"
                         : "text-white hover:text-white"
-                    }`}
+                      }`}
                     style={{
                       fontFamily: "Nunito, sans-serif",
                     }}
@@ -332,9 +341,8 @@ export default function StudentNavbar() {
                   <div className="flex items-center">
                     <ChevronDown
                       size={14}
-                      className={`text-gray-600 transition-transform duration-200 ${
-                        isDropdownVisible ? "rotate-180" : ""
-                      }`}
+                      className={`text-gray-600 transition-transform duration-200 ${isDropdownVisible ? "rotate-180" : ""
+                        }`}
                     />
                   </div>
                 )}

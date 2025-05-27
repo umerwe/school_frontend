@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useGetDashboardSummaryQuery } from '../../store/slices/studentDashboardApi';
+import { useGetDashboardSummaryQuery } from '../../api/studentDashboardApi';
 import { Loader2, AlertCircle, ClipboardList, FileText, DollarSign, Calendar, CheckCircle, Clock, XCircle, BookOpen, Ticket } from 'lucide-react';
 
 const FeeStatus = () => {

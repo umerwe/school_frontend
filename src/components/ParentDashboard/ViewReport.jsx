@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FileText, Loader2, AlertCircle, ChevronDown, ChevronUp, MessageSquare, User, Tag, Calendar, CheckCircle, Clock } from 'lucide-react';
-import { useGetParentDashboardSummaryQuery } from "../../store/slices/parentDashboardApi";
+import { useGetParentDashboardSummaryQuery } from "../../api/parentDashboardApi";
 
 const StatusBadge = ({ status }) => {
   const statusConfig = {

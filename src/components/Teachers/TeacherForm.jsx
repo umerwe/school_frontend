@@ -3,7 +3,7 @@ import { message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { EyeIcon, User } from "lucide-react";
 import { EyeSlashIcon } from "@heroicons/react/24/outline";
-import { useCreateTeacherMutation } from "../../store/slices/adminDashboardApi";
+import { useCreateTeacherMutation } from "../../api/adminDashboardApi";
 
 export default function TeacherForm() {
   const navigate = useNavigate();

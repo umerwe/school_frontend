@@ -13,9 +13,9 @@ import {
 import { useNavigate } from "react-router-dom";
 import { message, notification, Modal } from "antd";
 import { useSelector } from "react-redux";
-import { useGetDashboardSummaryQuery, useDeleteClassMutation } from "../../store/slices/adminDashboardApi";
+import { useGetDashboardSummaryQuery, useDeleteClassMutation } from "../../api/adminDashboardApi";
 import { store } from "../../store/store";
-import { adminDashboardApi } from "../../store/slices/adminDashboardApi";
+import { adminDashboardApi } from "../../api/adminDashboardApi";
 
 const capitalizeName = (name) => {
   if (!name) return "";

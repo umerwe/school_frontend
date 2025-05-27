@@ -24,7 +24,7 @@ import {
     Cell,
     Legend,
 } from 'recharts';
-import { useGetDashboardSummaryQuery } from '../../store/slices/studentDashboardApi';
+import { useGetDashboardSummaryQuery } from '../../api/studentDashboardApi.js';
 import AIAssistantButton from '../AIAssistantButton.jsx';
 
 const PIE_COLORS = ['#4F46E5', '#EF4444'];

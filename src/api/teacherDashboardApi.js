@@ -1,20 +1,9 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { baseQueryWithReauth } from './baseQuery';
 
-const baseUrl =
-  import.meta.env.MODE === 'production'
-    ? import.meta.env.VITE_API_BASE_URL_PROD
-    : import.meta.env.VITE_API_BASE_URL_LOCAL;
-    
 export const teacherDashboardApi = createApi({
   reducerPath: 'teacherDashboardApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl,
-    credentials: 'include',
-    prepareHeaders: (headers, { getState }) => {
-      headers.set('Accept', 'application/json');
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithReauth,
   tagTypes: ['TeacherDashboard'],
   endpoints: (builder) => ({
     getDashboardSummary: builder.query({

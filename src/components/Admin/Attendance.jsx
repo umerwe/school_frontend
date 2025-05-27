@@ -1,5 +1,5 @@
 import { X, Calendar, BookOpen, CheckCircle2, XCircle, Clock, Loader2, Users } from "lucide-react";
-import { useGetDashboardSummaryQuery } from "../../store/slices/adminDashboardApi";
+import { useGetDashboardSummaryQuery } from "../../api/adminDashboardApi";
 import { useState, useEffect } from "react";
 
 export default function Attendance() {

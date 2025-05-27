@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import {
   useGetDashboardSummaryQuery,
   useSubmitAttendanceMutation
-} from "../../store/slices/teacherDashboardApi";
+} from "../../api/teacherDashboardApi";
 
 export default function TeacherAttendance() {
   const navigate = useNavigate();

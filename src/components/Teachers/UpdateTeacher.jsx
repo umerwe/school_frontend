@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { User } from "lucide-react";
 import { message } from "antd";
-import { useUpdateTeacherMutation } from "../../store/slices/adminDashboardApi";
+import { useUpdateTeacherMutation } from "../../api/adminDashboardApi";
 
 export default function UpdateTeacher() {
   const navigate = useNavigate();

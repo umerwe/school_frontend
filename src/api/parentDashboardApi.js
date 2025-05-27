@@ -1,20 +1,9 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
-const baseUrl =
-  import.meta.env.MODE === 'production'
-    ? import.meta.env.VITE_API_BASE_URL_PROD
-    : import.meta.env.VITE_API_BASE_URL_LOCAL;
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { baseQueryWithReauth } from './baseQuery';
 
 export const parentDashboardApi = createApi({
   reducerPath: 'parentDashboardApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl,
-    credentials: 'include',
-    prepareHeaders: (headers, { getState }) => {
-      headers.set('Accept', 'application/json');
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithReauth,
   tagTypes: ['ParentDashboard', 'Dashboard'],
   endpoints: (builder) => ({
     getParentDashboardSummary: builder.query({
@@ -44,7 +33,7 @@ export const parentDashboardApi = createApi({
         method: 'POST',
         body: voucherData,
       }),
-      transformResponse: (response) => response, // Remove .data since the backend returns the response directly
+      transformResponse: (response) => response,
       invalidatesTags: ['ParentDashboard'],
     }),
     resetNotificationCount: builder.mutation({

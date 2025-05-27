@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { message } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useUpdateClassMutation } from '../../store/slices/adminDashboardApi';
+import { useUpdateClassMutation } from '../../api/adminDashboardApi';
 import { Loader2 } from 'lucide-react';
 
 export default function EditClass() {
@@ -32,12 +32,13 @@ export default function EditClass() {
 
     const messageKey = `updateClass-${id}`;
     message.loading({ content: 'Updating class teacher...', key: messageKey });
-
-    console.log('Submitting update with classId:', id, 'formData:', formData); // Debug log
-
     try {
-      const response = await updateClass({ classId: id, formData }).unwrap();
-      console.log('Update class response:', response); // Debug log
+      // Fix: Change formData to classData to match RTK Query mutation parameter
+      const response = await updateClass({ 
+        classId: id, 
+        classData: formData 
+      }).unwrap();
+
       message.success({
         content: 'Class teacher updated successfully!',
         key: messageKey,
@@ -45,7 +46,6 @@ export default function EditClass() {
       setFormData({ classTeacherIdOrName: '' });
       navigate('/admin-dashboard/classes');
     } catch (error) {
-      console.error('Update class error:', error); // Debug log
       const errMsg = error?.data?.message || 'Error updating class teacher';
       message.error({ content: errMsg, key: messageKey });
     }

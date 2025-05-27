@@ -29,7 +29,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useNavigate } from "react-router-dom";
-import { useGetDashboardSummaryQuery } from "../../store/slices/adminDashboardApi";
+import { useGetDashboardSummaryQuery } from "../../api/adminDashboardApi.js";
 import { useSelector } from "react-redux";
 
 const Dashboard = () => {

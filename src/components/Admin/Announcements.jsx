@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ClipboardList, Loader2, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { useSelector } from 'react-redux';
-import { useGetDashboardSummaryQuery } from '../../store/slices/adminDashboardApi';
+import { useGetDashboardSummaryQuery } from '../../api/adminDashboardApi';
 
 const capitalizeWords = (str) =>
   str

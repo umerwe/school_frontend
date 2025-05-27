@@ -1,8 +1,9 @@
+// src/main.jsx
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
-import { store, persistor } from "./store/store.js";
+import { createReduxStore } from "./store/store.js";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { Loader2 } from "lucide-react";
@@ -16,12 +17,18 @@ const PersistLoading = () => (
   </div>
 );
 
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <Provider store={store}>
-      <PersistGate loading={<PersistLoading />} persistor={persistor}>
-        <App />
-      </PersistGate>
-    </Provider>
-  </StrictMode>
-);
+async function initializeApp() {
+  const { store, persistor } = await createReduxStore();
+  
+  createRoot(document.getElementById("root")).render(
+    <StrictMode>
+      <Provider store={store}>
+        <PersistGate loading={<PersistLoading />} persistor={persistor}>
+          <App />
+        </PersistGate>
+      </Provider>
+    </StrictMode>
+  );
+}
+
+initializeApp();

@@ -1,6 +1,6 @@
 import { ChevronDownIcon, X, Calendar, User, BookOpen, CheckCircle2, XCircle, Clock, Loader2, Users } from "lucide-react";
 import { useSelector } from "react-redux";
-import { useGetDashboardSummaryQuery } from "../../store/slices/teacherDashboardApi";
+import { useGetDashboardSummaryQuery } from "../../api/teacherDashboardApi";
 import { useState, useEffect } from "react";
 
 export default function TeacherAttendanceHistory() {

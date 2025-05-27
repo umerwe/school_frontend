@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ClipboardList, ChevronDown, ChevronUp, AlertCircle, Loader2 } from 'lucide-react';
-import { useGetDashboardSummaryQuery } from '../../store/slices/studentDashboardApi';
+import { useGetDashboardSummaryQuery } from '../../api/studentDashboardApi';
 
 export default function StudentAnnouncements() {
   const [expandedId, setExpandedId] = useState(null);

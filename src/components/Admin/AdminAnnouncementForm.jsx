@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { message } from 'antd';
 import { Megaphone, PenSquare, MessageSquare, Users, CheckCircle, Send, Loader2, ChevronDown, XCircle } from 'lucide-react';
-import { useCreateAnnouncementMutation } from '../../store/slices/adminDashboardApi';
+import { useCreateAnnouncementMutation } from '../../api/adminDashboardApi';
 
 const AdminAnnouncementForm = () => {
   const [title, setTitle] = useState('');

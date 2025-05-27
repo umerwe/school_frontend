@@ -3,7 +3,7 @@ import { message } from 'antd';
 import { FileText, Loader2 } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
-import { useSubmitParentReportMutation } from '../../store/slices/parentDashboardApi';
+import { useSubmitParentReportMutation } from '../../api/parentDashboardApi';
 
 const SubmitReport = () => {
   const user = useSelector((store) => store.userSlice.user);

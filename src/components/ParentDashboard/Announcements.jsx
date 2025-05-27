@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ClipboardList, ChevronDown, ChevronUp, AlertCircle, Loader2 } from "lucide-react";
-import { useGetParentDashboardSummaryQuery } from "../../store/slices/parentDashboardApi";
+import { useGetParentDashboardSummaryQuery } from "../../api/parentDashboardApi";
 
 export default function Announcements() {
   const [expandedId, setExpandedId] = useState(null);

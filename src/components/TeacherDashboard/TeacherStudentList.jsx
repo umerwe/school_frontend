@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { User, BookOpen, Search } from "lucide-react";
-import { useGetDashboardSummaryQuery } from "../../store/slices/teacherDashboardApi";
+import { useGetDashboardSummaryQuery } from "../../api/teacherDashboardApi";
 
 export default function TeacherStudentList() {
   const user = useSelector((store) => store.userSlice.user);

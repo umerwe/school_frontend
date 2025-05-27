@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { message } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useUpdateSubjectMutation } from '../../store/slices/adminDashboardApi';
+import { useUpdateSubjectMutation } from '../../api/adminDashboardApi';
 import { Loader2 } from 'lucide-react';
 
 export default function EditSubject() {
@@ -14,6 +14,8 @@ export default function EditSubject() {
     subjectName: '',
     teacherName: '',
   });
+
+  console.log(formData);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -37,7 +39,12 @@ export default function EditSubject() {
     console.log('Submitting update with subjectId:', id, 'formData:', formData); // Debug
 
     try {
-      const response = await updateSubject({ subjectId: id, formData }).unwrap();
+      // Fix: Change formData to subjectData to match RTK Query mutation parameter
+      const response = await updateSubject({ 
+        subjectId: id, 
+        subjectData: formData 
+      }).unwrap();
+      
       console.log('Update subject response:', response); // Debug
       message.success({
         content: 'Subject updated successfully!',
@@ -61,7 +68,7 @@ export default function EditSubject() {
         Update Subject
       </h2>
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Subject Name */}
+       {/* Subject Name */}
         <div className="relative">
           <select
             name="subjectName"

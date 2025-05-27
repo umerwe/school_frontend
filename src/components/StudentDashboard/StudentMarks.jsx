@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { BookOpen, User, Loader2, Filter, FileText, ChevronDown } from 'lucide-react';
 import { Select } from 'antd';
-import { useGetDashboardSummaryQuery } from '../../store/slices/studentDashboardApi';
+import { useGetDashboardSummaryQuery } from '../../api/studentDashboardApi';
 
 const StudentMarks = () => {
   const user = useSelector((state) => state.userSlice.user);

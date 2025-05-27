@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useCreateSubjectMutation } from "../../store/slices/adminDashboardApi";
+import { useCreateSubjectMutation } from "../../api/adminDashboardApi";
 import { Loader2 } from "lucide-react";
 
 export default function SubjectForm() {

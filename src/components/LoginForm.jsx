@@ -86,53 +86,62 @@ export default function LoginForm() {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!validateForm()) return;
-        setLoading(true);
-        const payload = {};
-        if (selectedRole === 'admin') {
-            payload['instituteNameOrEmail'] = formData.instituteNameOrEmail;
-            payload.password = formData.password;
-        } else if (selectedRole === 'teacher') {
-            payload['teacherIdOrEmail'] = formData.instituteNameOrEmail;
-            payload.password = formData.password;
-        } else if (selectedRole === 'student') {
-            payload['rollNumberOrEmail'] = formData.instituteNameOrEmail;
-            payload.password = formData.password;
-        } else if (selectedRole === 'parent') {
-            payload['email'] = formData.instituteNameOrEmail;
-            payload.password = formData.password;
+    e.preventDefault();
+    if (!validateForm()) return;
+    setLoading(true);
+    const payload = {};
+    if (selectedRole === 'admin') {
+        payload['instituteNameOrEmail'] = formData.instituteNameOrEmail;
+        payload.password = formData.password;
+    } else if (selectedRole === 'teacher') {
+        payload['teacherIdOrEmail'] = formData.instituteNameOrEmail;
+        payload.password = formData.password;
+    } else if (selectedRole === 'student') {
+        payload['rollNumberOrEmail'] = formData.instituteNameOrEmail;
+        payload.password = formData.password;
+    } else if (selectedRole === 'parent') {
+        payload['email'] = formData.instituteNameOrEmail;
+        payload.password = formData.password;
+    }
+
+    try {
+        const baseUrl =
+            import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+
+        const { data } = await axios.post(
+            `${baseUrl}/auth/login-${selectedRole}`,
+            payload,
+            { withCredentials: true }
+        );
+        // Extract user data and tokens from response
+        const user = data.data[selectedRole];
+        const tokens = {
+            accessToken: data.data.accessToken,
+            refreshToken: data.data.refreshToken
+        };
+
+        // Dispatch login action with both user and tokens
+        dispatch(login({
+            user: user,
+            tokens: tokens
+        }));
+
+        // Redirect based on role
+        if (user.role === 'admin') {
+            navigate('/admin-dashboard');
+        } else if (user.role === 'teacher') {
+            navigate('/teacher-dashboard');
+        } else if (user.role === 'student') {
+            navigate('/student-dashboard');
+        } else if (user.role === 'parent') {
+            navigate('/parent-dashboard');
         }
-
-        try {
-            const baseUrl =
-                import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
-
-            const { data } = await axios.post(
-                `${baseUrl}/auth/login-${selectedRole}`,
-                payload,
-                { withCredentials: true }
-            );
-            message.success('Logged in successfully!');
-            const user = data.data[selectedRole];
-
-            dispatch(login(user));
-
-            if (user.role === 'admin') {
-                navigate('/admin-dashboard');
-            } else if (user.role === 'teacher') {
-                navigate('/teacher-dashboard');
-            } else if (user.role === 'student') {
-                navigate('/student-dashboard');
-            } else if (user.role === 'parent') {
-                navigate('/parent-dashboard');
-            }
-        } catch (err) {
-            message.error(err?.response?.data?.message || 'Login failed');
-        } finally {
-            setLoading(false);
-        }
-    };
+    } catch (err) {
+        message.error(err?.response?.data?.message || 'Login failed');
+    } finally {
+        setLoading(false);
+    }
+};
 
     return (
         <div className="min-h-[94vh] pb-10  flex items-center justify-center p-4 bg-gradient-to-br from-indigo-50 to-gray-100 relative overflow-hidden">

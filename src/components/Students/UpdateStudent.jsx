@@ -6,7 +6,7 @@ import { message } from "antd";
 import {
     useGetDashboardSummaryQuery,
     useUpdateStudentMutation
-} from '../../store/slices/adminDashboardApi';
+} from '../../api/adminDashboardApi';
 
 export default function UpdateStudent() {
     const navigate = useNavigate();

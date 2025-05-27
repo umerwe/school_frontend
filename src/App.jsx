@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState, useRef } from 'react';
 
 import LoginForm from './components/LoginForm.jsx';
 import AdminRegisterForm from './components/Admin/AdminRegisterForm.jsx';
@@ -38,14 +39,10 @@ import SubmitMarks from './components/TeacherDashboard/SubmitMarks.jsx';
 import AllMarks from './components/TeacherDashboard/AllMarks.jsx';
 import TeacherStudentList from './components/TeacherDashboard/TeacherStudentList.jsx';
 
-
 import TeacherAttendance from './components/TeacherDashboard/TeacherAttendance.jsx';
 import TeacherAttendanceHistory from './components/TeacherDashboard/TeacherAttendanceHistory.jsx';
 import SessionExpired from './components/SessionExpired.jsx';
 
-// PrivateRoute.jsx
-import { useEffect, useState } from 'react';
-import api from '../src/utils/axiosInterceptor.jsx';
 import StudentDashboard from './components/StudentDashboard/StudentDashboard.jsx';
 import StudentProfileDashboard from './components/StudentDashboard/StudentProfileDashboard.jsx';
 import StudentSubjects from './components/StudentDashboard/StudentSubjects.jsx';
@@ -83,110 +80,234 @@ import ViewReports from './components/ParentDashboard/ViewReport.jsx';
 import AdminReports from './components/Admin/AdminReport.jsx';
 import SubmitReport from './components/ParentDashboard/SubmitReport.jsx';
 import Attendance from './components/Admin/Attendance.jsx';
-import DotPulseLoader from './components/DotPulseLoader.jsx'
+
+import { useRefreshTokensMutation } from '../src/api/authApi.js';
+import { initializeAuth, logout, updateTokens } from '../src/store/slices/userSlice.js';
+import DotPulseLoader from '../src/components/DotPulseLoader.jsx';
+import ServerDown from './components/ServerDown.jsx';
+
+// Token utility functions
+export const checkTokenExpiration = (token, bufferSeconds = 0) => {
+  if (!token) return true;
+  
+  try {
+    const decoded = JSON.parse(atob(token.split('.')[1]));
+    const now = Date.now() / 1000;
+    return decoded.exp < (now + bufferSeconds);
+  } catch (e) {
+    return true;
+  }
+};
+
+export const getTokenExpirationTime = (token) => {
+  if (!token) return null;
+  
+  try {
+    const decoded = JSON.parse(atob(token.split('.')[1]));
+    return decoded.exp * 1000; // Convert to milliseconds
+  } catch (e) {
+    return null;
+  }
+};
+
+export const getTimeUntilExpiration = (token) => {
+  const expTime = getTokenExpirationTime(token);
+  if (!expTime) return 0;
+  
+  return Math.max(0, expTime - Date.now());
+};
+
+// Token Manager Hook
+const useTokenManager = () => {
+  const { tokens, isAuthenticated } = useSelector((store) => store.userSlice);
+  const dispatch = useDispatch();
+  const [refreshTokens] = useRefreshTokensMutation();
+  const intervalRef = useRef(null);
+  const isRefreshingRef = useRef(false);
+  const [tokenStatus, setTokenStatus] = useState({
+    accessTokenValid: true,
+    refreshTokenValid: true,
+    timeUntilAccessExpiry: null,
+    timeUntilRefreshExpiry: null,
+  });
+
+  const updateTokenStatus = () => {
+    if (!tokens?.accessToken || !tokens?.refreshToken) {
+      setTokenStatus({
+        accessTokenValid: false,
+        refreshTokenValid: false,
+        timeUntilAccessExpiry: null,
+        timeUntilRefreshExpiry: null,
+      });
+      return;
+    }
+
+    const accessTokenValid = !checkTokenExpiration(tokens.accessToken, 30);
+    const refreshTokenValid = !checkTokenExpiration(tokens.refreshToken, 0);
+    const timeUntilAccessExpiry = getTimeUntilExpiration(tokens.accessToken);
+    const timeUntilRefreshExpiry = getTimeUntilExpiration(tokens.refreshToken);
+
+    setTokenStatus({
+      accessTokenValid,
+      refreshTokenValid,
+      timeUntilAccessExpiry,
+      timeUntilRefreshExpiry,
+    });
+
+    return { accessTokenValid, refreshTokenValid };
+  };
+
+  const handleTokenRefresh = async () => {
+    if (isRefreshingRef.current || !tokens?.refreshToken) return;
+
+    // Check if refresh token is expired (no buffer for refresh token)
+    if (checkTokenExpiration(tokens.refreshToken, 0)) {
+      dispatch(logout({ manual: false }));
+      return;
+    }
+
+    // Check if access token needs refresh (with 30-second buffer)
+    if (!checkTokenExpiration(tokens.accessToken, 30)) {
+      return; // Access token is still valid
+    }
+
+    isRefreshingRef.current = true;
+
+    try {
+      const result = await refreshTokens().unwrap();
+      dispatch(updateTokens(result));
+    } catch (error) {
+      dispatch(logout({ manual: false }));
+    } finally {
+      isRefreshingRef.current = false;
+    }
+  };
+
+  const checkAndRefreshTokens = async () => {
+    if (!isAuthenticated || !tokens?.accessToken || !tokens?.refreshToken) {
+      return;
+    }
+
+    // First check if refresh token is expired (exact expiry, no buffer)
+    if (checkTokenExpiration(tokens.refreshToken, 0)) {
+      console.log('Refresh token expired, logging out');
+      dispatch(logout({ manual: false }));
+      return;
+    }
+
+    // Update token status
+    const status = updateTokenStatus();
+    
+    // If access token is expired or about to expire (30-second buffer), refresh it
+    if (!status.accessTokenValid && !isRefreshingRef.current) {
+      await handleTokenRefresh();
+    }
+  };
+
+  // Initialize token status on mount
+  useEffect(() => {
+    if (isAuthenticated && tokens?.accessToken && tokens?.refreshToken) {
+      updateTokenStatus();
+    }
+  }, [tokens, isAuthenticated]);
+
+  // Set up periodic token checking
+  useEffect(() => {
+    if (!isAuthenticated || !tokens?.accessToken) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      return;
+    }
+
+    // Check tokens immediately
+    checkAndRefreshTokens();
+
+    // Set up interval to check every minute
+    intervalRef.current = setInterval(() => {
+      checkAndRefreshTokens();
+    }, 60000); // 60 seconds
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, [isAuthenticated, tokens?.accessToken, tokens?.refreshToken]);
+
+  // Clean up on unmount
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, []);
+
+  return {
+    tokenStatus,
+    refreshTokensManually: handleTokenRefresh,
+  };
+};
 
 function PrivateRoute({ children, allowedRoles = [] }) {
-  const { user, isAuthenticated } = useSelector((store) => store.userSlice);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isServerDown, setIsServerDown] = useState(false);
+  const { user, isAuthenticated, isManualLogout, tokens } = useSelector((store) => store.userSlice);
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
   const dispatch = useDispatch();
+  const [refreshTokens] = useRefreshTokensMutation();
 
   useEffect(() => {
-    let isMounted = true;
-
-    const checkSession = async () => {
-      if (!isAuthenticated || !user) {
-        if (isMounted) setIsLoading(false);
+    const checkTokens = async () => {
+      if (!isAuthenticated || !tokens?.accessToken || !tokens?.refreshToken) {
+        setIsCheckingSession(false);
         return;
       }
 
-      try {
-        await api.get('/auth/verify-session', {
-          withCredentials: true
-        });
-        
-        if (isMounted) {
-          setIsLoading(false);
-          setIsServerDown(false);
-        }
-      } catch (error) {
-        if (!error.response) {
-          if (isMounted) {
-            setIsServerDown(true);
-            setIsLoading(false);
-          }
-          return;
-        }
+      // Check refresh token expiry first (exact expiry, no buffer)
+      const isRefreshTokenExpired = checkTokenExpiration(tokens.refreshToken, 0);
+      
+      if (isRefreshTokenExpired) {
+        dispatch(logout({ manual: false }));
+        setIsCheckingSession(false);
+        return;
+      }
 
-        // If 401, let interceptor handle it
-        if (error.response?.status === 401 && isMounted) {
-          setIsLoading(false);
+      // Check access token with buffer for proactive refresh
+      const isAccessTokenExpired = checkTokenExpiration(tokens.accessToken, 30);
+
+      // Only refresh on initial load if access token is expired or about to expire
+      // The useTokenManager hook will handle periodic refreshing
+      if (isAccessTokenExpired) {
+        try {
+          const result = await refreshTokens().unwrap();
+          dispatch(updateTokens(result));
+        } catch (error) {
+          dispatch(logout({ manual: false }));
         }
       }
+
+      setIsCheckingSession(false);
     };
 
-    checkSession();
+    checkTokens();
+  }, [isAuthenticated, tokens, dispatch, refreshTokens]);
 
-    return () => {
-      isMounted = false;
-    };
-  }, [isAuthenticated, user, dispatch]);
-
-  if (isLoading) {
+  if (isCheckingSession) {
     return <DotPulseLoader />;
   }
 
-  // If not authenticated, redirect to home (login) page
   if (!isAuthenticated || !user) {
-    return <Navigate to="/" replace />; // Changed from /session-expired to /
-  }
-
-  // Server down UI
-  if (isServerDown) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen bg-gray-100 p-4">
-        <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
-          <div className="text-red-500 mb-4">
-            <svg
-              className="h-12 w-12 mx-auto"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
-              />
-            </svg>
-          </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Server Unavailable</h2>
-          <p className="text-gray-600 mb-4">
-            We're unable to connect to the server. Please try again later.
-          </p>
-          <button
-            onClick={() => {
-              setIsServerDown(false);
-              setIsLoading(true);
-              // Try to reconnect immediately
-              api
-                .get('/auth/verify-session')
-                .then(() => setIsLoading(false))
-                .catch(() => setIsServerDown(true));
-            }}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition duration-200 w-full"
-          >
-            Try Again
-          </button>
-        </div>
-      </div>
+    return isManualLogout ? (
+      <Navigate to="/" replace />
+    ) : (
+      <Navigate to="/session-expired" replace />
     );
   }
 
-  // Role check
   if (allowedRoles.length > 0 && !allowedRoles.includes(user?.role)) {
-    // Redirect based on user role
     switch (user?.role) {
       case 'admin':
         return <Navigate to="/admin-dashboard" replace />;
@@ -197,19 +318,26 @@ function PrivateRoute({ children, allowedRoles = [] }) {
       case 'parent':
         return <Navigate to="/parent-dashboard" replace />;
       default:
-        // If no valid role, logout and redirect
-        dispatch(logout());
+        dispatch(logout({ manual: false }));
         return <Navigate to="/session-expired" replace />;
     }
   }
 
-  // All checks passed, render children
   return children;
 }
 
 // App.jsx
 function App() {
   const { user, isAuthenticated } = useSelector((store) => store.userSlice);
+  const dispatch = useDispatch();
+  
+  // Initialize token manager for automatic token checking
+  const { tokenStatus } = useTokenManager();
+
+  // Initialize auth state on app load
+  useEffect(() => {
+    dispatch(initializeAuth());
+  }, [dispatch]);
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -227,8 +355,8 @@ function App() {
               ) : user.role === 'student' ? (
                 <Navigate to="/student-dashboard" replace />
               ) : (
-                // Fallback for unknown roles
-                <Navigate to="/session-expired" replace />
+                // Fallback for unknown roles - treat as logout
+                <Navigate to="/" replace />
               )
             ) : (
               <LoginForm />
@@ -236,6 +364,7 @@ function App() {
           }
         />
         <Route path="/session-expired" element={<SessionExpired />} />
+        <Route path="/server-down" element={<ServerDown />} />
 
         <Route
           path="/admin-register"
@@ -345,5 +474,4 @@ function App() {
 
   return <RouterProvider router={router} />;
 }
-
 export default App;

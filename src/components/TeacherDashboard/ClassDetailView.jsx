@@ -1,7 +1,7 @@
 
 import { useSelector } from "react-redux";
 import { BookOpen, Users, User, ChevronDown, ChevronUp } from "lucide-react";
-import { useGetDashboardSummaryQuery } from "../../store/slices/teacherDashboardApi";
+import { useGetDashboardSummaryQuery } from "../../api/teacherDashboardApi";
 import { useState } from "react";
 
 export default function ClassDetailView() {

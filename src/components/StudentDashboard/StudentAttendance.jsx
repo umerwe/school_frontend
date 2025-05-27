@@ -10,7 +10,7 @@ import {
   UserCircleIcon,
   ChartBarIcon
 } from '@heroicons/react/24/outline';
-import { useGetDashboardSummaryQuery } from '../../store/slices/studentDashboardApi';
+import { useGetDashboardSummaryQuery } from '../../api/studentDashboardApi';
 
 export default function StudentAttendance() {
   const currentUser = useSelector((store) => store.userSlice.user);

@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { message } from 'antd';
 import { useSelector } from 'react-redux';
-import { useGetDashboardSummaryQuery, useAddReportCommentMutation } from '../../store/slices/adminDashboardApi';
+import { useGetDashboardSummaryQuery, useAddReportCommentMutation } from '../../api/adminDashboardApi';
 
 const StatusBadge = ({ status }) => {
   const statusStyles = {

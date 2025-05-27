@@ -25,7 +25,8 @@ import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { logout } from "../../store/slices/userSlice";
 import { message } from "antd";
 import axios from "axios";
-import { teacherDashboardApi, useGetDashboardSummaryQuery, useResetNumberMutation } from "../../store/slices/teacherDashboardApi";
+import { teacherDashboardApi, useGetDashboardSummaryQuery, useResetNumberMutation } from "../../api/teacherDashboardApi";
+import { setManualLogout } from "../../api/baseQuery";
 
 export default function TeacherNavbar() {
   const navigate = useNavigate();
@@ -121,22 +122,34 @@ export default function TeacherNavbar() {
   }, [location.pathname, currentUser?._id]);
 
   const handleLogout = async () => {
-    setIsDropdownVisible(false);
-    const baseUrl = import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
-
-    try {
-      await axios.post(`${baseUrl}/auth/logout`, {}, {
-        withCredentials: true,
-      });
-    } catch (error) {
-      console.error("Error during logout:", error);
-    } finally {
-      // Clear all states and redirect
-      dispatch(teacherDashboardApi.util.resetApiState());
-      localStorage.removeItem('persist:teacherDashboardApi');
-      dispatch(logout());
-    }
-  };
+      setIsDropdownVisible(false);
+      const baseUrl = import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+  
+      try {
+        // Explicitly set this as manual logout
+        setManualLogout(true);
+        dispatch(logout({ manual: true }));
+  
+        await axios.post(`${baseUrl}/auth/logout`, {}, {
+          withCredentials: true,
+        });
+  
+        // Clear all states
+        dispatch(teacherDashboardApi.util.resetApiState());
+        localStorage.removeItem('persist:teacherDashboardApi');
+  
+        // Navigate to login page (not session-expired)
+        navigate('/');
+  
+        // Clear cookies on client side
+        document.cookie.split(';').forEach(cookie => {
+          const name = cookie.split('=')[0].trim();
+          document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+        });
+      } catch (error) {
+        navigate('/');
+      }
+    };
 
   const capitalizeWords = (str) =>
     str

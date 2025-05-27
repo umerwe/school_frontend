@@ -4,7 +4,7 @@ import { message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { EyeIcon, User } from "lucide-react";
 import { EyeSlashIcon } from "@heroicons/react/24/outline";
-import {useCreateStudentMutation} from '../../store/slices/adminDashboardApi'
+import {useCreateStudentMutation} from '../../api/adminDashboardApi'
 
 export default function StudentForm() {
     const navigate = useNavigate();

@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { message } from "antd";
 import { AcademicCapIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
-import { useGetDashboardSummaryQuery } from "../../store/slices/adminDashboardApi";
+import { useGetDashboardSummaryQuery } from "../../api/adminDashboardApi";
 
 const VoucherList = () => {
     const navigate = useNavigate();

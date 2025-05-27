@@ -8,7 +8,7 @@ import {
   User,
   UserPlus,
 } from "lucide-react";
-import { useGetDashboardSummaryQuery } from "../../store/slices/adminDashboardApi";
+import { useGetDashboardSummaryQuery } from "../../api/adminDashboardApi";
 import { message } from "antd";
 
 export default function AdminProfile() {

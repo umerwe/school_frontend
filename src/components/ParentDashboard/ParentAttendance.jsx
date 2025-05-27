@@ -11,7 +11,7 @@ import {
   ClockIcon,
   ArrowPathIcon
 } from "@heroicons/react/24/outline";
-import { useGetParentDashboardSummaryQuery } from "../../store/slices/parentDashboardApi";
+import { useGetParentDashboardSummaryQuery } from "../../api/parentDashboardApi";
 
 export default function ParentAttendance() {
   const currentUser = useSelector((store) => store.userSlice.user);

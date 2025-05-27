@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { message } from "antd";
 import { ClipboardList, ChevronDown, ChevronUp, AlertCircle, Loader2 } from "lucide-react";
-import { useGetDashboardSummaryQuery } from "../../store/slices/teacherDashboardApi";
+import { useGetDashboardSummaryQuery } from "../../api/teacherDashboardApi";
 
 export default function TeacherAnnouncements() {
   const { data: dashboardData, isLoading: loading, error } = useGetDashboardSummaryQuery();

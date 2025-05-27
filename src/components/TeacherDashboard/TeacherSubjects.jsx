@@ -1,7 +1,7 @@
 import { message } from "antd";
 import { useSelector } from "react-redux";
 import { BookOpen, Clock, Users, FileText } from "lucide-react";
-import { useGetDashboardSummaryQuery } from "../../store/slices/teacherDashboardApi";
+import { useGetDashboardSummaryQuery } from "../../api/teacherDashboardApi";
 
 export default function TeacherSubjects() {
   const user = useSelector((store) => store.userSlice.user);

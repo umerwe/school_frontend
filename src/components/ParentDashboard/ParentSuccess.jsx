@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { CheckCircle, Loader2, AlertCircle } from "lucide-react";
-import { useVerifyPaymentMutation } from "../../store/slices/parentDashboardApi";
+import { useVerifyPaymentMutation } from "../../api/parentDashboardApi";
 
 export default function PaymentSuccess() {
   const location = useLocation();

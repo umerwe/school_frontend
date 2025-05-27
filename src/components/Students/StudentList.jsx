@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { message, Modal, notification } from "antd";
 import { useSelector } from "react-redux";
 import { store } from "../../store/store"; // Adjust path to your Redux store
-import { useGetDashboardSummaryQuery, useDeleteStudentMutation, adminDashboardApi } from "../../store/slices/adminDashboardApi";
+import { useGetDashboardSummaryQuery, useDeleteStudentMutation, adminDashboardApi } from "../../api/adminDashboardApi";
 
 const capitalizeName = (name) =>
   name
