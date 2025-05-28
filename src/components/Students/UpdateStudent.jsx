@@ -42,9 +42,6 @@ export default function UpdateStudent() {
                     name: student.name || "",
                     rollNumber: student.rollNumber || "",
                     email: student.email || "",
-                    password: "", // Password typically not fetched for security
-                    guardianName: student.guardianName || "",
-                    guardianEmail: student.guardianEmail || "",
                     studentClass: student.studentClass || "",
                     section: student.section || "",
                     admissionYear: student.admissionYear || "",
@@ -197,31 +194,6 @@ export default function UpdateStudent() {
                                             className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200"
                                         />
                                     </div>
-                                    {/* Password */}
-                                    <div>
-                                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                                        <input
-                                            type="password"
-                                            name="password"
-                                            id="password"
-                                            value={formData.password}
-                                            onChange={handleChange}
-                                            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200"
-                                            placeholder="Enter new password (optional)"
-                                        />
-                                    </div>
-                                    {/* Guardian Name */}
-                                    <div>
-                                        <label htmlFor="guardianName" className="block text-sm font-medium text-gray-700 mb-1">Guardian Name</label>
-                                        <input
-                                            type="text"
-                                            name="guardianName"
-                                            id="guardianName"
-                                            value={formData.guardianName}
-                                            onChange={handleChange}
-                                            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200"
-                                        />
-                                    </div>
                                 </div>
 
                                 {/* Right Column */}
@@ -250,18 +222,6 @@ export default function UpdateStudent() {
                                                 className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200"
                                             />
                                         </div>
-                                    </div>
-                                    {/* Guardian Email */}
-                                    <div>
-                                        <label htmlFor="guardianEmail" className="block text-sm font-medium text-gray-700 mb-1">Guardian Email</label>
-                                        <input
-                                            type="email"
-                                            name="guardianEmail"
-                                            id="guardianEmail"
-                                            value={formData.guardianEmail}
-                                            onChange={handleChange}
-                                            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200"
-                                        />
                                     </div>
                                     {/* Admission Year */}
                                     <div>
@@ -350,7 +310,7 @@ export default function UpdateStudent() {
                                 <button
                                     type="submit"
                                     disabled={isLoading || isUpdating}
-                                    className="w-full md:w-auto md:px-8 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+                                    className="w-full md:w-auto md:px-8 bg-indigo-500 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
                                 >
                                     {isUpdating ? (
                                         <>

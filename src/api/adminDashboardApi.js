@@ -6,7 +6,7 @@ export const adminDashboardApi = createApi({
   baseQuery: baseQueryWithReauth,
   keepUnusedDataFor: 24 * 60 * 60,
   refetchOnMountOrArgChange: false,
-  tagTypes: ['Dashboard', 'Class', 'Subject', 'Teacher', 'Parent', 'Student'],
+  tagTypes: ['Dashboard', 'Class', 'Subject', 'Teacher', 'Parent', 'Student', 'AdminAI'],
   endpoints: (builder) => ({
     getDashboardSummary: builder.query({
       query: () => ({
@@ -18,6 +18,21 @@ export const adminDashboardApi = createApi({
       }),
       transformResponse: (response) => response.data,
       providesTags: ['Dashboard'],
+      extraOptions: { maxRetries: 1 },
+    }),
+    // Admin AI endpoint
+    getAdminAiResponse: builder.mutation({
+      query: ({ userId, prompt }) => ({
+        url: `admin-ai/${userId}`,
+        method: 'POST',
+        body: { prompt },
+      }),
+      transformResponse: (response) => response,
+      transformErrorResponse: (response) => ({
+        status: response.status,
+        data: response.data || { error: 'Something went wrong' }
+      }),
+      invalidatesTags: ['AdminAI'],
       extraOptions: { maxRetries: 1 },
     }),
     addReportComment: builder.mutation({
@@ -165,13 +180,13 @@ export const adminDashboardApi = createApi({
         method: 'POST',
         body: { oldPassword, newPassword, role },
       }),
-      invalidatesTags: ['Dashboard'],
     }),
   }),
 });
 
 export const {
   useGetDashboardSummaryQuery,
+  useGetAdminAiResponseMutation, // New export for Admin AI
   useAddReportCommentMutation,
   useResetAdminNumberMutation,
   useCreateClassMutation,

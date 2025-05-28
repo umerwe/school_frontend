@@ -1,19 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
 import { message } from 'antd';
 import { Brain, Send, CheckCircle, Loader2, Copy, Users, BookOpen, DollarSign, Calendar, ChevronRight } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { useSelector } from 'react-redux';
+import { useGetAdminAiResponseMutation } from '../../api/adminDashboardApi'; // Adjust import path as needed
 
 const AdminAi = () => {
   const [prompt, setPrompt] = useState('');
   const [report, setReport] = useState('');
-  const [loading, setLoading] = useState(false);
   const [copyLoading, setCopyLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
   const outputRef = useRef(null);
   const user = useSelector((state) => state.userSlice.user);
+
+  // RTK Query mutation
+  const [getAdminAiResponse, { isLoading, error }] = useGetAdminAiResponseMutation();
 
   // Sample quick prompts
   const quickPrompts = [
@@ -39,33 +40,23 @@ const AdminAi = () => {
       return;
     }
 
-    setLoading(true);
     setReport('');
-    setError(null);
 
     try {
-      const baseUrl =
-        import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
-            
-      const response = await axios.post(
-        `${baseUrl}/admin-ai/${user._id}`,
-        { prompt },
-        { withCredentials: true }
-      );
+      const response = await getAdminAiResponse({
+        userId: user._id,
+        prompt: prompt.trim()
+      }).unwrap();
 
-      const result = response.data.result || 'No response data available.';
+      const result = response.result || 'No response data available.';
       setReport(result);
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.error || 'Failed to process query. Please try again.';
-      setError(errorMessage);
+      const errorMessage = error?.data?.error || 'Failed to process query. Please try again.';
       message.error({
         content: errorMessage,
         duration: 3,
         style: { marginTop: '20px' },
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -182,10 +173,10 @@ const AdminAi = () => {
                   <div className="flex justify-between items-center">
                     <button
                       type="submit"
-                      disabled={loading}
-                      className={`bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2.5 px-6 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                      disabled={isLoading}
+                      className={`bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2.5 px-6 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
                     >
-                      {loading ? (
+                      {isLoading ? (
                         <>
                           <Loader2 className="animate-spin h-5 w-5" />
                           <span>Processing...</span>
@@ -265,9 +256,11 @@ const AdminAi = () => {
                   </div>
                   <div>
                     <h3 className="text-sm font-medium text-red-800">Error Processing Request</h3>
-                    <p className="text-sm text-red-700 mt-1">{error}</p>
+                    <p className="text-sm text-red-700 mt-1">
+                      {error?.data?.error || 'Failed to process query. Please try again.'}
+                    </p>
                     <button
-                      onClick={() => setError(null)}
+                      onClick={() => window.location.reload()}
                       className="mt-2 text-sm font-medium text-red-600 hover:text-red-800"
                     >
                       Dismiss
