@@ -110,8 +110,11 @@ export default function AdminRegisterForm() {
     if (logo) payload.append('logo', logo);
 
     try {
+
       const baseUrl =
-        import.meta.env.VITE_API_BASE_URL_LOCAL;
+        import.meta.env.MODE === "production"
+          ? import.meta.env.VITE_API_BASE_URL_PROD
+          : import.meta.env.VITE_API_BASE_URL_LOCAL;
 
       setLoading(true);
       setLoading(true);
