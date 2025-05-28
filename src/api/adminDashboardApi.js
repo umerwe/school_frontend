@@ -12,7 +12,7 @@ export const adminDashboardApi = createApi({
       query: () => ({
         url: 'admin/dashboard/summary',
         headers: {
-          'Cache-Control': 'public, max-age=86400', // Cache for 24 hours
+          'Cache-Control': 'public, max-age=86400',
           Expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toUTCString(),
         },
       }),
@@ -159,6 +159,14 @@ export const adminDashboardApi = createApi({
       }),
       invalidatesTags: ['Dashboard'],
     }),
+    changePassword: builder.mutation({
+      query: ({ id, oldPassword, newPassword, role }) => ({
+        url: `auth/change-password/${id}`,
+        method: 'POST',
+        body: { oldPassword, newPassword, role },
+      }),
+      invalidatesTags: ['Dashboard'],
+    }),
   }),
 });
 
@@ -182,4 +190,5 @@ export const {
   useUpdateStudentMutation,
   useGenerateVoucherMutation,
   useCreateAnnouncementMutation,
+  useChangePasswordMutation,
 } = adminDashboardApi;

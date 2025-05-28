@@ -13,6 +13,7 @@ const AdminAi = () => {
   const [error, setError] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
   const outputRef = useRef(null);
+  const user = useSelector((state) => state.userSlice.user);
 
   // Sample quick prompts
   const quickPrompts = [
@@ -47,7 +48,7 @@ const AdminAi = () => {
         import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
             
       const response = await axios.post(
-        `${baseUrl}/admin-ai`,
+        `${baseUrl}/admin-ai/${user._id}`,
         { prompt },
         { withCredentials: true }
       );

@@ -85,6 +85,10 @@ import { useRefreshTokensMutation } from '../src/api/authApi.js';
 import { initializeAuth, logout, updateTokens } from '../src/store/slices/userSlice.js';
 import DotPulseLoader from '../src/components/DotPulseLoader.jsx';
 import ServerDown from './components/ServerDown.jsx';
+import ChangeTeacherPassword from './components/Teachers/ChangePassword.jsx';
+import ChangeStudentPassword from './components/Students/ChangePassword.jsx';
+import ChangeParentPassword from './components/Parents/ChangePassword.jsx';
+import ChangeAdminPassword from './components/Admin/ChangePassword.jsx';
 
 // Token utility functions
 export const checkTokenExpiration = (token, bufferSeconds = 0) => {
@@ -382,6 +386,7 @@ function App() {
         >
           <Route index element={<Dashboard />} />
           <Route path="profile" element={<AdminProfile />} />
+          <Route path="change-password" element={<ChangeAdminPassword />} />
           <Route path="classes" element={<ClassList />} />
           <Route path="classes/new" element={<ClassForm />} />
           <Route path="classes/:id/edit" element={<EditClass />} />
@@ -390,12 +395,15 @@ function App() {
           <Route path="subjects/:id/edit" element={<EditSubject />} />
           <Route path="teachers" element={<TeacherList />} />
           <Route path="teachers/:teacherId/update" element={<UpdateTeacher />} />
+          <Route path="teachers/:teacherId/change-password" element={<ChangeTeacherPassword />} />
           <Route path="teachers/new" element={<TeacherForm />} />
           <Route path="teacher/profile" element={<TeacherProfile />} />
           <Route path="parents" element={<ParentList />} />
           <Route path="parents/new" element={<ParentForm />} />
+          <Route path="parents/:id/change-password" element={<ChangeParentPassword />} />
           <Route path="students" element={<StudentList />} />
           <Route path="students/:studentId/update" element={<UpdateStudent />} />
+          <Route path="students/:studentId/change-password" element={<ChangeStudentPassword />} />
           <Route path="students/new" element={<StudentForm />} />
           <Route path="student/profile" element={<StudentProfile />} />
           <Route path="announcement/new" element={<AdminAnnouncementForm />} />

@@ -1,6 +1,5 @@
-// src/components/ParentList.js
 import React, { useState, useEffect } from "react";
-import { User, Users, Plus, Trash2, Search, Loader2 } from "lucide-react";
+import { User, Users, Plus, Trash2, Search, Loader2, Key } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { message, Modal } from "antd";
 import { useSelector } from "react-redux";
@@ -187,14 +186,23 @@ export default function ParentList() {
                         <p className="text-sm text-gray-500 font-nunito">{parent.phoneNumber}</p>
                       </div>
                     </div>
-                    <button
-                      onClick={() => handleDelete(parent._id)}
-                      className="text-gray-400 hover:text-red-500 transition-colors"
-                      title="Delete Parent"
-                      disabled={isDeleting}
-                    >
-                      <Trash2 className="h-5 w-5" />
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => navigate(`/admin-dashboard/parents/${parent._id}/change-password`, { state: { parent } })}
+                        className="text-gray-400 hover:text-indigo-600 transition-colors"
+                        title="Change Password"
+                      >
+                        <Key className="h-5 w-5" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(parent._id)}
+                        className="text-gray-400 hover:text-red-500 transition-colors"
+                        title="Delete Parent"
+                        disabled={isDeleting}
+                      >
+                        <Trash2 className="h-5 w-5" />
+                      </button>
+                    </div>
                   </div>
 
                   <div className="mt-4 pt-4 border-t border-indigo-100">
