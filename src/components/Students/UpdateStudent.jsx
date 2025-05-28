@@ -63,7 +63,7 @@ export default function UpdateStudent() {
             }
         }
     }, [dashboardData, studentId, navigate]);
-
+    
     if (isError) {
         message.error("Error fetching student data");
         navigate("/admin-dashboard/students");

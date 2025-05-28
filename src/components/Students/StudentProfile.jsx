@@ -31,6 +31,7 @@ export default function StudentProfile() {
         <button
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+          style={{ fontFamily: "Nunito, sans-serif" }}
         >
           <ChevronLeftIcon className="h-4 w-4" />
           Go Back
@@ -48,55 +49,73 @@ export default function StudentProfile() {
         <button
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 mb-6 text-indigo-600 hover:text-indigo-700 transition-colors"
+          style={{ fontFamily: "Nunito, sans-serif" }}
         >
           <ChevronLeftIcon className="h-5 w-5" />
           Back to Students
         </button>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
-          <div className="bg-gradient-to-r from-indigo-600 to-indigo-500 p-6">
-            <div className="flex flex-col md:flex-row items-center gap-6">
-              <div className="relative">
-                <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">
-                  {student.logo ? (
-                    <img
-                      src={student.logo}
-                      alt={`${student.name}'s profile`}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-indigo-100 text-indigo-500">
-                      <UserCircleIcon className="w-16 h-16" />
-                    </div>
-                  )}
+          <div className="relative">
+            {/* Background Pattern */}
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-700"></div>
+            
+            <div className="relative px-6 sm:px-8 lg:px-12 py-6 sm:py-8">
+              <div className="flex flex-col sm:flex-row items-center gap-6">
+                {/* Profile Image */}
+                <div className="relative">
+                  <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl bg-white/10 backdrop-blur-sm">
+                    {student.logo ? (
+                      <img
+                        src={student.logo}
+                        alt={`${student.name}'s profile`}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-white/10 text-white">
+                        <UserCircleIcon className="w-12 h-12 sm:w-14 sm:h-14" />
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex-1 text-center md:text-left">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                {/* Profile Info */}
+                <div className="flex-1 flex flex-col sm:flex-row items-center sm:items-center sm:justify-between gap-4 text-center sm:text-left">
                   <div>
-                    <h2 className="text-2xl md:text-3xl font-bold text-white mb-1">
+                    <h2
+                      className="text-xl sm:text-2xl font-bold text-white mb-2"
+                      style={{ fontFamily: "Nunito, sans-serif" }}
+                    >
                       {capitalizeName(student.name)}
                     </h2>
-                    <div className="flex flex-wrap gap-x-4 gap-y-2 justify-center md:justify-start">
-                      <p className="text-indigo-100 flex items-center gap-1 text-sm">
+                    <div className="space-y-1">
+                      <p
+                        className="text-indigo-100 flex items-center justify-center sm:justify-start gap-2 text-sm"
+                        style={{ fontFamily: "Nunito, sans-serif" }}
+                      >
                         <AcademicCapIcon className="h-4 w-4" />
                         Class {student.studentClass} - {student.section}
                       </p>
-                      <p className="text-indigo-100 flex items-center gap-1 text-sm">
+                      <p
+                        className="text-indigo-100 flex items-center justify-center sm:justify-start gap-2 text-sm"
+                        style={{ fontFamily: "Nunito, sans-serif" }}
+                      >
                         <IdentificationIcon className="h-4 w-4" />
                         Roll No: {student.rollNumber}
                       </p>
                     </div>
                   </div>
+                  
+                  {/* Edit Button */}
                   {user?.role !== 'teacher' && (
                     <button
                       onClick={() => navigate(`/admin-dashboard/students/${student._id}/update`)}
-                      className="mt-4 md:mt-0 flex items-center gap-1 px-6 m-auto pr-7 md:m-0 py-2 bg-white text-indigo-600 rounded-lg shadow-sm hover:bg-gray-50 transition-colors"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-white text-indigo-600 rounded-lg shadow-lg hover:bg-indigo-50 hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-white/30 font-medium text-sm"
                       title="Edit Profile"
+                      style={{ fontFamily: "Nunito, sans-serif" }}
                     >
                       <PencilIcon className="h-4 w-4" />
-                      <span className="text-sm font-medium">Edit</span>
+                      <span>Edit</span>
                     </button>
                   )}
                 </div>
@@ -120,10 +139,10 @@ export default function StudentProfile() {
                         label: "Date of Birth",
                         value: student.dateOfBirth
                           ? new Date(student.dateOfBirth).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            })
                           : "Not provided"
                       },
                       {
