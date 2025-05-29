@@ -22,10 +22,7 @@ const AdminAnnouncementForm = () => {
       setMessageContent('');
       setAudience('all');
 
-      message.success({
-        content: 'Announcement published successfully!',
-        icon: <CheckCircle className="text-green-500" />,
-      });
+      message.success('Announcement published successfully');
     } catch (err) {
       message.error({
         content: err?.data?.message || 'Failed to publish announcement',
