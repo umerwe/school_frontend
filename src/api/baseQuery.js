@@ -25,11 +25,11 @@ let refreshPromise = null;
 export const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
   
-  // Handle server down/network errors
-  if (result.error && (result.error.status === 'FETCH_ERROR' || result.error.status === 503)) {
-    window.location.href = '/server-down';
-    return result;
-  }
+  // // Handle server down/network errors
+  // if (result.error && (result.error.status === 'FETCH_ERROR' || result.error.status === 503)) {
+  //   window.location.href = '/server-down';
+  //   return result;
+  // }
 
   if (result?.error?.status === 401 && !isManualLogout) {
     // If already refreshing, wait for the existing refresh to complete
