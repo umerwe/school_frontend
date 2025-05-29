@@ -14,7 +14,6 @@ import {
 import { Lock, Pencil } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { message } from "antd";
 
 export default function StudentProfile() {
   const user = useSelector((store) => store.userSlice.user);
@@ -197,11 +196,6 @@ export default function StudentProfile() {
                           "Not provided"
                         )
                       }
-                    />
-                    <InfoItem
-                      icon={<PhoneIcon className="h-5 w-5 text-indigo-500" />}
-                      label="Phone Number"
-                      value={student.phoneNumber || "Not provided"}
                     />
                     <InfoItem
                       icon={<PhoneIcon className="h-5 w-5 text-indigo-500" />}
