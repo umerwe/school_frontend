@@ -34,6 +34,7 @@ export default function TeacherList() {
       error,
     }),
   });
+  
 
   const [teachers, setTeachers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
