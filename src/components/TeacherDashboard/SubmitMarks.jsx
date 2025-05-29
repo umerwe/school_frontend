@@ -65,12 +65,12 @@ export default function SubmitMarks() {
   return (
     <div className="max-w-7xl mx-3 md:mx-8 p-3 py-6 sm:px-8 bg-white mt-4 rounded-2xl">
       <div className="flex items-center gap-3 mb-6">
-        <BookOpen className="md:h-7 md:w-7 text-indigo-600" />
+                  <div className="bg-indigo-100 p-3 rounded-full">
+                    <BookOpen className="md:w-7 md:h-7 text-indigo-600" />
+                  </div>
         <div>
-          <h1 className="sm:text-2xl text-xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
-            Submit Marks
-          </h1>
-          <p className="text-sm text-gray-600 -mt-1" style={{ fontFamily: 'Nunito, sans-serif' }}>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-800 font-nunito">Submit Marks</h1>
+          <p className="text-xs sm:text-sm text-gray-600 " >
             Enter student details and assessment marks below.
           </p>
         </div>

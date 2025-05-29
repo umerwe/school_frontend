@@ -91,16 +91,18 @@ export default function TeacherAttendance() {
     <div className="min-h-screen p-4 py-6 sm:px-8">
       <div className="max-w-5xl mx-auto bg-white p-3 py-6 sm:px-8 rounded-xl shadow-sm border border-indigo-200">
         <div className="flex items-center gap-3 mb-6">
+          <div className="p-3 bg-indigo-100 rounded-full">
             <BookOpen className="md:w-7 md:h-7 text-indigo-600" />
-            <div>
-              <h2 className="text-xl md:text-2xl font-bold text-gray-800">
-                Mark Attendance
-              </h2>
-              <p className="text-indigo-600 text-xs md:text-sm font-medium flex items-center gap-1">
-                {classInfo.classTitle}-{classInfo.section}
-              </p>
-            </div>
           </div>
+          <div>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800">
+              Mark Attendance
+            </h2>
+            <p className="text-indigo-600 text-xs md:text-sm font-medium flex items-center gap-1">
+              {classInfo.classTitle}-{classInfo.section}
+            </p>
+          </div>
+        </div>
 
         {!classInfo?._id ? (
           NoClassAssigned

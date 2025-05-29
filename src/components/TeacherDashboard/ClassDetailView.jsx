@@ -7,7 +7,7 @@ import { useState } from "react";
 export default function ClassDetailView() {
   const user = useSelector((store) => store.userSlice.user);
   const { data: dashboardData, isLoading: loading, error } = useGetDashboardSummaryQuery();
-  const classData = dashboardData.classDetails;
+  const classData = dashboardData?.classDetails || null;
   const [expandedSection, setExpandedSection] = useState({
     subjects: true,
     students: true,
@@ -60,11 +60,11 @@ export default function ClassDetailView() {
     <div className="p-5 sm:p-8 max-w-7xl mx-4 md:mx-8 bg-gray-50 min-h-screen mt-8 rounded-2xl shadow-lg border border-indigo-100">
       {/* Header Section */}
       <div className="flex p-4 flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div className="flex gap-4">
-          <div>
+        <div className="flex items-start gap-3">
+          <div className="bg-indigo-100 p-3 rounded-full">
             <Users className="md:w-7 md:h-7 text-indigo-600" />
           </div>
-          <div className="-mt-2">
+          <div className="-mt-0.5">
             <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Class Dashboard</h1>
             <p className="text-gray-600 text-xs sm:text-sm">Manage and track your assigned class</p>
           </div>

@@ -35,13 +35,13 @@ export default function TeacherStudentList() {
         <div className="flex flex-col md:flex-row rounded-xl shadow-sm border-1 border-indigo-100 justify-between items-start md:items-center mb-6 sm:mb-8 gap-4 overflow-visible">
           {/* Header Section */}
           <div className="bg-white p-4 sm:p-6 w-full md:w-auto">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <div className="bg-indigo-100 p-3 rounded-full">
                 <User className="w-6 h-6 sm:w-8 sm:h-8 text-indigo-600" />
               </div>
               <div>
-                <h1 className="text-base sm:text-lg md:text-2xl font-bold text-gray-800 font-nunito">Students</h1>
-                <p className="text-sm sm:text-base text-gray-500 font-nunito mt-1">{filteredStudents.length} students enrolled</p>
+                <h1 className="text-xl md:text-2xl font-bold text-gray-800 font-nunito">Students</h1>
+                <p className="text-sm sm:text-base text-gray-500 font-nunito -mt-1">{filteredStudents.length} students enrolled</p>
               </div>
             </div>
           </div>

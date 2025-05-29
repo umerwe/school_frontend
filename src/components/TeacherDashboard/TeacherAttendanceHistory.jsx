@@ -6,16 +6,16 @@ import { useState, useEffect } from "react";
 export default function TeacherAttendanceHistory() {
   const currentUser = useSelector((store) => store.userSlice.user);
   const classInfo = currentUser?.classTeacherOf;
-  
-  const { 
-    data, 
+
+  const {
+    data,
     isLoading: loadingAttendance,
-    error 
+    error
   } = useGetDashboardSummaryQuery();
 
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedStudent, setSelectedStudent] = useState("");
-  
+
   // Extract data from API responses
   const students = data?.students || [];
   const allRecords = data?.attendance || [];
@@ -151,7 +151,9 @@ export default function TeacherAttendanceHistory() {
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <div className="flex items-center gap-3">
-            <BookOpen className="md:w-7 md:h-7 text-indigo-600" />
+            <div className="p-3 bg-indigo-100 rounded-full">
+              <BookOpen className="md:w-7 md:h-7 text-indigo-600" />
+            </div>
             <div>
               <h2 className="text-xl md:text-2xl font-bold text-gray-800">
                 Attendance History

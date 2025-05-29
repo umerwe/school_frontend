@@ -121,7 +121,7 @@ export default function AllMarks() {
               <h2 className="text-xl md:text-2xl font-bold text-gray-800 font-nunito">
                 Students Marks Records
               </h2>
-              <p className="text-sm md:text-base text-gray-500 font-nunito">
+              <p className="text-xs sm:text-sm text-gray-500 font-nunito">
                 All submitted marks with student details and grades
               </p>
             </div>
