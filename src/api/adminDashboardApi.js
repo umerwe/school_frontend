@@ -12,8 +12,7 @@ export const adminDashboardApi = createApi({
       query: () => ({
         url: 'admin/dashboard/summary',
         headers: {
-          'Cache-Control': 'public, max-age=86400',
-          Expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toUTCString(),
+          'Cache-Control': 'no-cache', // Temporarily disable caching
         },
       }),
       transformResponse: (response) => response.data,
