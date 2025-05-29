@@ -282,16 +282,6 @@ export default function StudentProfile() {
                       label="Class"
                       value={`Class ${student.studentClass} - Section ${student.section}` || "Not provided"}
                     />
-                    <InfoItem
-                      icon={<CalendarDaysIcon className="h-5 w-5 text-indigo-500" />}
-                      label="Academic Year"
-                      value={student.academicYear || "Not provided"}
-                    />
-                    <InfoItem
-                      icon={<IdentificationIcon className="h-5 w-5 text-indigo-500" />}
-                      label="Attendance"
-                      value={student.attendance ? `${student.attendance}%` : "Not provided"}
-                    />
                   </div>
                 </Section>
               </div>
