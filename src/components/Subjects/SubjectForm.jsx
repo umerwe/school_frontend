@@ -43,9 +43,6 @@ export default function SubjectForm() {
     }
 
     const messageKey = "createSubject";
-    message.loading({ content: "Creating subject...", key: messageKey });
-
-    console.log("Submitting create with formData:", formData); // Debug
 
     try {
       const response = await createSubject(formData).unwrap();
@@ -58,7 +55,6 @@ export default function SubjectForm() {
       setFormData({ classTitle: "", section: "", subjectName: "", teacherName: "" });
       navigate("/admin-dashboard/subjects");
     } catch (error) {
-      console.error("Create subject error:", error); // Debug
       const errMsg = error?.data?.message || "Error creating subject";
       message.error({ content: errMsg, key: messageKey, duration: 3 });
     }

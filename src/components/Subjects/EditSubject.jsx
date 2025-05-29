@@ -15,8 +15,6 @@ export default function EditSubject() {
     teacherName: '',
   });
 
-  console.log(formData);
-
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -34,9 +32,6 @@ export default function EditSubject() {
     }
 
     const messageKey = `updateSubject-${id}`;
-    message.loading({ content: 'Updating subject...', key: messageKey });
-
-    console.log('Submitting update with subjectId:', id, 'formData:', formData); // Debug
 
     try {
       // Fix: Change formData to subjectData to match RTK Query mutation parameter
@@ -45,7 +40,6 @@ export default function EditSubject() {
         subjectData: formData 
       }).unwrap();
       
-      console.log('Update subject response:', response); // Debug
       message.success({
         content: 'Subject updated successfully!',
         key: messageKey,
@@ -53,7 +47,6 @@ export default function EditSubject() {
       setFormData({ subjectName: '', teacherName: '' });
       navigate('/admin-dashboard/subjects');
     } catch (error) {
-      console.error('Update subject error:', error); // Debug
       const errMsg = error?.data?.message || 'Error updating subject';
       message.error({ content: errMsg, key: messageKey });
     }
