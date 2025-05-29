@@ -18,10 +18,21 @@ export const studentDashboardApi = createApi({
       }),
       invalidatesTags: ['StudentDashboard'],
     }),
+    getStudentAiResponse: builder.mutation({
+      query: ({ userId, prompt }) => ({
+        url: 'student-ai',
+        method: 'POST',
+        body: { userId, prompt },
+      }),
+      transformResponse: (response) => ({
+        result: response.data.result,
+      }),
+    }),
   }),
 });
 
 export const {
   useGetDashboardSummaryQuery,
   useResetAnnouncementsCountMutation,
+  useGetStudentAiResponseMutation
 } = studentDashboardApi;

@@ -1,19 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
 import { message } from 'antd';
 import { Brain, Send, CheckCircle, Loader2, Copy, BookOpen, Calendar, DollarSign, ChevronRight } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { useSelector } from 'react-redux';
+import { useGetParentAiResponseMutation } from '../../api/parentDashboardApi';
 
 const ParentAi = () => {
   const [prompt, setPrompt] = useState('');
   const [responses, setResponses] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [copyLoading, setCopyLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
   const outputRef = useRef(null);
-  const user = useSelector((store) => store.userSlice.user);
+
+  // RTK Query mutation
+  const [getParentAiResponse, { isLoading, error: queryError }] = useGetParentAiResponseMutation();
 
   // Sample quick prompts
   const quickPrompts = [
@@ -30,53 +29,42 @@ const ParentAi = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!prompt.trim()) {
+    if (!prompt || typeof prompt !== 'string' || !prompt.trim()) {
       message.warning({
-        content: 'Please enter a query.',
+        content: 'Please enter a valid query.',
         duration: 2,
         style: { marginTop: '20px' },
       });
       return;
     }
 
-    setLoading(true);
     setResponses([]);
-    setError(null);
 
     try {
-      const baseUrl =
-        import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+      const response = await getParentAiResponse(prompt.trim()).unwrap();
+      
+      if (!response.data?.children || response.data.children.length === 0) {
+        throw new Error('No response data received for your children.');
+      }
 
-      const response = await axios.post(
-        `${baseUrl}/parent-ai`,
-        { prompt },
-        { withCredentials: true }
+      const childrenResponses = response.data.children;
+      // Check if all responses are identical (generic prompt)
+      const isGeneric = childrenResponses.every(
+        (res, i, arr) => res.result === arr[0].result
       );
-      const childrenResponses = response.data.data.children || [];
-      if (!childrenResponses.length) {
-        setError('No response data received for your children.');
+      
+      if (isGeneric) {
+        setResponses([{ id: 'generic', result: childrenResponses[0].result }]);
       } else {
-        // Check if all responses are identical (generic prompt)
-        const isGeneric = childrenResponses.every(
-          (res, i, arr) => res.result === arr[0].result
-        );
-        if (isGeneric) {
-          setResponses([{ id: 'generic', result: childrenResponses[0].result }]);
-        } else {
-          setResponses(childrenResponses);
-        }
+        setResponses(childrenResponses);
       }
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || 'Failed to process query. Please try again.';
-      setError(errorMessage);
+      const errorMessage = error?.data?.error || error.message || 'Failed to process query. Please try again.';
       message.error({
         content: errorMessage,
         duration: 3,
         style: { marginTop: '20px' },
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -180,13 +168,13 @@ const ParentAi = () => {
               <div className="p-5 border-b border-indigo-200 bg-gray-50">
                 <h2 className="font-semibold text-gray-800">Ask Your Question</h2>
               </div>
-              <div className="p-5">
+              <div className="p-3 py-6 sm:px-8">
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="relative">
                     <textarea
                       className="w-full bg-gray-50 border border-indigo-200 rounded-lg px-4 py-3 text-base text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 resize-none pr-12"
                       rows={4}
-                      placeholder="e.g., 'What's my child's attendance this month?', 'Show grades for my child', 'Upcoming parent-teacher meetings'"
+                      placeholder={`e.g., "What's my child's attendance this month?", "Show grades for my child", "Check my child's fee voucher status"`}
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
                       aria-required="true"
@@ -195,10 +183,10 @@ const ParentAi = () => {
                   <div className="flex justify-between items-center">
                     <button
                       type="submit"
-                      disabled={loading}
-                      className={`bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2.5 px-6 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                      disabled={isLoading}
+                      className={`bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2.5 px-6 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
                     >
-                      {loading ? (
+                      {isLoading ? (
                         <>
                           <Loader2 className="animate-spin h-5 w-5" />
                           <span>Processing...</span>
@@ -290,7 +278,7 @@ const ParentAi = () => {
             )}
 
             {/* Error Display */}
-            {error && (
+            {queryError && (
               <div className="bg-red-50 rounded-xl p-4 border border-red-200">
                 <div className="flex items-start gap-3">
                   <div className="mt-0.5">
@@ -300,9 +288,11 @@ const ParentAi = () => {
                   </div>
                   <div>
                     <h3 className="text-sm font-medium text-red-800">Error Processing Request</h3>
-                    <p className="text-sm text-red-700 mt-1">{error}</p>
+                    <p className="text-sm text-red-700 mt-1">
+                      {queryError?.data?.error || 'Failed to process query. Please try again.'}
+                    </p>
                     <button
-                      onClick={() => setError(null)}
+                      onClick={() => window.location.reload()}
                       className="mt-2 text-sm font-medium text-red-600 hover:text-red-800"
                     >
                       Dismiss

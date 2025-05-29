@@ -42,6 +42,16 @@ export const teacherDashboardApi = createApi({
       }),
       invalidatesTags: ['TeacherDashboard'],
     }),
+    getTeacherAiResponse: builder.mutation({
+      query: ({ userId, prompt }) => ({
+        url: 'teacher-ai',
+        method: 'POST',
+        body: { userId, prompt },
+      }),
+      transformResponse: (response) => ({
+        result: response.data.result,
+      }),
+    }),
   }),
 });
 
@@ -51,4 +61,5 @@ export const {
   useSubmitMarksMutation,
   useDeleteMarksMutation,
   useResetNumberMutation,
+  useGetTeacherAiResponseMutation
 } = teacherDashboardApi;

@@ -8,7 +8,7 @@ export default function Attendance() {
         isLoading: loadingAttendance,
         error
     } = useGetDashboardSummaryQuery();
-    console.log(data)
+    
     const today = new Date().toISOString().split('T')[0];
     const [selectedDate, setSelectedDate] = useState(today);
 

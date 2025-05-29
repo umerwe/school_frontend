@@ -1,25 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
 import { message } from 'antd';
 import { Brain, Send, CheckCircle, Loader2, Copy, BookOpen, Users, ClipboardList, BarChart2, ChevronRight } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { useSelector } from 'react-redux';
+import { useGetTeacherAiResponseMutation } from '../../api/teacherDashboardApi'; // Adjust import path as needed
 
 const TeacherAi = () => {
   const [prompt, setPrompt] = useState('');
   const [report, setReport] = useState('');
-  const [loading, setLoading] = useState(false);
   const [copyLoading, setCopyLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
   const outputRef = useRef(null);
   const user = useSelector((store) => store.userSlice.user);
+
+  // RTK Query mutation
+  const [getTeacherAiResponse, { isLoading, error }] = useGetTeacherAiResponseMutation();
 
   // Sample quick prompts
   const quickPrompts = [
     { icon: <Users size={16} />, text: "List all students in my class" },
     { icon: <ClipboardList size={16} />, text: "Show attendance summary" },
-    { icon: <BarChart2 size={16} />, text: "Display recent marks analysis" }
+    { icon: <BarChart2 size={16} />, text: "Display recent marks analysis" },
   ];
 
   useEffect(() => {
@@ -39,33 +40,23 @@ const TeacherAi = () => {
       return;
     }
 
-    setLoading(true);
     setReport('');
-    setError(null);
 
     try {
-      const baseUrl =
-        import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
-            
-      const response = await axios.post(
-        `${baseUrl}/teacher-ai`,
-        { prompt },
-        { withCredentials: true }
-      );
+      const response = await getTeacherAiResponse({
+        userId: user._id,
+        prompt: prompt.trim(),
+      }).unwrap();
 
-      const result = response.data.data.result || 'No response data available.';
+      const result = response.result || 'No response data available.';
       setReport(result);
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || 'Failed to process query. Please try again.';
-      setError(errorMessage);
+      const errorMessage = error?.data?.error || 'Failed to process query. Please try again.';
       message.error({
         content: errorMessage,
         duration: 3,
         style: { marginTop: '20px' },
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -94,7 +85,7 @@ const TeacherAi = () => {
 
   const handleQuickPrompt = (text) => {
     setPrompt(text);
-    setShowSidebar(false); // Close sidebar on mobile after selecting prompt
+    setShowSidebar(false);
   };
 
   return (
@@ -124,7 +115,7 @@ const TeacherAi = () => {
 
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Sidebar - Hidden on mobile unless toggled */}
+          {/* Left Sidebar */}
           <div className={`bg-white rounded-xl shadow-sm border border-indigo-200 p-5 h-fit ${showSidebar ? 'block' : 'hidden'} lg:block`}>
             <h2 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
               <BookOpen className="h-5 w-5 text-indigo-500" />
@@ -184,10 +175,10 @@ const TeacherAi = () => {
                   <div className="flex justify-between items-center">
                     <button
                       type="submit"
-                      disabled={loading}
-                      className={`bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2.5 px-6 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                      disabled={isLoading}
+                      className={`bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2.5 px-6 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
                     >
-                      {loading ? (
+                      {isLoading ? (
                         <>
                           <Loader2 className="animate-spin h-5 w-5" />
                           <span>Processing...</span>
@@ -267,9 +258,9 @@ const TeacherAi = () => {
                   </div>
                   <div>
                     <h3 className="text-sm font-medium text-red-800">Error Processing Request</h3>
-                    <p className="text-sm text-red-700 mt-1">{error}</p>
+                    <p className="text-sm text-red-700 mt-1">{error?.data?.error || 'Failed to process query. Please try again.'}</p>
                     <button
-                      onClick={() => setError(null)}
+                      onClick={() => window.location.reload()}
                       className="mt-2 text-sm font-medium text-red-600 hover:text-red-800"
                     >
                       Dismiss

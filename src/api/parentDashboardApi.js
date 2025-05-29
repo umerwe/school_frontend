@@ -11,6 +11,26 @@ export const parentDashboardApi = createApi({
       transformResponse: (response) => response.data,
       providesTags: ['ParentDashboard'],
     }),
+    getParentAiResponse: builder.mutation({
+      query: (prompt) => ({
+        url: `parent-ai`,
+        method: 'POST',
+        body: { prompt },
+      }),
+      transformResponse: (response) => ({
+        data: {
+          children: response.data.children.map(child => ({
+            id: child.id,
+            name: child.name,
+            result: child.result
+          }))
+        }
+      }),
+      transformErrorResponse: (response) => ({
+        status: response.status,
+        data: response.data || { error: 'Something went wrong' }
+      }),
+    }),
     submitParentReport: builder.mutation({
       query: (reportData) => ({
         url: 'parent/submit/reports',
@@ -52,7 +72,6 @@ export const parentDashboardApi = createApi({
         body: {},
       }),
       transformResponse: (response) => response.data,
-      invalidatesTags: ['ParentDashboard'],
     }),
   }),
 });
@@ -64,4 +83,5 @@ export const {
   useVerifyPaymentMutation,
   useResetNotificationCountMutation,
   useResetReportCommentsCountMutation,
+  useGetParentAiResponseMutation
 } = parentDashboardApi;

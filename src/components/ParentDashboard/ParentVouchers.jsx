@@ -26,6 +26,8 @@ export default function ParentVouchers() {
   const { data: dashboardData, isLoading, error: queryError } = useGetParentDashboardSummaryQuery();
   const [createCheckoutSession] = useCreateCheckoutSessionMutation();
 
+  // Check if running in production
+  const isProduction = import.meta.env.MODE === "production";
   // Format date for display
   const formatDisplayDate = (dateString) => {
     return new Date(dateString).toLocaleDateString(undefined, {
@@ -77,8 +79,8 @@ export default function ParentVouchers() {
     } catch (err) {
       setError(
         err.data?.error ||
-        err.message ||
-        "Failed to initiate payment. Please try again."
+          err.message ||
+          "Failed to initiate payment. Please try again."
       );
       setLoadingVouchers((prev) => ({ ...prev, [voucherId]: false }));
     }
@@ -133,6 +135,26 @@ export default function ParentVouchers() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-4 md:p-8">
       <div className="max-w-6xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-indigo-100">
+        {/* Production Testing Message */}
+        {isProduction && (
+          <div className="mb-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg flex items-start gap-3">
+            <div className="w-5 h-5 rounded-full bg-yellow-100 text-yellow-500 flex items-center justify-center mt-0.5">
+              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <p className="text-gray-800 font-medium font-nunito">
+                This feature is currently in testing mode. Please proceed with caution.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Header Section */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
@@ -217,6 +239,12 @@ export default function ParentVouchers() {
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider font-nunito">
                       <div className="flex items-center gap-1">
+                        <AcademicCapIcon className="w-4 h-4" />
+                        Voucher ID
+                      </div>
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider font-nunito">
+                      <div className="flex items-center gap-1">
                         <CalendarIcon className="w-4 h-4" />
                         Due Date
                       </div>
@@ -234,12 +262,6 @@ export default function ParentVouchers() {
                       </div>
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider font-nunito">
-                      <div className="flex items-center gap-1">
-                        <AcademicCapIcon className="w-4 h-4" />
-                        Voucher ID
-                      </div>
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider font-nunito">
                       Action
                     </th>
                   </tr>
@@ -254,6 +276,9 @@ export default function ParentVouchers() {
                         className="hover:bg-indigo-50 transition-colors duration-200"
                       >
                         <td className="px-6 py-4 text-sm text-gray-700 font-nunito">
+                          {voucher.voucherId || "N/A"}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-700 font-nunito">
                           {formatDisplayDate(voucher.dueDate)}
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-700 font-nunito">
@@ -267,17 +292,15 @@ export default function ParentVouchers() {
                             {voucher.status || "Unknown"}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-700 font-nunito">
-                          {voucher.voucherId || "N/A"}
-                        </td>
                         <td className="px-6 py-4">
                           <button
                             onClick={() => handlePayment(voucher.voucherId)}
                             disabled={statusInfo.disabled || isLoading}
-                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-2 min-w-[100px] ${statusInfo.disabled || isLoading
+                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-2 min-w-[100px] ${
+                              statusInfo.disabled || isLoading
                                 ? "bg-gray-300 text-gray-600 cursor-not-allowed"
                                 : "bg-indigo-600 text-white hover:bg-indigo-700"
-                              }`}
+                            }`}
                             style={{ fontFamily: "Nunito, sans-serif" }}
                           >
                             {isLoading ? (
