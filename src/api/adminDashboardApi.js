@@ -186,7 +186,7 @@ export const adminDashboardApi = createApi({
 
 export const {
   useGetDashboardSummaryQuery,
-  useGetAdminAiResponseMutation, // New export for Admin AI
+  useGetAdminAiResponseMutation,
   useAddReportCommentMutation,
   useResetAdminNumberMutation,
   useCreateClassMutation,
