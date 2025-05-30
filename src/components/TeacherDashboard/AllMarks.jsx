@@ -1,4 +1,4 @@
-import { message, Modal, Select } from "antd";
+import { message, Modal } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { BookOpen, User, Trash2, Filter, ChevronDown, FileText, Loader2 } from "lucide-react";
 import { useSelector } from "react-redux";
@@ -10,15 +10,13 @@ export default function AllMarks() {
   const { data: dashboardData, isLoading, error } = useGetDashboardSummaryQuery();
   const [deleteMarks] = useDeleteMarksMutation();
   const [filterType, setFilterType] = useState('');
-  const [classes, setClasses] = useState([]);
-  const [sections, setSections] = useState([]);
-  const [selectedClass, setSelectedClass] = useState("");
-  const [selectedSection, setSelectedSection] = useState("");
+  const [students, setStudents] = useState([]);
+  const [selectedStudent, setSelectedStudent] = useState("");
   const didFetchRef = useRef(false);
 
   // Extract marks from dashboard data or default to empty array
   const marks = dashboardData?.classMarks || [];
-
+  
   useEffect(() => {
     if (didFetchRef.current) return;
     didFetchRef.current = true;
@@ -28,19 +26,14 @@ export default function AllMarks() {
       message.error(backendError);
     }
 
-    // Extract unique classes and sections
-    const classSet = new Set();
-    const sectionSet = new Set();
+    // Extract unique students
+    const studentSet = new Set();
     marks.forEach((mark) => {
-      if (mark.classTitle) {
-        classSet.add(mark.classTitle.toString());
-      }
-      if (mark.section) {
-        sectionSet.add(mark.section);
+      if (mark.student?.name) {
+        studentSet.add(mark.student.name);
       }
     });
-    setClasses([...classSet].sort());
-    setSections([...sectionSet].sort());
+    setStudents([...studentSet].sort());
   }, [error, isLoading, marks]);
 
   const handleDelete = async (recordId) => {
@@ -86,15 +79,13 @@ export default function AllMarks() {
 
   const clearFilters = () => {
     setFilterType('');
-    setSelectedClass('');
-    setSelectedSection('');
+    setSelectedStudent('');
   };
 
   const filteredMarks = marks.filter((mark) => {
     return (
       (!filterType || mark.assessmentType === filterType) &&
-      (!selectedClass || mark.classTitle === selectedClass) &&
-      (!selectedSection || mark.section === selectedSection)
+      (!selectedStudent || mark.student?.name === selectedStudent)
     );
   });
 
@@ -127,7 +118,7 @@ export default function AllMarks() {
             </div>
           </div>
           <div className="flex items-center gap-4">
-            {(filterType || selectedClass || selectedSection) && (
+            {(filterType || selectedStudent) && (
               <button
                 onClick={clearFilters}
                 className="flex items-center gap-2 px-4 py-2 text-sm text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-lg font-medium font-nunito transition-colors"
@@ -147,8 +138,33 @@ export default function AllMarks() {
         </div>
 
         {/* Filters and Summary */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-5 mb-8">
-          {/* Assessment Type Filter */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+          {/* Student Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2 font-nunito">
+              Student
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <User className="w-5 h-5 text-indigo-500" />
+              </div>
+              <select
+                value={selectedStudent}
+                onChange={(e) => setSelectedStudent(e.target.value)}
+                className="w-full text-sm md:text-md pl-10 pr-10 py-2.5 border border-indigo-200 rounded-lg bg-white text-gray-700 appearance-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 font-nunito hover:bg-indigo-50 transition-colors"
+                disabled={isLoading}
+              >
+                <option value="">All Students</option>
+                {students.map((student) => (
+                  <option key={student} value={student}>
+                    {capitalizeName(student)}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-indigo-500 pointer-events-none" />
+            </div>
+          </div>
+{/* Assessment Type Filter */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2 font-nunito">
               Assessment Type
@@ -167,58 +183,6 @@ export default function AllMarks() {
                 {assessmentTypes.map((type) => (
                   <option key={type} value={type}>
                     {type}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-indigo-500 pointer-events-none" />
-            </div>
-          </div>
-
-          {/* Class Filter */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 font-nunito">
-              Class
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <User className="w-5 h-5 text-indigo-500" />
-              </div>
-              <select
-                value={selectedClass}
-                onChange={(e) => setSelectedClass(e.target.value)}
-                className="w-full text-sm md:text-md pl-10 pr-10 py-2.5 border border-indigo-200 rounded-lg bg-white text-gray-700 appearance-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 font-nunito hover:bg-indigo-50 transition-colors"
-                disabled={isLoading}
-              >
-                <option value="">All Classes</option>
-                {classes.map((cls) => (
-                  <option key={cls} value={cls}>
-                    Class {cls}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-indigo-500 pointer-events-none" />
-            </div>
-          </div>
-
-          {/* Section Filter */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 font-nunito">
-              Section
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <BookOpen className="w-5 h-5 text-indigo-500" />
-              </div>
-              <select
-                value={selectedSection}
-                onChange={(e) => setSelectedSection(e.target.value)}
-                className="w-full text-sm md:text-md pl-10 pr-10 py-2.5 border border-indigo-200 rounded-lg bg-white text-gray-700 appearance-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 font-nunito hover:bg-indigo-50 transition-colors"
-                disabled={isLoading}
-              >
-                <option value="">All Sections</option>
-                {sections.map((section) => (
-                  <option key={section} value={section}>
-                    Section {section}
                   </option>
                 ))}
               </select>
@@ -374,7 +338,7 @@ export default function AllMarks() {
               No Marks Found
             </h3>
             <p className="text-gray-500 font-nunito">
-              {filterType || selectedClass || selectedSection
+              {filterType || selectedStudent
                 ? "No marks match your filters. Try adjusting your selections."
                 : "No marks records available. Add new marks to get started."}
             </p>
