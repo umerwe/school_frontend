@@ -23,9 +23,9 @@ export default function SessionExpired() {
   }, [dispatch]);
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-50 to-gray-200 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden">
-        <div className="bg-red-600 p-6 text-center">
+    <div className="fixed inset-0 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
+        <div className="bg-indigo-700 p-6 text-center text-amber-400">
           <LockOutlined className="text-white text-4xl mb-4" />
           <h1 className="text-2xl font-bold text-white">Session Expired</h1>
         </div>
@@ -38,10 +38,13 @@ export default function SessionExpired() {
           <Button 
             type="primary" 
             size="large"
-            danger
             className="w-full max-w-xs h-12 text-lg font-medium"
+            style={{
+              backgroundColor: '#4f46e5',
+              borderColor: '#4f46e5',
+            }}
             onClick={() => window.location.href = '/'}
-            icon={<LockOutlined />}
+            icon={<LockOutlined className="text-indigo-100" />}
           >
             Return to Login
           </Button>

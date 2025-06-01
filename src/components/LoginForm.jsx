@@ -86,65 +86,65 @@ export default function LoginForm() {
     };
 
     const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-    setLoading(true);
-    const payload = {};
-    if (selectedRole === 'admin') {
-        payload['instituteNameOrEmail'] = formData.instituteNameOrEmail;
-        payload.password = formData.password;
-    } else if (selectedRole === 'teacher') {
-        payload['teacherIdOrEmail'] = formData.instituteNameOrEmail;
-        payload.password = formData.password;
-    } else if (selectedRole === 'student') {
-        payload['rollNumberOrEmail'] = formData.instituteNameOrEmail;
-        payload.password = formData.password;
-    } else if (selectedRole === 'parent') {
-        payload['email'] = formData.instituteNameOrEmail;
-        payload.password = formData.password;
-    }
-
-    try {
-        const baseUrl =
-            import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
-
-        const { data } = await axios.post(
-            `${baseUrl}/auth/login-${selectedRole}`,
-            payload,
-            { withCredentials: true }
-        );
-        // Extract user data and tokens from response
-        const user = data.data[selectedRole];
-        const tokens = {
-            accessToken: data.data.accessToken,
-            refreshToken: data.data.refreshToken
-        };
-
-        // Dispatch login action with both user and tokens
-        dispatch(login({
-            user: user,
-            tokens: tokens
-        }));
-
-        // Redirect based on role
-        if (user.role === 'admin') {
-            navigate('/admin-dashboard');
-        } else if (user.role === 'teacher') {
-            navigate('/teacher-dashboard');
-        } else if (user.role === 'student') {
-            navigate('/student-dashboard');
-        } else if (user.role === 'parent') {
-            navigate('/parent-dashboard');
+        e.preventDefault();
+        if (!validateForm()) return;
+        setLoading(true);
+        const payload = {};
+        if (selectedRole === 'admin') {
+            payload['instituteNameOrEmail'] = formData.instituteNameOrEmail;
+            payload.password = formData.password;
+        } else if (selectedRole === 'teacher') {
+            payload['teacherIdOrEmail'] = formData.instituteNameOrEmail;
+            payload.password = formData.password;
+        } else if (selectedRole === 'student') {
+            payload['rollNumberOrEmail'] = formData.instituteNameOrEmail;
+            payload.password = formData.password;
+        } else if (selectedRole === 'parent') {
+            payload['email'] = formData.instituteNameOrEmail;
+            payload.password = formData.password;
         }
-    } catch (err) {
-        message.error(err?.response?.data?.message || 'Login failed');
-    } finally {
-        setLoading(false);
-    }
-};
+
+        try {
+            const baseUrl =
+                import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
+
+            const { data } = await axios.post(
+                `${baseUrl}/auth/login-${selectedRole}`,
+                payload,
+                { withCredentials: true }
+            );
+            // Extract user data and tokens from response
+            const user = data.data[selectedRole];
+            const tokens = {
+                accessToken: data.data.accessToken,
+                refreshToken: data.data.refreshToken
+            };
+
+            // Dispatch login action with both user and tokens
+            dispatch(login({
+                user: user,
+                tokens: tokens
+            }));
+
+            // Redirect based on role
+            if (user.role === 'admin') {
+                navigate('/admin-dashboard');
+            } else if (user.role === 'teacher') {
+                navigate('/teacher-dashboard');
+            } else if (user.role === 'student') {
+                navigate('/student-dashboard');
+            } else if (user.role === 'parent') {
+                navigate('/parent-dashboard');
+            }
+        } catch (err) {
+            message.error(err?.response?.data?.message || 'Login failed');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
-        <div className="min-h-[94vh] pb-10  flex items-center justify-center p-4 bg-gradient-to-br from-indigo-50 to-gray-100 relative overflow-hidden">
+        <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-indigo-50 to-gray-100 relative overflow-hidden">
             {/* Animated background elements */}
             <div className="absolute inset-0 overflow-hidden">
                 <div className={`absolute top-0 left-0 w-64 h-64 rounded-full bg-indigo-500 opacity-5 transition-all duration-5000 ease-in-out ${animateBackground ? 'translate-x-10 translate-y-10' : '-translate-x-6 -translate-y-6'}`}></div>
@@ -285,9 +285,9 @@ export default function LoginForm() {
                             Transform your educational institution with our comprehensive management platform.
                         </p>
                         <div className="relative">
-                                      <div className="absolute -inset-4 rounded-full bg-indigo-400 opacity-20 animate-pulse"></div>
-                                      <AcademicCapIcon className="h-20 w-20 text-amber-400 relative z-10 transform transition duration-500 hover:rotate-12" />
-                                    </div>
+                            <div className="absolute -inset-4 rounded-full bg-indigo-400 opacity-20 animate-pulse"></div>
+                            <AcademicCapIcon className="h-20 w-20 text-amber-400 relative z-10 transform transition duration-500 hover:rotate-12" />
+                        </div>
                     </div>
                     <div className="text-sm text-indigo-200 text-center z-10">
                         © 2025 eSchool. All rights reserved.
