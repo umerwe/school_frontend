@@ -284,9 +284,6 @@ export default function ClassList() {
                                                 <h5 className="font-medium text-gray-900 font-nunito">
                                                   {capitalizeName(subject.subjectName)}
                                                 </h5>
-                                                <span className="text-xs bg-indigo-100 text-indigo-800 px-2 py-1 rounded font-nunito">
-                                                  {subject.subjectCode || "N/A"}
-                                                </span>
                                               </div>
                                               {subject.subjectTeacher?.name && (
                                                 <p className="text-sm text-gray-600 mt-1 flex items-center gap-1 font-nunito">

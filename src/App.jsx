@@ -89,6 +89,7 @@ import ChangeTeacherPassword from './components/Teachers/ChangePassword.jsx';
 import ChangeStudentPassword from './components/Students/ChangePassword.jsx';
 import ChangeParentPassword from './components/Parents/ChangePassword.jsx';
 import ChangeAdminPassword from './components/Admin/ChangePassword.jsx';
+import NotFoundPage from './components/NotFoundPage.jsx';
 
 // Token utility functions
 export const checkTokenExpiration = (token, bufferSeconds = 0) => {
@@ -476,6 +477,7 @@ function App() {
           <Route path="submit-report" element={<SubmitReport />} />
           <Route path="view-reports" element={<ViewReports />} />
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     )
   );
