@@ -128,7 +128,7 @@ export default function AllMarks() {
               </button>
             )}
             <button
-              onClick={() => navigate("/teacher-dashboard/add-marks")}
+              onClick={() => navigate("/teacher-dashboard/marks/submit")}
               className="flex text-sm md:text-md items-center gap-2 px-4 py-2 bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg font-medium font-nunito transition-colors shadow-sm hover:shadow-md"
             >
               <FileText className="w-4 h-4" />
@@ -289,9 +289,9 @@ export default function AllMarks() {
                         </div>
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-700 font-nunito">
-                        {record.classTitle ? `Grade ${record.classTitle}` : 'N/A'}
+                        {record.classTitle ? `${record.classTitle}` : 'N/A'}
                         {record.section && (
-                          <span className="text-gray-400 ml-1">• Sec {record.section}</span>
+                          <span className="text-gray-400 ml-1">- {record.section}</span>
                         )}
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-700 font-nunito">

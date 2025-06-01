@@ -230,11 +230,14 @@ const ParentNavbar = () => {
       ),
       label: 'View Reports',
       path: '/parent-dashboard/view-reports',
-      onClick: () => {
+      onClick: async () => {
         if (currentUser?._id) {
-          resetReportCommentsCount(currentUser._id).unwrap().catch((err) => {
+          try {
+            await resetReportCommentsCount(currentUser._id).unwrap();
+            setNewReportsCount(0); // Manually reset the count in state
+          } catch (err) {
             message.error(err?.data?.message || "Error resetting report comments count");
-          });
+          }
         }
       },
       separator: false,
@@ -247,11 +250,11 @@ const ParentNavbar = () => {
       <div
         ref={sidebarRef}
         className={`bg-indigo-500 text-white h-full transition-all duration-300 ease-in-out ${isMobile
-            ? `fixed top-0 left-0 z-20 w-64 shadow-xl rounded-sm ${showMobileSidebar ? 'translate-x-0' : '-translate-x-full'
-            }`
-            : isSidebarOpen
-              ? 'w-64'
-              : 'w-20'
+          ? `fixed top-0 left-0 z-20 w-64 shadow-xl rounded-sm ${showMobileSidebar ? 'translate-x-0' : '-translate-x-full'
+          }`
+          : isSidebarOpen
+            ? 'w-64'
+            : 'w-20'
           } shadow-xl z-10 rounded-sm`}
       >
         <div className="flex items-center justify-between p-3 sm:p-4 border-b border-indigo-400">
@@ -287,14 +290,14 @@ const ParentNavbar = () => {
                   if (isMobile) setShowMobileSidebar(false);
                 }}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200 ${location.pathname === item.path
-                    ? "bg-indigo-400 shadow-lg shadow-indigo-900/20"
-                    : "text-white hover:bg-indigo-400 hover:text-white hover:translate-x-1"
+                  ? "bg-indigo-400 shadow-lg shadow-indigo-900/20"
+                  : "text-white hover:bg-indigo-400 hover:text-white hover:translate-x-1"
                   }`}
               >
                 <span
                   className={`flex-shrink-0 ${location.pathname === item.path
-                      ? "text-indigo-100"
-                      : "text-white hover:text-white"
+                    ? "text-indigo-100"
+                    : "text-white hover:text-white"
                     }`}
                 >
                   {item.icon}
@@ -302,8 +305,8 @@ const ParentNavbar = () => {
                 {(isSidebarOpen || isMobile) && (
                   <span
                     className={`text-sm font-medium ${location.pathname === item.path
-                        ? "text-white"
-                        : "text-white hover:text-white"
+                      ? "text-white"
+                      : "text-white hover:text-white"
                       }`}
                     style={{ fontFamily: "Nunito, sans-serif" }}
                   >
