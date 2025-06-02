@@ -21,6 +21,7 @@ import {
   FileText,
   Bot,
   MessageSquare,
+  Award,
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
@@ -111,8 +112,6 @@ const AdminNavbar = () => {
     }
   }, [location.pathname]);
 
-
-
   const handleLogout = async () => {
     setIsDropdownVisible(false);
     const baseUrl = import.meta.env.VITE_API_BASE_URL_PROD || import.meta.env.VITE_API_BASE_URL_LOCAL;
@@ -158,6 +157,7 @@ const AdminNavbar = () => {
     { icon: <User size={20} />, label: "Teachers", path: "/admin-dashboard/teachers" },
     { icon: <UserPlus size={20} />, label: "Students", path: "/admin-dashboard/students" },
     { icon: <User size={20} />, label: "Parents", path: "/admin-dashboard/parents" },
+    { icon: <Award size={20} />, label: "Marks", path: "/admin-dashboard/marks" },
     {
       icon: (
         <div className="relative">
@@ -192,9 +192,9 @@ const AdminNavbar = () => {
           : isSidebarOpen
             ? 'w-64 md:w-58'
             : 'w-20'
-          } shadow-xl z-10 rounded-sm`}
+          } shadow-xl z-10 rounded-sm flex flex-col`}
       >
-        <div className="flex items-center justify-between p-3 sm:p-4 border-b border-indigo-400">
+        <div className="flex items-center justify-between p-3 sm:p-4 border-b border-indigo-400 flex-shrink-0">
           {(isSidebarOpen || isMobile) && (
             <div className="flex items-center gap-1">
               <GraduationCap className="h-8 md:h-10 w-8 md:w-10 text-amber-400 -rotate-[15deg]" />
@@ -216,7 +216,7 @@ const AdminNavbar = () => {
           </button>
         </div>
 
-        <div className="px-2 sm:px-3 pb-0 pt-3 md:pt-1.5">
+        <div className="flex-1 sm:overflow-y-auto px-2 sm:px-3 pb-3 pt-3 md:pt-1.5">
           <ul className="space-y-1.5">
             {menuItems.map((item, index) => (
               <li

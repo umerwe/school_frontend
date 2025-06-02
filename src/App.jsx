@@ -80,6 +80,7 @@ import ViewReports from './components/ParentDashboard/ViewReport.jsx';
 import AdminReports from './components/Admin/AdminReport.jsx';
 import SubmitReport from './components/ParentDashboard/SubmitReport.jsx';
 import Attendance from './components/Admin/Attendance.jsx';
+import AllStudentMarks from './components/Admin/AllMarks.jsx';
 
 import { useRefreshTokensMutation } from '../src/api/authApi.js';
 import { initializeAuth, logout, updateTokens } from '../src/store/slices/userSlice.js';
@@ -414,6 +415,7 @@ function App() {
           <Route path="create-voucher" element={<CreateVoucher />} />
           <Route path="reports" element={<AdminReports />} />
           <Route path="attendance" element={<Attendance />} />
+          <Route path="marks" element={<AllStudentMarks />} />
         </Route>
 
         <Route
