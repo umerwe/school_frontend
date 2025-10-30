@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-
+// Hello
 const SchoolLoader = () => {
   const containerVariants = {
     start: { transition: { staggerChildren: 0.2 } },
